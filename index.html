@@ -664,7 +664,7 @@ main {
   margin-left: 7px;
   border-radius: 50%;
   background: var(--ink-mute);
-  color: var(--card);
+  color: #F6F9F4;
   font-family: 'Fraunces', serif;
   font-size: 12px;
   font-weight: 700;
@@ -1870,6 +1870,76 @@ footer a:hover { color: var(--primary); text-decoration: none; }
   .collab-name { white-space: normal; text-align: center; }
 }
 
+/* ======================================================================= */
+/*  Phone / small-tablet support                                            */
+/* ======================================================================= */
+@media (max-width: 640px) {
+  /* nav */
+  .nav-inner { padding: 10px 16px; gap: 14px; flex-wrap: wrap; }
+  .brand { font-size: 17px; }
+  .nav-links { gap: 14px; margin-left: auto; flex-wrap: wrap; row-gap: 8px; }
+  .nav-links a, .nav-dropdown-trigger { font-size: 13px; }
+  .nav-links .coming-chip { display: none; }
+  .theme-toggle { margin-left: 0; }
+  .nav-menu { left: auto; right: 0; min-width: 220px; }
+
+  /* hero */
+  .hero { padding: 32px 16px 18px; gap: 18px; }
+  .hero h1 { font-size: 34px; line-height: 1.08; }
+  .hero h1 .hero-sub { font-size: 17px; display: block; margin-top: 6px; }
+  .hero .tagline { font-size: 14.5px; margin-top: 14px; }
+  .hero-stats { gap: 20px; flex-wrap: wrap; }
+  .stat-item { flex: 0 1 auto; min-width: 0; }
+  .stat-item .stat-num { font-size: 28px; }
+  .stat-item .stat-label { font-size: 11.5px; }
+  .hero-stats .info-pop .info-bubble { min-width: 200px; max-width: 260px; }
+
+  /* category tabs */
+  .cat-tabs { padding: 0 12px; }
+  .cat-tab { padding: 12px 12px; font-size: 15px; gap: 6px; }
+  .cat-tab .badge { font-size: 9.5px; padding: 2px 5px; }
+
+  /* main */
+  main { padding: 20px 16px 56px; }
+  .chart-card { padding: 18px 16px 14px; }
+  .content-block { padding: 20px 18px; }
+  .section-title { font-size: 19px; }
+
+  /* primary tabs — 2x2 already at 860, but tighten padding here */
+  .primary-tabs { padding: 5px; }
+  .primary-tab { padding: 11px 10px; font-size: 14px; }
+
+  /* leaderboard — horizontal scroll so columns stay legible */
+  .table-card { overflow-x: auto; -webkit-overflow-scrolling: touch; }
+  table.leaderboard { min-width: 640px; font-size: 13px; }
+  .leaderboard thead th { padding: 9px 10px; font-size: 10.5px; }
+  .leaderboard td { padding: 10px 10px; }
+
+  /* per-task bar */
+  .task-bar { gap: 10px; }
+  .task-tabs { min-width: 0; flex: 1 1 100%; }
+  .variant-picker { width: 100%; justify-content: space-between; }
+  .variant-select { flex: 1; min-width: 0; }
+
+  /* dataset tables wrap-overflow */
+  .dataset-table { display: block; overflow-x: auto; -webkit-overflow-scrolling: touch; }
+
+  /* footer */
+  footer { padding: 20px 16px 32px; font-size: 12px; }
+}
+
+@media (max-width: 420px) {
+  .brand { font-size: 16px; }
+  .nav-links { gap: 10px; }
+  .hero h1 { font-size: 28px; }
+  .hero h1 .hero-sub { font-size: 15px; }
+  .hero-stats { gap: 14px; }
+  .stat-item .stat-num { font-size: 24px; }
+  .cat-tab { padding: 10px 10px; font-size: 13.5px; }
+  .cat-tab .badge { display: none; }
+  .primary-tab { font-size: 13px; padding: 10px 6px; }
+}
+
 /* print-friendly */
 @media print {
   .nav, .cat-tabs, .primary-tabs, .sub-tabs, .task-bar, .disclosure-btn { display: none; }
@@ -1966,14 +2036,13 @@ footer a:hover { color: var(--primary); text-decoration: none; }
     </div>
     <h1>Towards <em>Medical AutoResearch</em><br><span class="hero-sub">a benchmark for AI agents on medical AI tasks.</span></h1>
     <p class="tagline">
-      AutoMedBench scores autonomous agents across the full research pipeline (<code>plan</code>, <code>setup</code>, <code>validate</code>, <code>infer</code>, <code>submit</code>), not just final outputs.
+      AutoMedBench scores autonomous agentic models across the research evaluation pipeline (<code>plan</code>, <code>setup</code>, <code>validate</code>, <code>infer</code>, <code>submit</code>), not just final outputs.
     </p>
   </div>
   <aside class="hero-stats" aria-label="benchmark at a glance">
-    <div class="stat-item"><span class="stat-num">7</span><span class="stat-label">agents</span></div>
+    <div class="stat-item"><span class="stat-num">7</span><span class="stat-label">agentic models<span class="info-pop info-pop-right" tabindex="0" role="button" aria-label="What is an agentic model?"><span class="info-bang">!</span><span class="info-bubble">We evaluate the <strong>base LLM as the agent</strong> driving the pipeline directly &mdash; not a vendor&rsquo;s own agent harness or tool-use wrapper.</span></span></span></div>
     <div class="stat-item"><span class="stat-num">10</span><span class="stat-label">task combos</span></div>
     <div class="stat-item"><span class="stat-num">1,080+</span><span class="stat-label">total runs</span></div>
-    <div class="stat-item"><span class="stat-num">1.2B+</span><span class="stat-label">tokens burned</span></div>
   </aside>
 </section>
 
