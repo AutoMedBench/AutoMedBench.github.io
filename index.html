@@ -1980,15 +1980,15 @@ footer a:hover { color: var(--primary); text-decoration: none; }
             </button>
           </li>
           <li role="none">
-            <button type="button" role="menuitem" data-cat-leaderboard="vqa">
+            <button type="button" role="menuitem" disabled aria-disabled="true">
               <span class="nm-label">VQA</span>
-              <span class="nm-hint">scores pending</span>
+              <span class="nm-hint">coming soon</span>
             </button>
           </li>
           <li role="none">
-            <button type="button" role="menuitem" data-cat-leaderboard="reporting">
+            <button type="button" role="menuitem" disabled aria-disabled="true">
               <span class="nm-label">Report Generation</span>
-              <span class="nm-hint">scores pending</span>
+              <span class="nm-hint">coming soon</span>
             </button>
           </li>
           <li role="none">
@@ -2056,11 +2056,11 @@ footer a:hover { color: var(--primary); text-decoration: none; }
   <button class="cat-tab" data-cat="enhancement">
     <span class="live-dot"></span> Image Enhancement
   </button>
-  <button class="cat-tab" data-cat="vqa">
-    VQA <span class="badge badge-pending">scores pending</span>
+  <button class="cat-tab coming-soon" data-cat="vqa" disabled aria-disabled="true">
+    VQA <span class="badge">coming soon</span>
   </button>
-  <button class="cat-tab" data-cat="reporting">
-    Report Generation <span class="badge badge-pending">scores pending</span>
+  <button class="cat-tab coming-soon" data-cat="reporting" disabled aria-disabled="true">
+    Report Generation <span class="badge">coming soon</span>
   </button>
   <button class="cat-tab coming-soon" data-cat="detection" disabled aria-disabled="true">
     Lesion Detection <span class="badge">coming soon</span>
