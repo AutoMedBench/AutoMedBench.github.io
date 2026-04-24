@@ -2535,6 +2535,16 @@ footer a:hover { color: var(--primary); text-decoration: none; }
         <p class="sub">Wall-clock per run</p>
         <div class="chart-wrap"><canvas id="chartTime-rpt"></canvas></div>
       </div>
+      <div class="chart-card">
+        <h3>Avg Tokens</h3>
+        <p class="sub">Total LLM tokens / run</p>
+        <div class="chart-wrap"><canvas id="chartTokens-rpt"></canvas></div>
+      </div>
+      <div class="chart-card">
+        <h3>Avg Cost</h3>
+        <p class="sub">USD / run</p>
+        <div class="chart-wrap"><canvas id="chartCost-rpt"></canvas></div>
+      </div>
     </div>
 
     <div class="disclosure-bar">
@@ -5080,7 +5090,7 @@ function buildReportingAgentStats() {
     if (!rows) continue;
     for (const r of rows) {
       if (!acc[r.agent]) {
-        acc[r.agent] = { overall:[], agentic:[], task:[], turns:[], time:[], fail:[] };
+        acc[r.agent] = { overall:[], agentic:[], task:[], turns:[], time:[], tokens:[], cost:[], fail:[] };
       }
       const a = acc[r.agent];
       a.overall.push(r.overall);
@@ -5088,6 +5098,8 @@ function buildReportingAgentStats() {
       a.task.push(r.task);
       a.turns.push(r.turns);
       a.time.push(r.time_s);
+      a.tokens.push(r.tokens);
+      a.cost.push(r.cost);
       a.fail.push(r.fail);
     }
   }
@@ -5100,6 +5112,8 @@ function buildReportingAgentStats() {
     avgTask:    mean(acc[a].task),
     avgTurns:   mean(acc[a].turns),
     avgTime:    mean(acc[a].time),
+    avgTokens:  mean(acc[a].tokens),
+    avgCost:    mean(acc[a].cost),
     avgFail:    mean(acc[a].fail),
   }));
 }
@@ -5121,6 +5135,16 @@ function renderReportingFirstViewCharts() {
     value: d => d.avgTime / 60, label: 'Time',
     smallTicks: true, yFmt: v => v + 'm',
     tooltip: v => v.toFixed(1) + ' min'
+  });
+  simpleBarChart('chartTokens-rpt', stats, {
+    value: d => d.avgTokens / 1e6, label: 'Tokens',
+    smallTicks: true, yFmt: v => v.toFixed(1) + 'M',
+    tooltip: v => v.toFixed(2) + 'M tokens'
+  });
+  simpleBarChart('chartCost-rpt', stats, {
+    value: d => d.avgCost, label: 'Cost',
+    smallTicks: true, yFmt: v => '$' + v,
+    tooltip: v => fmtCost(v)
   });
 }
 
