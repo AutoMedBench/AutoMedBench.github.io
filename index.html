@@ -2404,31 +2404,31 @@ footer a:hover { color: var(--primary); text-decoration: none; }
           <thead><tr><th>Task</th><th>Modality</th><th>Task Time Range</th><th>Source</th><th>Description</th></tr></thead>
           <tbody>
             <tr>
-              <td><code>pathvqa-task</code></td><td>Histopathology</td>
+              <td>Pathology VQA</td><td>Histopathology</td>
               <td><code class="time-chip">—</code></td>
               <td><a href="https://huggingface.co/datasets/flaviagiammarino/path-vqa" target="_blank" rel="noopener">PathVQA</a></td>
               <td style="color:var(--ink-soft); font-size:13px">Open-ended pathology QA.</td>
             </tr>
             <tr>
-              <td><code>vqa-rad-task</code></td><td>CT · MRI · X-ray</td>
+              <td>Radiology VQA</td><td>CT · MRI · X-ray</td>
               <td><code class="time-chip">—</code></td>
               <td><a href="https://huggingface.co/datasets/flaviagiammarino/vqa-rad" target="_blank" rel="noopener">VQA-RAD</a></td>
               <td style="color:var(--ink-soft); font-size:13px">Radiology QA, mixed.</td>
             </tr>
             <tr>
-              <td><code>slake-task</code></td><td>Radiology · EN</td>
+              <td>Semantic Radiology VQA</td><td>Radiology · EN</td>
               <td><code class="time-chip">—</code></td>
               <td><a href="https://huggingface.co/datasets/BoKelvin/SLAKE" target="_blank" rel="noopener">SLAKE-EN</a></td>
               <td style="color:var(--ink-soft); font-size:13px">Semantic radiology QA.</td>
             </tr>
             <tr class="is-pending">
-              <td><code>medframeqa-task</code><span class="pending-pill">pending</span></td><td>Multi-frame video</td>
+              <td>Multi-frame Medical VQA <span class="pending-pill">pending</span></td><td>Multi-frame video</td>
               <td><code class="time-chip">—</code></td>
               <td><a href="https://huggingface.co/datasets/SuhaoYu1020/MedFrameQA" target="_blank" rel="noopener">MedFrameQA</a></td>
               <td style="color:var(--ink-soft); font-size:13px">Multi-frame MCQ (A–E).</td>
             </tr>
             <tr class="is-pending">
-              <td><code>medxpertqa-mm-task</code><span class="pending-pill">pending</span></td><td>Multi-modal</td>
+              <td>Expert Multimodal VQA <span class="pending-pill">pending</span></td><td>Multi-modal</td>
               <td><code class="time-chip">—</code></td>
               <td><a href="https://huggingface.co/datasets/TsinghuaC3I/MedXpertQA" target="_blank" rel="noopener">MedXpertQA · MM</a></td>
               <td style="color:var(--ink-soft); font-size:13px">Expert multi-image MCQ.</td>
@@ -2679,7 +2679,7 @@ footer a:hover { color: var(--primary); text-decoration: none; }
         <thead><tr><th>Task</th><th>Modality</th><th>Task Time Range</th><th>Source</th><th>Description</th></tr></thead>
         <tbody>
           <tr>
-            <td><code>mimic-cxr-report-task</code></td>
+            <td>Chest X-ray Report Generation</td>
             <td>Chest X-ray</td>
             <td><code class="time-chip">—</code></td>
             <td><a href="https://physionet.org/content/mimic-cxr/2.0.0/" target="_blank" rel="noopener">MIMIC-CXR</a></td>
@@ -3238,7 +3238,7 @@ const CONTENT = {
   /* ---------- per-task metadata (from eval_seg/*-seg-task/config.yaml) -- */
   taskMeta: {
     feta: {
-      display: 'Fetal Brain (FeTA)',
+      display: 'Fetal Brain Tissues',
       tabSlug: 'segmentation-mri-brain',
       modality: 'MRI T2w',
       samples: 40,
@@ -3248,7 +3248,7 @@ const CONTENT = {
       description: 'Multi-tissue segmentation of fetal brain T2w super-resolution MRI into 7 tissue classes (eCSF, GM, WM, LV, CBM, SGM, BS).'
     },
     kidney: {
-      display: 'Kidney (KiTS19)',
+      display: 'Kidney Tumor',
       tabSlug: 'segmentation-ct-kidney',
       modality: 'CT',
       samples: 20,
@@ -3258,7 +3258,7 @@ const CONTENT = {
       description: 'Segment kidneys and detect kidney lesions / tumors.'
     },
     pancreas: {
-      display: 'Pancreas (PanTS)',
+      display: 'Pancreas Tumor',
       tabSlug: 'segmentation-ct-pancreas',
       modality: 'CT',
       samples: 20,
@@ -3268,7 +3268,7 @@ const CONTENT = {
       description: 'Segment pancreas and detect pancreatic lesions / tumors.'
     },
     pancreas_oar: {
-      display: 'Pancreas OAR (PanTS)',
+      display: 'Pancreas OAR',
       tabSlug: 'segmentation-ct-pancreas-oar',
       modality: 'CT',
       samples: 20,
@@ -4804,14 +4804,14 @@ const ENH_TIERS = ['lite', 'standard'];
 // 1:1 with segmentation (Task · Modality · Task Time Range · Source · Description).
 const ENH_TASK_META = {
   'ldct-denoising-task': {
-    display:     'LDCT Denoising (AAPM LDCT)',
+    display:     'LDCT Denoising',
     modality:    'CT',
     source:      'AAPM LDCT',
     sourceUrl:   'https://www.aapm.org/grandchallenge/lowdosect/',
     description: 'Denoise low-dose CT to standard-dose quality.',
   },
   'mri-sr-task': {
-    display:     'MRI Super-Resolution (fastMRI)',
+    display:     'MRI Super-Resolution',
     modality:    'MRI',
     source:      'fastMRI',
     sourceUrl:   'https://fastmri.med.nyu.edu/',
