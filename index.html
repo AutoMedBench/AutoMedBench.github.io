@@ -194,42 +194,41 @@ h1, h2, h3 {
 }
 
 /* ---------- "I want to test my agent" CTA (terminal-bench style) ---------- */
+/* Temporarily gated as coming soon — low-contrast until the submission
+   flow is live. */
 .nav-links .test-agent-btn {
   display: inline-flex;
   align-items: center;
-  gap: 6px;
-  padding: 6px 12px;
-  background: #FFFFFF;
-  color: #0B0D09;
-  border: 1px solid #FFFFFF;
+  gap: 8px;
+  padding: 5px 11px;
+  background: transparent;
+  color: var(--ink-soft);
+  border: 1px solid var(--edge);
   border-radius: 6px;
   font-family: 'JetBrains Mono', monospace;
   font-size: 12px;
-  font-weight: 600;
+  font-weight: 500;
   letter-spacing: -0.01em;
   text-decoration: none;
   white-space: nowrap;
-  transition: transform 0.15s ease, box-shadow 0.15s ease, border-color 0.15s ease;
+  cursor: not-allowed;
 }
 .nav-links .test-agent-btn::before {
   content: '>';
-  color: #4A7355;
+  color: var(--ink-mute);
   font-weight: 700;
   margin-right: 1px;
 }
-.nav-links .test-agent-btn:hover {
-  background: #FFFFFF;
-  color: #000000;
-  text-decoration: none;
-  transform: translateY(-1px);
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.22);
-}
-/* Light mode: white-on-white needs a dark border so the button reads as a button */
-:root[data-theme="light"] .nav-links .test-agent-btn {
-  border-color: var(--ink);
-}
-:root[data-theme="light"] .nav-links .test-agent-btn:hover {
-  border-color: var(--primary);
+.nav-links .test-agent-btn::after {
+  content: 'coming soon';
+  font-size: 9.5px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  background: var(--amber-soft);
+  color: var(--walnut);
+  padding: 2px 6px;
+  border-radius: 3px;
 }
 
 /* ---------- Leaderboard hover dropdown ---------- */
@@ -2041,7 +2040,7 @@ footer a:hover { color: var(--primary); text-decoration: none; }
       <a href="#about">About</a>
       <a href="https://github.com/KumaKuma2002/AutoMedBench/tree/main" target="_blank" rel="noopener">GitHub</a>
       <span class="coming-chip">Paper</span>
-      <a href="https://github.com/AutoMedBench/AutoMedBench" target="_blank" rel="noopener" class="test-agent-btn">I want to test my agent</a>
+      <span class="test-agent-btn" aria-disabled="true">I want to test my agent</span>
       <button type="button" class="theme-toggle" id="themeToggle" aria-label="Toggle theme">
         <svg class="icon-sun"  viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true">
           <circle cx="12" cy="12" r="4"/>
