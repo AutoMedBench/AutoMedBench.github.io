@@ -194,16 +194,15 @@ h1, h2, h3 {
 }
 
 /* ---------- "I want to test my agent" CTA (terminal-bench style) ---------- */
-/* Temporarily gated as coming soon — low-contrast until the submission
-   flow is live. Uses the site primary green tones. */
+/* Temporarily gated as coming soon. White text on primary-green card. */
 .nav-links .test-agent-btn {
   display: inline-flex;
   align-items: center;
   gap: 8px;
   padding: 5px 11px;
-  background: transparent;
-  color: var(--primary);
-  border: 1px solid var(--primary-soft);
+  background: var(--primary);
+  color: #FFFFFF;
+  border: 1px solid var(--primary);
   border-radius: 6px;
   font-family: 'JetBrains Mono', monospace;
   font-size: 12px;
@@ -215,7 +214,7 @@ h1, h2, h3 {
 }
 .nav-links .test-agent-btn::before {
   content: '>';
-  color: var(--primary);
+  color: #FFFFFF;
   font-weight: 700;
   margin-right: 1px;
   opacity: 0.75;
@@ -226,8 +225,8 @@ h1, h2, h3 {
   font-weight: 700;
   text-transform: uppercase;
   letter-spacing: 0.08em;
-  background: var(--primary-soft);
-  color: var(--primary);
+  background: rgba(255, 255, 255, 0.18);
+  color: #FFFFFF;
   padding: 2px 6px;
   border-radius: 3px;
 }
