@@ -195,15 +195,15 @@ h1, h2, h3 {
 
 /* ---------- "I want to test my agent" CTA (terminal-bench style) ---------- */
 /* Temporarily gated as coming soon — low-contrast until the submission
-   flow is live. */
+   flow is live. Uses the site primary green tones. */
 .nav-links .test-agent-btn {
   display: inline-flex;
   align-items: center;
   gap: 8px;
   padding: 5px 11px;
   background: transparent;
-  color: var(--ink-soft);
-  border: 1px solid var(--edge);
+  color: var(--primary);
+  border: 1px solid var(--primary-soft);
   border-radius: 6px;
   font-family: 'JetBrains Mono', monospace;
   font-size: 12px;
@@ -215,9 +215,10 @@ h1, h2, h3 {
 }
 .nav-links .test-agent-btn::before {
   content: '>';
-  color: var(--ink-mute);
+  color: var(--primary);
   font-weight: 700;
   margin-right: 1px;
+  opacity: 0.75;
 }
 .nav-links .test-agent-btn::after {
   content: 'coming soon';
@@ -225,8 +226,8 @@ h1, h2, h3 {
   font-weight: 700;
   text-transform: uppercase;
   letter-spacing: 0.08em;
-  background: var(--amber-soft);
-  color: var(--walnut);
+  background: var(--primary-soft);
+  color: var(--primary);
   padding: 2px 6px;
   border-radius: 3px;
 }
