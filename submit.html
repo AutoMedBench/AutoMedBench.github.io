@@ -1,0 +1,261 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Test your agent · AutoMedBench</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600;9..144,700&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<script>
+  (function () {
+    try {
+      var saved = localStorage.getItem('ambench.theme');
+      var prefers = window.matchMedia('(prefers-color-scheme: dark)').matches;
+      document.documentElement.dataset.theme = saved || (prefers ? 'dark' : 'light');
+    } catch (e) {
+      document.documentElement.dataset.theme = 'light';
+    }
+  })();
+</script>
+<style>
+:root {
+  --bg: #F6F1E6;
+  --panel: #FAF6EE;
+  --ink: #3B4538;
+  --ink-soft: #737A6D;
+  --ink-mute: #A1A79A;
+  --edge: #ECE4D2;
+  --primary: #4A7355;
+  --primary-hover: #3E6248;
+  --primary-soft: #E6EDE5;
+  --amber-soft: #F6EDDB;
+  --walnut: #A08666;
+  --card-hover: #F1ECDE;
+  --shadow: 0 1px 1px rgba(60,70,58,0.018), 0 2px 4px rgba(60,70,58,0.025);
+}
+:root[data-theme="dark"] {
+  --bg: #141812;
+  --panel: #1C201B;
+  --ink: #E4E6DC;
+  --ink-soft: #A0A69A;
+  --ink-mute: #6E746A;
+  --edge: #2A2E28;
+  --primary: #84B38D;
+  --primary-hover: #9CC7A4;
+  --primary-soft: #1E2B21;
+  --amber-soft: #2A241B;
+  --walnut: #C6A98A;
+  --card-hover: #202520;
+  --shadow: 0 1px 2px rgba(0,0,0,0.40), 0 4px 10px rgba(0,0,0,0.28);
+}
+* { box-sizing: border-box; }
+html, body {
+  margin: 0; padding: 0;
+  background: var(--bg); color: var(--ink);
+  font-family: 'Inter', system-ui, -apple-system, sans-serif;
+  font-size: 15px; line-height: 1.55;
+  -webkit-font-smoothing: antialiased;
+  transition: background-color 0.25s ease, color 0.25s ease;
+}
+a { color: var(--primary); text-decoration: none; }
+a:hover { color: var(--primary-hover); text-decoration: underline; }
+
+.container {
+  max-width: 880px; margin: 0 auto;
+  padding: 48px 28px 64px;
+}
+.back-link {
+  display: inline-flex; align-items: center; gap: 6px;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 12.5px;
+  color: var(--ink-soft);
+  margin-bottom: 32px;
+  text-decoration: none;
+}
+.back-link:hover { color: var(--primary); text-decoration: none; }
+.back-link::before { content: '←'; font-size: 14px; }
+
+.eyebrow {
+  font-size: 10.5px;
+  text-transform: uppercase;
+  letter-spacing: 0.14em;
+  color: var(--ink-mute);
+  font-weight: 600;
+  margin-bottom: 10px;
+}
+h1 {
+  font-family: 'Fraunces', Georgia, serif;
+  font-size: 46px;
+  font-weight: 600;
+  letter-spacing: -0.02em;
+  margin: 0 0 14px;
+  color: var(--ink);
+  line-height: 1.05;
+}
+h1 em { font-style: italic; color: var(--primary); }
+.lede {
+  font-size: 17px;
+  color: var(--ink-soft);
+  max-width: 680px;
+  margin: 0 0 44px;
+}
+.lede code {
+  background: var(--primary-soft); color: var(--primary);
+  padding: 1px 6px; border-radius: 4px;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 13.5px;
+}
+
+.section-label {
+  font-family: 'Inter', sans-serif;
+  font-size: 11px; font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--ink-mute);
+  margin: 0 0 14px;
+}
+
+.cat-list {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 14px;
+  margin-bottom: 40px;
+}
+@media (max-width: 640px) { .cat-list { grid-template-columns: 1fr; } }
+.cat-card {
+  background: var(--panel);
+  border: 1px solid var(--edge);
+  border-radius: 10px;
+  padding: 20px 22px;
+  box-shadow: var(--shadow);
+  display: flex; flex-direction: column; gap: 6px;
+}
+.cat-card.muted { opacity: 0.82; }
+.cat-row {
+  display: flex; justify-content: space-between; align-items: center;
+  gap: 12px;
+}
+.cat-row h3 {
+  font-family: 'Fraunces', serif;
+  font-size: 19px; font-weight: 600;
+  margin: 0;
+  color: var(--ink);
+  letter-spacing: -0.01em;
+}
+.cat-card p {
+  font-size: 13.5px;
+  color: var(--ink-soft);
+  margin: 0;
+  font-family: 'JetBrains Mono', monospace;
+  line-height: 1.5;
+}
+.soon-chip {
+  font-family: 'Inter', sans-serif;
+  font-size: 9.5px; font-weight: 700;
+  text-transform: uppercase; letter-spacing: 0.08em;
+  background: var(--amber-soft); color: var(--walnut);
+  padding: 3px 8px; border-radius: 3px;
+  white-space: nowrap;
+}
+
+.info-strip {
+  background: var(--panel);
+  border: 1px solid var(--edge);
+  border-left: 3px solid var(--primary);
+  border-radius: 8px;
+  padding: 18px 22px;
+  font-size: 14px;
+  color: var(--ink-soft);
+  line-height: 1.6;
+}
+.info-strip strong { color: var(--ink); }
+.info-strip code {
+  background: var(--card-hover);
+  color: var(--ink);
+  padding: 1px 6px; border-radius: 3px;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 12.5px;
+}
+
+footer {
+  margin-top: 56px;
+  padding-top: 22px;
+  border-top: 1px solid var(--edge);
+  font-size: 12.5px;
+  color: var(--ink-soft);
+}
+</style>
+</head>
+<body>
+<div class="container">
+  <a href="index.html" class="back-link">back to leaderboard</a>
+
+  <div class="eyebrow">Submission</div>
+  <h1>Test your <em>agent</em></h1>
+  <p class="lede">
+    Run your own agentic model through the AutoMedBench S1&nbsp;&rarr;&nbsp;S5 pipeline
+    and get a slot on the public leaderboard. Submissions open per-category as
+    each track&rsquo;s harness, sandbox, and judge hit release status.
+  </p>
+
+  <div class="section-label">Task categories</div>
+  <div class="cat-list">
+    <div class="cat-card muted">
+      <div class="cat-row">
+        <h3>Segmentation</h3>
+        <span class="soon-chip">coming soon</span>
+      </div>
+      <p>Fetal Brain Tissues &middot; Kidney Tumor &middot; Pancreas Tumor &middot; Pancreas OAR</p>
+    </div>
+
+    <div class="cat-card muted">
+      <div class="cat-row">
+        <h3>Image Enhancement</h3>
+        <span class="soon-chip">coming soon</span>
+      </div>
+      <p>LDCT Denoising &middot; MRI Super-Resolution</p>
+    </div>
+
+    <div class="cat-card muted">
+      <div class="cat-row">
+        <h3>VQA</h3>
+        <span class="soon-chip">coming soon</span>
+      </div>
+      <p>Pathology VQA &middot; Radiology VQA &middot; Semantic Radiology VQA &middot; Expert Multimodal VQA</p>
+    </div>
+
+    <div class="cat-card muted">
+      <div class="cat-row">
+        <h3>Report Generation</h3>
+        <span class="soon-chip">coming soon</span>
+      </div>
+      <p>Chest X-ray Report Generation</p>
+    </div>
+
+    <div class="cat-card muted">
+      <div class="cat-row">
+        <h3>Lesion Detection</h3>
+        <span class="soon-chip">coming soon</span>
+      </div>
+      <p>Chest X-ray Abnormality Detection</p>
+    </div>
+  </div>
+
+  <div class="info-strip">
+    <strong>How submission will work.</strong>
+    Once a track opens, you&rsquo;ll package your agent against the
+    <code>run_eval.py</code> contract in the public
+    <a href="https://github.com/AutoMedBench/AutoMedBench" target="_blank" rel="noopener">AutoMedBench</a>
+    repo, open a PR on the matching <code>eval_&lt;track&gt;</code> branch,
+    and the maintainers run the held-out sweep against the private split.
+    All five S1&nbsp;&rarr;&nbsp;S5 stage rubrics are applied automatically
+    and the leaderboard updates on merge.
+  </div>
+
+  <footer>
+    © 2026 AutoMedBench &middot; UC Santa Cruz &middot; NVIDIA
+  </footer>
+</div>
+</body>
+</html>

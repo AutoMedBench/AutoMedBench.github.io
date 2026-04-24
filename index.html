@@ -194,11 +194,11 @@ h1, h2, h3 {
 }
 
 /* ---------- "I want to test my agent" CTA (terminal-bench style) ---------- */
-/* Temporarily gated as coming soon. White text on primary-green card. */
+/* White text on primary-green card; links to submit.html. */
 .nav-links .test-agent-btn {
   display: inline-flex;
   align-items: center;
-  gap: 8px;
+  gap: 6px;
   padding: 5px 11px;
   background: var(--primary);
   color: #FFFFFF;
@@ -206,11 +206,12 @@ h1, h2, h3 {
   border-radius: 6px;
   font-family: 'JetBrains Mono', monospace;
   font-size: 12px;
-  font-weight: 500;
+  font-weight: 600;
   letter-spacing: -0.01em;
   text-decoration: none;
   white-space: nowrap;
-  cursor: not-allowed;
+  cursor: pointer;
+  transition: background 0.15s ease, transform 0.15s ease, box-shadow 0.15s ease;
 }
 .nav-links .test-agent-btn::before {
   content: '>';
@@ -219,16 +220,13 @@ h1, h2, h3 {
   margin-right: 1px;
   opacity: 0.75;
 }
-.nav-links .test-agent-btn::after {
-  content: 'coming soon';
-  font-size: 9.5px;
-  font-weight: 700;
-  text-transform: uppercase;
-  letter-spacing: 0.08em;
-  background: rgba(255, 255, 255, 0.18);
+.nav-links .test-agent-btn:hover {
+  background: var(--primary-hover);
+  border-color: var(--primary-hover);
   color: #FFFFFF;
-  padding: 2px 6px;
-  border-radius: 3px;
+  text-decoration: none;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.18);
 }
 
 /* ---------- Leaderboard hover dropdown ---------- */
@@ -2040,7 +2038,7 @@ footer a:hover { color: var(--primary); text-decoration: none; }
       <a href="#about">About</a>
       <a href="https://github.com/KumaKuma2002/AutoMedBench/tree/main" target="_blank" rel="noopener">GitHub</a>
       <span class="coming-chip">Paper</span>
-      <span class="test-agent-btn" aria-disabled="true">I want to test my agent</span>
+      <a href="submit.html" class="test-agent-btn">I want to test my agent</a>
       <button type="button" class="theme-toggle" id="themeToggle" aria-label="Toggle theme">
         <svg class="icon-sun"  viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true">
           <circle cx="12" cy="12" r="4"/>
