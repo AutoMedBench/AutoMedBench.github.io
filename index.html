@@ -2792,6 +2792,186 @@ footer a:hover { color: var(--primary); text-decoration: none; }
 
 
 <!-- ===================================================================== -->
+<!--  LESION DETECTION VIEW                                                 -->
+<!-- ===================================================================== -->
+<div id="detection-view" style="display:none">
+
+  <div class="primary-tabs" id="primaryTabs-detection">
+    <button class="primary-tab active" data-panel="performance">Performance</button>
+    <button class="primary-tab" data-panel="workflow">Workflow</button>
+    <button class="primary-tab" data-panel="tiers">Task Setting</button>
+    <button class="primary-tab" data-panel="rubrics">Scoring Rubrics</button>
+  </div>
+
+  <!-- ================= DETECTION · PERFORMANCE ================= -->
+  <div id="detection-panel-performance" class="panel active">
+    <div class="scores-pending">
+      <h3>Scores pending — first sweep queued</h3>
+      <p>
+        Workflow · Task Setting · Scoring Rubrics are finalized.
+        Leaderboard fills in once the first runs land on <span class="mono">vindr-cxr-det-task</span>.
+      </p>
+    </div>
+  </div>
+
+  <!-- ================= DETECTION · WORKFLOW ================= -->
+  <div id="detection-panel-workflow" class="panel">
+    <div class="workflow-wrap">
+      <h3>Agent Workflow — S1 → S5</h3>
+      <p>
+        Same coding-agent loop as every other track. S4 writes a bbox
+        prediction list per image; S5 consolidates the submission and calls
+        <code>submit_results</code>. Scoring is <code>mAP@0.5</code> on the
+        held-out private labels.
+      </p>
+      <div class="workflow-flow" id="workflowFlow-detection"></div>
+      <p class="flow-hint">
+        Benchmark unit is <strong>one chest X-ray</strong>. See
+        <button type="button" class="inline-link" data-goto-detection="rubrics">Scoring Rubrics</button>
+        for how each stage is scored.
+      </p>
+    </div>
+  </div>
+
+  <!-- ================= DETECTION · TASK SETTING ================= -->
+  <div id="detection-panel-tiers" class="panel">
+
+    <div class="content-block">
+      <h3>Difficulty Tiers</h3>
+      <p>Defined in <code>eval_det2d/tier_config.py</code>. Tiers differ by model-selection strategy and plan-artefact requirements at S1.</p>
+      <div class="tier-grid" id="tierGrid-detection"></div>
+    </div>
+
+    <div class="content-block">
+      <h3>Dataset <small>chest X-ray abnormality detection</small></h3>
+      <table class="simple dataset-table">
+        <thead><tr><th>Task</th><th>Modality</th><th>Task Time Range</th><th>Source</th><th>Description</th></tr></thead>
+        <tbody>
+          <tr>
+            <td>Chest X-ray Abnormality Detection</td>
+            <td>Chest X-ray</td>
+            <td><code class="time-chip">—</code></td>
+            <td><a href="https://vindr.ai/datasets/vindr-cxr" target="_blank" rel="noopener">VinDr-CXR</a></td>
+            <td style="color:var(--ink-soft); font-size:13px">Single-class bbox detection; all positive findings mapped to <code>abnormality</code>. Task score = mAP@0.5.</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="content-block">
+      <h3>Sandbox Rules</h3>
+      <dl class="constraints">
+        <div class="row">
+          <dt>Policy</dt>
+          <dd><strong>Inference-only.</strong> Agents run pre-trained detectors on real chest X-rays; no training or fine-tuning on benchmark data.</dd>
+        </div>
+        <div class="row">
+          <dt>Allowed</dt>
+          <dd>
+            <code>data/VinDrCXR_Detection10/public/&lt;case_id&gt;/image.png</code> <span class="note">read-only</span>
+            <span class="sep">·</span>
+            <code>/workspace/</code> <span class="note">read-write</span>
+          </dd>
+        </div>
+        <div class="row forbidden">
+          <dt>Forbidden</dt>
+          <dd>
+            <code>data/VinDrCXR_Detection10/private/</code>
+            <span class="sep">·</span> ground-truth <code>boxes.json</code>
+            <span class="sep">·</span> <code>ground_truth.csv</code>
+            <span class="sep">·</span> other agents' runs
+          </dd>
+        </div>
+        <div class="row">
+          <dt>Limits</dt>
+          <dd>
+            Time limit <code>3 600 s</code> per run <span class="sep">·</span>
+            IoU threshold <code>0.5</code> (configurable via <code>iou_threshold</code>)
+          </dd>
+        </div>
+        <div class="row">
+          <dt>On violation</dt>
+          <dd>
+            <span class="sev warn" data-n="1">Warning</span>
+            <span class="sev-body">execution blocked; agent continues</span>
+            <span class="sep">·</span>
+            <span class="sev fail" data-n="2">Disqualified</span>
+            <span class="sev-body">run zeroed; no credit</span>
+          </dd>
+        </div>
+      </dl>
+    </div>
+
+  </div>
+
+  <!-- ================= DETECTION · SCORING RUBRICS ================= -->
+  <div id="detection-panel-rubrics" class="panel">
+
+    <div class="content-block">
+      <h3>Overall Score</h3>
+      <p>Every run gets a single Overall Score (0–100). It is the average of an <strong>Agentic</strong> score (how well the agent ran the research pipeline) and a <strong>Task</strong> score (how good the final bbox output was).</p>
+
+      <div class="score-pies">
+        <figure class="score-pie">
+          <div class="pie-caption">
+            <span class="lbl">Overall = ½ · Agentic + ½ · Task</span>
+            <span class="rng">× 100 → [0, 100]</span>
+          </div>
+          <ul class="pie-legend">
+            <li>
+              <span class="sw" style="background:var(--primary)"></span>
+              <span class="sid"><span class="info-pop" tabindex="0" role="button" aria-label="How Agentic is computed"><strong>Agentic</strong><span class="info-bang">!</span><span class="info-bubble"><strong>Agentic</strong> — weighted sum of S1–S5 stage scores, each ∈ [0, 1]. Stays in [0, 1] internally, shown ×100.</span></span></span>
+              <span class="w">50%</span>
+            </li>
+            <li>
+              <span class="sw" style="background:var(--walnut)"></span>
+              <span class="sid"><span class="info-pop" tabindex="0" role="button" aria-label="How Task is computed"><strong>Task</strong><span class="info-bang">!</span><span class="info-bubble"><strong>Task (Detection)</strong> = <code>mAP@0.5</code> on the held-out private labels. ∈ [0, 1].</span></span></span>
+              <span class="w">50%</span>
+            </li>
+          </ul>
+        </figure>
+
+        <figure class="score-pie">
+          <div class="pie-caption">
+            <span class="lbl">Agentic = weighted S1 → S5</span>
+            <span class="rng">∈ [0, 1]</span>
+          </div>
+          <ul class="pie-legend">
+            <li><span class="sw" style="background:var(--primary)"></span><span class="sid">S1</span><span class="snm">PLAN</span><span class="w">25%</span></li>
+            <li><span class="sw" style="background:var(--primary)"></span><span class="sid">S2</span><span class="snm">SETUP</span><span class="w">15%</span></li>
+            <li><span class="sw" style="background:var(--primary)"></span><span class="sid">S3</span><span class="snm">VALIDATE</span><span class="w">35%</span></li>
+            <li><span class="sw" style="background:var(--primary)"></span><span class="sid">S4</span><span class="snm">INFERENCE</span><span class="w">15%</span></li>
+            <li><span class="sw" style="background:var(--primary)"></span><span class="sid">S5</span><span class="snm">SUBMIT</span><span class="w">10%</span></li>
+          </ul>
+        </figure>
+      </div>
+
+      <p style="margin-top:14px; color:var(--ink-soft); font-size:13px">
+        All sub-scores live in <code>[0, 1]</code>; the leaderboard just shows them ×100.
+      </p>
+    </div>
+
+    <div class="content-block">
+      <h3>Stage-by-stage breakdown <small>S1 → S5 · weights & sub-criteria</small></h3>
+      <p>The Agentic score is a weighted sum across the five stages. Click any stage for its sub-criteria and scoring formula.</p>
+
+      <div class="workflow-flow" id="rubricsFlow-detection"></div>
+
+      <div class="workflow-legend">
+        <span><span class="dot"></span>LLM-judge scored: S1–S3</span>
+        <span><span class="dot"></span>Continuous: S4</span>
+        <span><span class="dot"></span>Discrete: S5</span>
+      </div>
+
+      <div class="stage-detail" id="stageDetail-detection"></div>
+    </div>
+
+  </div>
+
+</div>  <!-- end detection-view -->
+
+
+<!-- ===================================================================== -->
 <!--  IMAGE ENHANCEMENT VIEW                                                -->
 <!-- ===================================================================== -->
 <div id="enhancement-view" style="display:none">
@@ -4250,7 +4430,7 @@ function renderPerformanceTable() {
 /*  Live: Segmentation · VQA · Report Generation · Image Enhancement        */
 /*  Coming soon: Lesion Detection (disabled tab, no view wired up yet)      */
 /* ======================================================================= */
-const CATEGORY_VIEWS = ['segmentation', 'enhancement', 'vqa', 'reporting'];
+const CATEGORY_VIEWS = ['segmentation', 'enhancement', 'vqa', 'reporting', 'detection'];
 let activeCategory = 'segmentation';
 document.getElementById('catTabs').addEventListener('click', (e) => {
   const btn = e.target.closest('.cat-tab');
@@ -4302,7 +4482,7 @@ function wireIncomingView(slug) {
     if (tab && !tab.classList.contains('active')) tab.click();
   });
 }
-['vqa', 'reporting', 'enhancement'].forEach(wireIncomingView);
+['vqa', 'reporting', 'enhancement', 'detection'].forEach(wireIncomingView);
 
 /* ======================================================================= */
 /*  PER-TRACK TIER DATA — keeps incoming views structurally aligned with   */
@@ -4351,6 +4531,20 @@ const TRACK_TIERS = {
         ['Environment', 'Agent sets up deps'],
         ['Guidance',    'S1 skill only']
       ] }
+  ],
+  'detection': [
+    { id: 'lite', name: 'Lite', tag: 'Agent follows a recipe', burden: 0.3,
+      specs: [
+        ['Model',       'Hardcoded detector given'],
+        ['Environment', 'requirements.txt provided'],
+        ['Guidance',    'S1–S3 skills provided']
+      ] },
+    { id: 'standard', name: 'Standard', tag: 'Agent chooses within bounds', burden: 0.6,
+      specs: [
+        ['Model',       'Pick from detector families'],
+        ['Environment', 'Agent sets up deps'],
+        ['Guidance',    'S1 skill only']
+      ] }
   ]
 };
 
@@ -4392,6 +4586,8 @@ function renderTrackTiers(slug) {
     renderTierGridInto('tierGrid-reporting',  TRACK_TIERS['reporting']);
   } else if (slug === 'enhancement') {
     renderTierGridInto('tierGrid-enhancement', TRACK_TIERS['enhancement']);
+  } else if (slug === 'detection') {
+    renderTierGridInto('tierGrid-detection',  TRACK_TIERS['detection']);
   }
   _tiersRenderedFor.add(slug);
 }
@@ -4588,6 +4784,69 @@ const TRACK_STAGES = {
         ['format_valid',      'All enhanced.npy pass format check', '{0, 1}']
       ],
       formula: 'S5 = 0.50·has_valid_results + 0.50·format_valid ∈ {0.0, 0.5, 1.0}'
+    }
+  ],
+
+  /* Lesion Detection — S1-S5 rubric from eval_det2d/llm_judge.py.
+     1:1 port of segmentation's structure; Task score = mAP@0.5. */
+  'detection': [
+    {
+      id: 'S1', name: 'PLAN', weight: 25, judge: 'llm',
+      desc: 'Research detectors, write plan.md',
+      scale: 'Each sub-criterion ∈ {0, 1}',
+      criteria: [
+        ['s1a', 'Created plan.md?', '{0, 1}'],
+        ['s1b', 'Plan has clear pipeline instructions?', '{0, 1}'],
+        ['s1c', 'Chose a lesion-detection model suited to the task?', '{0, 1}'],
+        ['s1d', 'Researched ≥ 3 models? (Lite: auto-pass)', '{0, 1}'],
+        ['s1e', 'Created plan visualization (png)? (Lite: auto-pass)', '{0, 1}'],
+        ['s1f', 'Plot has clear pipeline diagram? (Lite: auto-pass)', '{0, 1}']
+      ],
+      formula: 'S1 = (s1a + s1b + s1c + s1d + s1e + s1f) / 6  ∈ [0, 1]'
+    },
+    {
+      id: 'S2', name: 'SETUP', weight: 15, judge: 'llm',
+      desc: 'Download weights, install deps, load GPU',
+      scale: 'Each sub-criterion ∈ {0, 1}',
+      criteria: [
+        ['s2a', 'Checkpoint downloaded?', '{0, 1}'],
+        ['s2b', 'Compatibility check done?', '{0, 1}'],
+        ['s2c', 'Environment setup succeeded?', '{0, 1}'],
+        ['s2d', 'Env failures ≤ 5 attempts?', '{0, 1}'],
+        ['s2e', 'Model loaded on GPU?', '{0, 1}']
+      ],
+      formula: 'S2 = (s2a + s2b + s2c + s2d + s2e) / 5  ∈ [0, 1]'
+    },
+    {
+      id: 'S3', name: 'VALIDATE', weight: 35, judge: 'llm',
+      desc: 'Test on 1 image, verify bbox format and quality',
+      scale: 'LLM-judge ∈ [0, 1]',
+      criteria: [
+        ['judge_score',   'LLM-judge verdict on validation quality', '[0, 1]'],
+        ['pilot_before',  'Ran a pilot before full inference', '{0, 1}'],
+        ['format_sanity', 'Checked bbox format (x1 ≤ x2, y1 ≤ y2) and per-box scores', '{0, 1}']
+      ],
+      formula: 'S3 = LLM-judge verdict ∈ [0, 1]'
+    },
+    {
+      id: 'S4', name: 'INFERENCE', weight: 15, judge: 'continuous',
+      desc: 'Run detector on all images, write predictions.json',
+      scale: 'Two equal-weight sub-criteria',
+      criteria: [
+        ['completion_rate',     'images_with_predictions / total_images', '[0, 1]'],
+        ['predictions_valid',   '1 if all predictions.json pass bbox schema check', '{0, 1}']
+      ],
+      formula: 'S4 = 0.50·completion_rate + 0.50·predictions_valid  ∈ [0, 1]'
+    },
+    {
+      id: 'S5', name: 'SUBMIT', weight: 10, judge: 'discrete',
+      desc: 'Consolidate predictions, call submit_results',
+      scale: 'Each sub-criterion ∈ {0, 1}',
+      criteria: [
+        ['has_valid_results',    'Any image scored AND mAP@0.5 computable', '{0, 1}'],
+        ['output_format_valid',  'Submission JSON passes schema check', '{0, 1}']
+      ],
+      formula: 'S5 = 0.50·has_valid_results + 0.50·output_format_valid  ∈ {0.0, 0.5, 1.0}'
     }
   ]
 };
@@ -5264,7 +5523,7 @@ renderReportPerTaskTable();
 // Eagerly render workflow + tier grids + per-step rubrics for all incoming
 // tracks so the content is in the DOM regardless of which tab the user opens
 // first.
-['vqa', 'reporting', 'enhancement'].forEach(slug => {
+['vqa', 'reporting', 'enhancement', 'detection'].forEach(slug => {
   renderIncomingWorkflow(slug);
   renderTrackTiers(slug);
   renderTrackRubrics(slug);
