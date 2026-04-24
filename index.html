@@ -1986,9 +1986,9 @@ footer a:hover { color: var(--primary); text-decoration: none; }
             </button>
           </li>
           <li role="none">
-            <button type="button" role="menuitem" disabled aria-disabled="true">
+            <button type="button" role="menuitem" data-cat-leaderboard="reporting">
               <span class="nm-label">Report Generation</span>
-              <span class="nm-hint">coming soon</span>
+              <span class="nm-hint"><span class="live-dot"></span>live</span>
             </button>
           </li>
           <li role="none">
@@ -2041,8 +2041,8 @@ footer a:hover { color: var(--primary); text-decoration: none; }
   </div>
   <aside class="hero-stats" aria-label="benchmark at a glance">
     <div class="stat-item"><span class="stat-num">7</span><span class="stat-label">agentic models<span class="info-pop info-pop-right" tabindex="0" role="button" aria-label="What is an agentic model?"><span class="info-bang">!</span><span class="info-bubble">We evaluate the <strong>base LLM as the agent</strong> driving the pipeline directly &mdash; not a vendor&rsquo;s own agent harness or tool-use wrapper.</span></span></span></div>
-    <div class="stat-item"><span class="stat-num">12</span><span class="stat-label">task combos</span></div>
-    <div class="stat-item"><span class="stat-num">1,340+</span><span class="stat-label">total runs</span></div>
+    <div class="stat-item"><span class="stat-num">14</span><span class="stat-label">task combos</span></div>
+    <div class="stat-item"><span class="stat-num">1,480+</span><span class="stat-label">total runs</span></div>
   </aside>
 </section>
 
@@ -2059,8 +2059,8 @@ footer a:hover { color: var(--primary); text-decoration: none; }
   <button class="cat-tab coming-soon" data-cat="vqa" disabled aria-disabled="true">
     VQA <span class="badge">coming soon</span>
   </button>
-  <button class="cat-tab coming-soon" data-cat="reporting" disabled aria-disabled="true">
-    Report Generation <span class="badge">coming soon</span>
+  <button class="cat-tab" data-cat="reporting">
+    <span class="live-dot"></span> Report Generation
   </button>
   <button class="cat-tab coming-soon" data-cat="detection" disabled aria-disabled="true">
     Lesion Detection <span class="badge">coming soon</span>
@@ -2509,12 +2509,91 @@ footer a:hover { color: var(--primary); text-decoration: none; }
 
   <!-- ================= REPORT · PERFORMANCE ================= -->
   <div id="reporting-panel-performance" class="panel active">
-    <div class="scores-pending">
-      <h3>Scores pending — first sweep queued</h3>
-      <p>
-        Workflow · Task Setting · Scoring Rubrics are finalized.
-        Leaderboard fills in once the first runs land on <span class="mono">mimic-cxr-report-task</span>.
-      </p>
+
+    <div class="perf-grid">
+      <div class="chart-card span-4 dark" id="overallPerformance-rpt">
+        <h3>Overall Score — averaged across all tasks</h3>
+        <p class="sub">Overall = (<span class="info-pop on-dark" tabindex="0" role="button" aria-label="What is the Agentic score?"><strong>Agentic</strong><span class="info-bang">!</span><span class="info-bubble"><strong>Agentic</strong> — how well the agent <em>ran the research pipeline</em>. Weighted sum of S1–S5 stage scores (plan, setup, validate, infer, submit). ∈ [0, 100].</span></span> + <span class="info-pop on-dark" tabindex="0" role="button" aria-label="What is the Task score?"><strong>Task</strong><span class="info-bang">!</span><span class="info-bubble"><strong>Task</strong> — how good the <em>final output</em> was. Mean over BLEU, METEOR, ROUGE-L, F1RadGraph, μP, μR, μF1 against the reference report. ∈ [0, 100].</span></span>) / 2</p>
+        <div class="chart-legend" id="chartOverallLegend-rpt">
+          <span class="legend-hint">
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+              <path d="M5 3 L5 17 L9 13 L12 20 L14.5 19 L11.5 12 L17 12 Z" fill="#FFFFFF"/>
+            </svg>
+            click a chip to toggle
+          </span>
+          <div class="legend-chips"></div>
+        </div>
+        <div class="chart-wrap"><canvas id="chartOverall-rpt"></canvas></div>
+      </div>
+      <div class="chart-card">
+        <h3>Avg Turns</h3>
+        <p class="sub">Conversational turns / run</p>
+        <div class="chart-wrap"><canvas id="chartTurns-rpt"></canvas></div>
+      </div>
+      <div class="chart-card">
+        <h3>Avg Time</h3>
+        <p class="sub">Wall-clock per run</p>
+        <div class="chart-wrap"><canvas id="chartTime-rpt"></canvas></div>
+      </div>
+    </div>
+
+    <div class="disclosure-bar">
+      <button class="disclosure-btn" id="moreMetricsBtn-rpt">
+        <span class="info-i">i</span>
+        More metrics
+        <span class="chev">▸</span>
+      </button>
+    </div>
+
+    <div class="disclosure-content" id="moreMetrics-rpt">
+      <div class="metric-grid-1">
+        <div class="chart-card">
+          <h3>
+            Failure Rate
+            <span class="info-pop" tabindex="0" role="button" aria-label="How is failure defined?">
+              <span class="info-bang">!</span>
+              <span class="info-bubble">
+                <strong>Failure</strong> = run did not finish all five stages.
+                <br>Causes: error, timeout, turn / cost limit, or no submission produced.
+              </span>
+            </span>
+          </h3>
+          <p class="sub">% of runs that did not reach a final submission.</p>
+          <div class="chart-wrap"><canvas id="chartFail-rpt"></canvas></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="pertask-section">
+      <h2 class="section-title">Per-Task Leaderboard</h2>
+      <p class="section-sub">MIMIC-CXR chest X-ray findings report generation.</p>
+
+      <div class="task-bar">
+        <div class="task-tabs" id="rptTaskTabs">
+          <button type="button" class="task-tab active" data-rpt-task="mimic-cxr-report-task">mimic-cxr-report-task</button>
+        </div>
+        <div class="variant-picker">
+          <label for="rptTierSelect">
+            Difficulty
+            <span class="info-pop info-pop-right" tabindex="0" role="button" aria-label="How is difficulty defined?">
+              <span class="info-bang">!</span>
+              <span class="info-bubble">
+                <strong>Two tiers</strong> — more scaffolding = lower difficulty.
+                <ul class="bubble-list">
+                  <li><strong>Lite</strong> · exact MRG given</li>
+                  <li><strong>Standard</strong> · pick from MRG families</li>
+                </ul>
+              </span>
+            </span>
+          </label>
+          <select class="variant-select" id="rptTierSelect">
+            <option value="lite">Lite</option>
+            <option value="standard">Standard</option>
+          </select>
+        </div>
+      </div>
+
+      <div id="rptPertaskBody"></div>
     </div>
   </div>
 
@@ -4965,6 +5044,160 @@ renderVariantPicker();
 renderPerformanceTable();
 renderEnhFirstViewCharts();
 renderEnhPerTaskTable();
+
+/* ======================================================================= */
+/*  REPORT GENERATION — per-task leaderboard                                */
+/* ======================================================================= */
+const REPORTING_DATA = {
+  'mimic-cxr-report-task': {
+    lite: [
+      {agent:"glm-5",           n:10, overall:0.6578, agentic:0.9473, task:0.3683, turns:37.0, time_s:914.0,  cost:2.14, tokens:1024493, fail:0.0},
+      {agent:"claude-opus-4.6", n:10, overall:0.6406, agentic:0.9161, task:0.3651, turns:11.0, time_s:736.9,  cost:5.58, tokens:348018,  fail:0.0},
+      {agent:"qwen3.5",         n:10, overall:0.6215, agentic:0.9161, task:0.3269, turns:32.0, time_s:3605.0, cost:1.50, tokens:707232,  fail:100.0},
+      {agent:"kimi-k2.5",       n:10, overall:0.5962, agentic:0.9161, task:0.2763, turns:28.0, time_s:2659.3, cost:1.90, tokens:689864,  fail:0.0},
+      {agent:"gemini-3.1-pro",  n:10, overall:0.3997, agentic:0.7426, task:0.0567, turns:3.0,  time_s:315.1,  cost:0.27, tokens:36750,   fail:0.0},
+      {agent:"chatgpt-5.4",     n:10, overall:0.2796, agentic:0.5592, task:0.0000, turns:3.0,  time_s:795.4,  cost:0.73, tokens:45465,   fail:100.0},
+      {agent:"minimax-m2.5",    n:10, overall:0.0321, agentic:0.0643, task:0.0000, turns:3.0,  time_s:42.4,   cost:0.18, tokens:99309,   fail:100.0}
+    ],
+    standard: [
+      {agent:"glm-5",           n:10, overall:0.6062, agentic:0.9286, task:0.2838, turns:44.0, time_s:968.2,  cost:2.55, tokens:1218316, fail:0.0},
+      {agent:"claude-opus-4.6", n:10, overall:0.5972, agentic:0.9036, task:0.2908, turns:12.0, time_s:635.3,  cost:6.08, tokens:379656,  fail:0.0},
+      {agent:"gemini-3.1-pro",  n:10, overall:0.5884, agentic:0.8536, task:0.3232, turns:15.0, time_s:706.1,  cost:1.33, tokens:183750,  fail:0.0},
+      {agent:"minimax-m2.5",    n:10, overall:0.3142, agentic:0.6285, task:0.0000, turns:48.0, time_s:2152.8, cost:2.85, tokens:1588944, fail:100.0},
+      {agent:"chatgpt-5.4",     n:10, overall:0.2976, agentic:0.5952, task:0.0000, turns:12.0, time_s:1505.2, cost:2.90, tokens:181860,  fail:100.0},
+      {agent:"qwen3.5",         n:10, overall:0.2536, agentic:0.5072, task:0.0000, turns:13.0, time_s:694.0,  cost:0.61, tokens:287313,  fail:100.0},
+      {agent:"kimi-k2.5",       n:10, overall:0.0215, agentic:0.0429, task:0.0000, turns:2.0,  time_s:101.0,  cost:0.14, tokens:49276,   fail:100.0}
+    ]
+  }
+};
+
+let rptTier = 'lite';
+
+function buildReportingAgentStats() {
+  const acc = {};
+  for (const v of ['lite', 'standard']) {
+    const rows = (REPORTING_DATA['mimic-cxr-report-task'] || {})[v];
+    if (!rows) continue;
+    for (const r of rows) {
+      if (!acc[r.agent]) {
+        acc[r.agent] = { overall:[], agentic:[], task:[], turns:[], time:[], fail:[] };
+      }
+      const a = acc[r.agent];
+      a.overall.push(r.overall);
+      a.agentic.push(r.agentic);
+      a.task.push(r.task);
+      a.turns.push(r.turns);
+      a.time.push(r.time_s);
+      a.fail.push(r.fail);
+    }
+  }
+  const agents = Object.keys(acc).sort((a, b) => mean(acc[b].overall) - mean(acc[a].overall));
+  return agents.map(a => ({
+    agent: a,
+    color: AGENT_COLORS[a] || '#8A6B4A',
+    avgOverall: mean(acc[a].overall),
+    avgAgentic: mean(acc[a].agentic),
+    avgTask:    mean(acc[a].task),
+    avgTurns:   mean(acc[a].turns),
+    avgTime:    mean(acc[a].time),
+    avgFail:    mean(acc[a].fail),
+  }));
+}
+
+function renderReportingFirstViewCharts() {
+  const stats = buildReportingAgentStats();
+  const overall = overallGroupedChart('chartOverall-rpt', stats);
+  renderOverallLegend('chartOverallLegend-rpt', overall, '#ECEFE5');
+  Object.values(AGENT_BRAND).forEach(b => {
+    if (!b.slug) return;
+    loadBrandLogo(b.slug).then(img => { if (img) overall.update('none'); });
+  });
+  simpleBarChart('chartTurns-rpt', stats, {
+    value: d => d.avgTurns, label: 'Turns',
+    smallTicks: true, yFmt: v => v,
+    tooltip: v => v.toFixed(1) + ' turns'
+  });
+  simpleBarChart('chartTime-rpt', stats, {
+    value: d => d.avgTime / 60, label: 'Time',
+    smallTicks: true, yFmt: v => v + 'm',
+    tooltip: v => v.toFixed(1) + ' min'
+  });
+}
+
+let _rptSecondaryRendered = false;
+function renderReportingSecondaryCharts() {
+  if (_rptSecondaryRendered) return;
+  _rptSecondaryRendered = true;
+  const stats = buildReportingAgentStats();
+  simpleBarChart('chartFail-rpt', stats, {
+    value: d => d.avgFail, label: 'Fail %',
+    yMax: 100, yFmt: v => v + '%', smallTicks: true,
+    tooltip: v => v.toFixed(1) + '%'
+  });
+}
+
+function renderReportPerTaskTable() {
+  const rows = (REPORTING_DATA['mimic-cxr-report-task'] || {})[rptTier];
+  const host = document.getElementById('rptPertaskBody');
+  if (!host || !rows) return;
+  const sorted = [...rows].sort((a, b) => b.overall - a.overall);
+  const medal = i => i < 3 ? `medal-${i+1}` : '';
+  const failClass = v => v >= 70 ? 'fail-hi' : v >= 30 ? 'fail-mid' : '';
+  host.innerHTML = `
+    <div class="table-card">
+      <table class="leaderboard">
+        <thead>
+          <tr>
+            <th>#</th>
+            <th>Agent</th>
+            <th class="num">Overall</th>
+            <th class="num">Agentic</th>
+            <th class="num">Task</th>
+            <th class="num">Turns</th>
+            <th class="num">Time</th>
+            <th class="num">Fail&nbsp;%</th>
+          </tr>
+        </thead>
+        <tbody>
+          ${sorted.map((r, i) => `
+            <tr>
+              <td class="rank ${medal(i)}">${i + 1}</td>
+              <td><div class="agent-cell">
+                <span class="agent-dot" style="background:${AGENT_COLORS[r.agent] || '#8A6B4A'}"></span>
+                <span class="agent-name">${r.agent}</span>
+              </div></td>
+              <td class="num overall-score">${(r.overall * 100).toFixed(1)}</td>
+              <td class="num">${(r.agentic * 100).toFixed(1)}</td>
+              <td class="num">${(r.task * 100).toFixed(1)}</td>
+              <td class="num muted">${r.turns.toFixed(1)}</td>
+              <td class="num muted">${fmtTime(r.time_s)}</td>
+              <td class="num ${failClass(r.fail)}">${r.fail.toFixed(1)}%</td>
+            </tr>`).join('')}
+        </tbody>
+      </table>
+    </div>
+  `;
+}
+
+document.getElementById('rptTierSelect')?.addEventListener('change', (e) => {
+  rptTier = e.target.value;
+  renderReportPerTaskTable();
+});
+
+/* Disclosure toggle for reporting "More metrics" */
+(function wireRptDisclosure() {
+  const btn  = document.getElementById('moreMetricsBtn-rpt');
+  const body = document.getElementById('moreMetrics-rpt');
+  if (!btn || !body) return;
+  btn.addEventListener('click', () => {
+    const open = body.classList.toggle('open');
+    btn.classList.toggle('open', open);
+    if (open) renderReportingSecondaryCharts();
+  });
+})();
+
+renderReportingFirstViewCharts();
+renderReportPerTaskTable();
 
 // Eagerly render workflow + tier grids + per-step rubrics for all incoming
 // tracks so the content is in the DOM regardless of which tab the user opens
