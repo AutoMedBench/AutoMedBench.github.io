@@ -1986,9 +1986,9 @@ footer a:hover { color: var(--primary); text-decoration: none; }
             </button>
           </li>
           <li role="none">
-            <button type="button" role="menuitem" data-cat-leaderboard="reporting">
+            <button type="button" role="menuitem" disabled aria-disabled="true">
               <span class="nm-label">Report Generation</span>
-              <span class="nm-hint"><span class="live-dot"></span>live</span>
+              <span class="nm-hint">coming soon</span>
             </button>
           </li>
           <li role="none">
@@ -2041,8 +2041,8 @@ footer a:hover { color: var(--primary); text-decoration: none; }
   </div>
   <aside class="hero-stats" aria-label="benchmark at a glance">
     <div class="stat-item"><span class="stat-num">7</span><span class="stat-label">agentic models<span class="info-pop info-pop-right" tabindex="0" role="button" aria-label="What is an agentic model?"><span class="info-bang">!</span><span class="info-bubble">We evaluate the <strong>base LLM as the agent</strong> driving the pipeline directly &mdash; not a vendor&rsquo;s own agent harness or tool-use wrapper.</span></span></span></div>
-    <div class="stat-item"><span class="stat-num">14</span><span class="stat-label">task combos</span></div>
-    <div class="stat-item"><span class="stat-num">1,480+</span><span class="stat-label">total runs</span></div>
+    <div class="stat-item"><span class="stat-num">12</span><span class="stat-label">task combos</span></div>
+    <div class="stat-item"><span class="stat-num">1,340+</span><span class="stat-label">total runs</span></div>
   </aside>
 </section>
 
@@ -2059,8 +2059,8 @@ footer a:hover { color: var(--primary); text-decoration: none; }
   <button class="cat-tab coming-soon" data-cat="vqa" disabled aria-disabled="true">
     VQA <span class="badge">coming soon</span>
   </button>
-  <button class="cat-tab" data-cat="reporting">
-    <span class="live-dot"></span> Report Generation
+  <button class="cat-tab coming-soon" data-cat="reporting" disabled aria-disabled="true">
+    Report Generation <span class="badge">coming soon</span>
   </button>
   <button class="cat-tab coming-soon" data-cat="detection" disabled aria-disabled="true">
     Lesion Detection <span class="badge">coming soon</span>
