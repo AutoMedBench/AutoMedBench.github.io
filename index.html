@@ -5502,6 +5502,8 @@ function renderReportPerTaskTable() {
             <th class="num">Task</th>
             <th class="num">Turns</th>
             <th class="num">Time</th>
+            <th class="num">Cost</th>
+            <th class="num">Tokens</th>
             <th class="num">Fail&nbsp;%</th>
           </tr>
         </thead>
@@ -5518,6 +5520,8 @@ function renderReportPerTaskTable() {
               <td class="num">${(r.task * 100).toFixed(1)}</td>
               <td class="num muted">${r.turns.toFixed(1)}</td>
               <td class="num muted">${fmtTime(r.time_s)}</td>
+              <td class="num">${fmtCost(r.cost)}</td>
+              <td class="num muted">${fmtTokens(r.tokens)}</td>
               <td class="num ${failClass(r.fail)}">${r.fail.toFixed(1)}%</td>
             </tr>`).join('')}
         </tbody>
