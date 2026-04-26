@@ -5487,6 +5487,25 @@ function renderReportingSecondaryCharts() {
   });
 }
 
+let rptSortKey = 'overall';
+let rptSortDir = 'desc';
+
+function rptTimeRange() {
+  const vals = [];
+  for (const v of ['lite', 'standard']) {
+    const rows = (REPORTING_DATA['mimic-cxr-report-task'] || {})[v];
+    if (!rows) continue;
+    for (const r of rows) if (typeof r.time_s === 'number') vals.push(r.time_s);
+  }
+  if (!vals.length) return '—';
+  const fmt = n => Math.round(n).toLocaleString('en-US').replace(/,/g, ' ');
+  return `${fmt(Math.min(...vals))} – ${fmt(Math.max(...vals))} s`;
+}
+(function renderRptTimeChip() {
+  const chip = document.querySelector('#reporting-panel-tiers .time-chip');
+  if (chip) chip.textContent = rptTimeRange();
+})();
+
 function renderReportPerTaskTable() {
   const rows = (REPORTING_DATA['mimic-cxr-report-task'] || {})[rptTier];
   const host = document.getElementById('rptPertaskBody');
@@ -5495,9 +5514,16 @@ function renderReportPerTaskTable() {
     host.innerHTML = pendingCard(`Runs for <code style="font-family:JetBrains Mono,monospace;background:var(--primary-soft);color:var(--primary);padding:1px 6px;border-radius:4px">mimic-cxr-report-task · ${rptTier}</code> are still being collected.`);
     return;
   }
-  const sorted = [...rows].sort((a, b) => b.overall - a.overall);
+  const sorted = [...rows].sort((a, b) => compareRows(a, b, rptSortKey, rptSortDir));
   const medal = i => i < 3 ? `medal-${i+1}` : '';
   const failClass = v => v >= 70 ? 'fail-hi' : v >= 30 ? 'fail-mid' : '';
+
+  const thFor = (c) => {
+    const activeCls = (rptSortKey === c.key) ? `active ${rptSortDir}` : '';
+    const numCls    = c.num ? 'num' : '';
+    return `<th class="sortable ${numCls} ${activeCls}" data-sort="${c.key}" title="Sort by ${c.label.replace('&nbsp;', ' ')}"><span class="th-inner">${c.label}${SORT_CARET_SVG}</span></th>`;
+  };
+
   host.innerHTML = `
     <div class="table-card">
       <table class="leaderboard">
@@ -5505,14 +5531,7 @@ function renderReportPerTaskTable() {
           <tr>
             <th>#</th>
             <th>Agent</th>
-            <th class="num">Overall</th>
-            <th class="num">Agentic</th>
-            <th class="num">Task</th>
-            <th class="num">Turns</th>
-            <th class="num">Time</th>
-            <th class="num">Cost</th>
-            <th class="num">Tokens</th>
-            <th class="num">Fail&nbsp;%</th>
+            ${SORT_COLUMNS.map(thFor).join('')}
           </tr>
         </thead>
         <tbody>
@@ -5536,6 +5555,19 @@ function renderReportPerTaskTable() {
       </table>
     </div>
   `;
+
+  host.querySelectorAll('th.sortable').forEach(th => {
+    th.addEventListener('click', () => {
+      const key = th.dataset.sort;
+      if (rptSortKey === key) {
+        rptSortDir = (rptSortDir === 'asc') ? 'desc' : 'asc';
+      } else {
+        rptSortKey = key;
+        rptSortDir = SORT_DEFAULTS[key] || 'desc';
+      }
+      renderReportPerTaskTable();
+    });
+  });
 }
 
 document.getElementById('rptTierSelect')?.addEventListener('change', (e) => {
