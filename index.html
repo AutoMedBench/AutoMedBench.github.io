@@ -2022,9 +2022,9 @@ footer a:hover { color: var(--primary); text-decoration: none; }
             </button>
           </li>
           <li role="none">
-            <button type="button" role="menuitem" disabled aria-disabled="true">
+            <button type="button" role="menuitem" data-cat-leaderboard="reporting">
               <span class="nm-label">Report Generation</span>
-              <span class="nm-hint">coming soon</span>
+              <span class="nm-hint"><span class="live-dot"></span>live</span>
             </button>
           </li>
           <li role="none">
@@ -2077,8 +2077,8 @@ footer a:hover { color: var(--primary); text-decoration: none; }
   </div>
   <aside class="hero-stats" aria-label="benchmark at a glance">
     <div class="stat-item"><span class="stat-num">7</span><span class="stat-label">agentic models<span class="info-pop info-pop-right" tabindex="0" role="button" aria-label="What is an agentic model?"><span class="info-bang">!</span><span class="info-bubble">We evaluate the <strong>base LLM as the agent</strong> driving the pipeline directly &mdash; not a vendor&rsquo;s own agent harness or tool-use wrapper.</span></span></span></div>
-    <div class="stat-item"><span class="stat-num">14</span><span class="stat-label">task combos</span></div>
-    <div class="stat-item"><span class="stat-num">1,620+</span><span class="stat-label">total runs</span></div>
+    <div class="stat-item"><span class="stat-num">15</span><span class="stat-label">task combos</span></div>
+    <div class="stat-item"><span class="stat-num">1,690+</span><span class="stat-label">total runs</span></div>
   </aside>
 </section>
 
@@ -2095,8 +2095,8 @@ footer a:hover { color: var(--primary); text-decoration: none; }
   <button class="cat-tab coming-soon" data-cat="vqa" disabled aria-disabled="true">
     VQA <span class="badge">coming soon</span>
   </button>
-  <button class="cat-tab coming-soon" data-cat="reporting" disabled aria-disabled="true">
-    Report Generation <span class="badge">coming soon</span>
+  <button class="cat-tab" data-cat="reporting">
+    <span class="live-dot"></span> Report Generation
   </button>
   <button class="cat-tab coming-soon" data-cat="detection" disabled aria-disabled="true">
     Lesion Detection <span class="badge">coming soon</span>
@@ -2639,8 +2639,8 @@ footer a:hover { color: var(--primary); text-decoration: none; }
             </span>
           </label>
           <select class="variant-select" id="rptTierSelect">
-            <option value="lite">Lite</option>
-            <option value="standard">Standard</option>
+            <option value="standard" selected>Standard</option>
+            <option value="lite">Lite · pending</option>
           </select>
         </div>
       </div>
@@ -5387,28 +5387,20 @@ renderEnhPerTaskTable();
 /* ======================================================================= */
 const REPORTING_DATA = {
   'mimic-cxr-report-task': {
-    lite: [
-      {agent:"glm-5",           n:10, overall:0.6578, agentic:0.9473, task:0.3683, turns:37.0, time_s:914.0,  cost:2.14, tokens:1024493, fail:0.0},
-      {agent:"claude-opus-4.6", n:10, overall:0.6406, agentic:0.9161, task:0.3651, turns:11.0, time_s:736.9,  cost:5.58, tokens:348018,  fail:0.0},
-      {agent:"qwen3.5",         n:10, overall:0.6215, agentic:0.9161, task:0.3269, turns:32.0, time_s:3605.0, cost:1.50, tokens:707232,  fail:100.0},
-      {agent:"kimi-k2.5",       n:10, overall:0.5962, agentic:0.9161, task:0.2763, turns:28.0, time_s:2659.3, cost:1.90, tokens:689864,  fail:0.0},
-      {agent:"gemini-3.1-pro",  n:10, overall:0.3997, agentic:0.7426, task:0.0567, turns:3.0,  time_s:315.1,  cost:0.27, tokens:36750,   fail:0.0},
-      {agent:"chatgpt-5.4",     n:10, overall:0.2796, agentic:0.5592, task:0.0000, turns:3.0,  time_s:795.4,  cost:0.73, tokens:45465,   fail:100.0},
-      {agent:"minimax-m2.5",    n:10, overall:0.0321, agentic:0.0643, task:0.0000, turns:3.0,  time_s:42.4,   cost:0.18, tokens:99309,   fail:100.0}
-    ],
+    lite: [],  // incoming — first sweep queued
     standard: [
-      {agent:"glm-5",           n:10, overall:0.6062, agentic:0.9286, task:0.2838, turns:44.0, time_s:968.2,  cost:2.55, tokens:1218316, fail:0.0},
-      {agent:"claude-opus-4.6", n:10, overall:0.5972, agentic:0.9036, task:0.2908, turns:12.0, time_s:635.3,  cost:6.08, tokens:379656,  fail:0.0},
-      {agent:"gemini-3.1-pro",  n:10, overall:0.5884, agentic:0.8536, task:0.3232, turns:15.0, time_s:706.1,  cost:1.33, tokens:183750,  fail:0.0},
-      {agent:"minimax-m2.5",    n:10, overall:0.3142, agentic:0.6285, task:0.0000, turns:48.0, time_s:2152.8, cost:2.85, tokens:1588944, fail:100.0},
-      {agent:"chatgpt-5.4",     n:10, overall:0.2976, agentic:0.5952, task:0.0000, turns:12.0, time_s:1505.2, cost:2.90, tokens:181860,  fail:100.0},
-      {agent:"qwen3.5",         n:10, overall:0.2536, agentic:0.5072, task:0.0000, turns:13.0, time_s:694.0,  cost:0.61, tokens:287313,  fail:100.0},
-      {agent:"kimi-k2.5",       n:10, overall:0.0215, agentic:0.0429, task:0.0000, turns:2.0,  time_s:101.0,  cost:0.14, tokens:49276,   fail:100.0}
+      {agent:"claude-opus-4.6", n:10, overall:0.6848, agentic:0.9900, task:0.3795, turns:20.6, time_s:420.4,  cost:11.2072, tokens:685335,  fail:0.0},
+      {agent:"glm-5",           n:10, overall:0.5398, agentic:0.8020, task:0.2777, turns:48.2, time_s:347.2,  cost:3.3880,  tokens:1649215, fail:20.0},
+      {agent:"gemini-3.1-pro",  n:10, overall:0.4481, agentic:0.6507, task:0.2456, turns:39.8, time_s:359.8,  cost:10.6871, tokens:1503886, fail:30.0},
+      {agent:"chatgpt-5.4",     n:10, overall:0.4117, agentic:0.6835, task:0.1398, turns:16.6, time_s:241.6,  cost:6.8116,  tokens:434270,  fail:20.0},
+      {agent:"qwen3.5",         n:10, overall:0.3529, agentic:0.5481, task:0.1577, turns:41.0, time_s:429.5,  cost:3.6273,  tokens:1748341, fail:50.0},
+      {agent:"minimax-m2.5",    n:10, overall:0.1645, agentic:0.3064, task:0.0226, turns:38.2, time_s:497.6,  cost:2.6955,  tokens:1283832, fail:90.0},
+      {agent:"kimi-k2.5",       n:10, overall:0.1406, agentic:0.2452, task:0.0359, turns:22.4, time_s:1035.7, cost:2.2890,  tokens:861856,  fail:80.0}
     ]
   }
 };
 
-let rptTier = 'lite';
+let rptTier = 'standard';
 
 function buildReportingAgentStats() {
   const acc = {};
@@ -5490,7 +5482,11 @@ function renderReportingSecondaryCharts() {
 function renderReportPerTaskTable() {
   const rows = (REPORTING_DATA['mimic-cxr-report-task'] || {})[rptTier];
   const host = document.getElementById('rptPertaskBody');
-  if (!host || !rows) return;
+  if (!host) return;
+  if (!rows || rows.length === 0) {
+    host.innerHTML = pendingCard(`Runs for <code style="font-family:JetBrains Mono,monospace;background:var(--primary-soft);color:var(--primary);padding:1px 6px;border-radius:4px">mimic-cxr-report-task · ${rptTier}</code> are still being collected.`);
+    return;
+  }
   const sorted = [...rows].sort((a, b) => b.overall - a.overall);
   const medal = i => i < 3 ? `medal-${i+1}` : '';
   const failClass = v => v >= 70 ? 'fail-hi' : v >= 30 ? 'fail-mid' : '';
