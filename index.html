@@ -2321,8 +2321,11 @@ footer a:hover { color: var(--primary); text-decoration: none; }
     <p class="section-sub">Pick a task and difficulty tier.</p>
 
     <div class="task-bar">
-      <div class="task-tabs" id="taskTabs"></div>
       <div class="variant-picker">
+        <label for="taskSelect">Task</label>
+        <select class="variant-select" id="taskSelect"></select>
+      </div>
+      <div class="variant-picker" style="margin-left: auto">
         <label for="variantSelect">
           Difficulty
           <span class="info-pop info-pop-right" tabindex="0" role="button" aria-label="How is difficulty defined?">
@@ -2615,10 +2618,13 @@ footer a:hover { color: var(--primary); text-decoration: none; }
       <p class="section-sub">MIMIC-CXR chest X-ray findings report generation.</p>
 
       <div class="task-bar">
-        <div class="task-tabs" id="rptTaskTabs">
-          <button type="button" class="task-tab active" data-rpt-task="mimic-cxr-report-task">mimic-cxr-report-task</button>
-        </div>
         <div class="variant-picker">
+          <label for="rptTaskSelect">Task</label>
+          <select class="variant-select" id="rptTaskSelect">
+            <option value="mimic-cxr-report-task" selected>mimic-cxr-report-task</option>
+          </select>
+        </div>
+        <div class="variant-picker" style="margin-left: auto">
           <label for="rptTierSelect">
             Difficulty
             <span class="info-pop info-pop-right" tabindex="0" role="button" aria-label="How is difficulty defined?">
@@ -3054,11 +3060,14 @@ footer a:hover { color: var(--primary); text-decoration: none; }
       <p class="section-sub">Pick a task and difficulty tier.</p>
 
       <div class="task-bar">
-        <div class="task-tabs" id="enhTaskTabs">
-          <button type="button" class="task-tab active" data-enh-task="ldct-denoising-task">LDCT Denoising</button>
-          <button type="button" class="task-tab" data-enh-task="mri-sr-task">MRI Super-Resolution</button>
-        </div>
         <div class="variant-picker">
+          <label for="enhTaskSelect">Task</label>
+          <select class="variant-select" id="enhTaskSelect">
+            <option value="ldct-denoising-task" selected>ldct-denoising-task</option>
+            <option value="mri-sr-task">mri-sr-task</option>
+          </select>
+        </div>
+        <div class="variant-picker" style="margin-left: auto">
           <label for="enhTierSelect">
             Difficulty
             <span class="info-pop info-pop-right" tabindex="0" role="button" aria-label="How is difficulty defined?">
@@ -4312,24 +4321,23 @@ let activeBase    = BASE_TASKS[0];
 let activeVariant = (variantsFor(activeBase)[0]) || 'lite';
 
 function renderTaskTabs() {
-  const el = document.getElementById('taskTabs');
-  el.innerHTML = BASE_TASKS.map(b => {
+  const sel = document.getElementById('taskSelect');
+  if (!sel) return;
+  sel.innerHTML = BASE_TASKS.map(b => {
     const has = hasAnyDataFor(b);
-    const cls = 'task-tab' + (b === activeBase ? ' active' : '') + (has ? '' : ' no-data');
     const slug = (CONTENT.taskMeta[b] && CONTENT.taskMeta[b].tabSlug) || `${CATEGORY}-${b}`;
-    return `<button class="${cls}" data-base="${b}">${slug}${has ? '' : ' · pending'}</button>`;
+    const label = slug + (has ? '' : ' · pending');
+    const selected = (b === activeBase) ? ' selected' : '';
+    return `<option value="${b}"${selected}>${label}</option>`;
   }).join('');
-  el.querySelectorAll('.task-tab').forEach(btn => {
-    btn.addEventListener('click', () => {
-      activeBase = btn.dataset.base;
-      const vs = variantsFor(activeBase);
-      if (!vs.includes(activeVariant)) activeVariant = vs[0] || 'lite';
-      renderTaskTabs();
-      renderVariantPicker();
-      renderPerformanceTable();
-    });
-  });
 }
+document.getElementById('taskSelect')?.addEventListener('change', (e) => {
+  activeBase = e.target.value;
+  const vs = variantsFor(activeBase);
+  if (!vs.includes(activeVariant)) activeVariant = vs[0] || 'lite';
+  renderVariantPicker();
+  renderPerformanceTable();
+});
 function renderVariantPicker() {
   const sel = document.getElementById('variantSelect');
   sel.innerHTML = VARIANTS.map(v => {
@@ -5349,17 +5357,13 @@ function renderEnhPerTaskTable() {
   });
 })();
 
-/* ---------- wire task tabs + tier picker (per-task table only) ---------- */
+/* ---------- wire task select + tier picker (per-task table only) ---------- */
 (function wireEnhPertaskControls() {
-  const tabHost = document.getElementById('enhTaskTabs');
+  const taskSel = document.getElementById('enhTaskSelect');
   const tierSel = document.getElementById('enhTierSelect');
-  if (!tabHost || !tierSel) return;
-  tabHost.addEventListener('click', (e) => {
-    const btn = e.target.closest('.task-tab');
-    if (!btn) return;
-    tabHost.querySelectorAll('.task-tab').forEach(b => b.classList.remove('active'));
-    btn.classList.add('active');
-    enhTask = btn.dataset.enhTask;
+  if (!taskSel || !tierSel) return;
+  taskSel.addEventListener('change', () => {
+    enhTask = taskSel.value;
     renderEnhPerTaskTable();
   });
   tierSel.addEventListener('change', () => {
