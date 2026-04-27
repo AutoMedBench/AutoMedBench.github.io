@@ -157,6 +157,15 @@ a.cat-card:hover {
   margin: 0;
   color: var(--ink);
   letter-spacing: -0.01em;
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+}
+.cat-row .live-dot {
+  width: 8px; height: 8px; border-radius: 50%;
+  background: #8FBF3F;
+  box-shadow: 0 0 0 3px rgba(118, 185, 0, 0.2);
+  flex-shrink: 0;
 }
 .cat-card p {
   font-size: 13.5px;
@@ -226,10 +235,10 @@ footer {
   <div class="cat-list">
     <a class="cat-card" href="https://huggingface.co/MitakaKuma/automedbench-seg-task-image" target="_blank" rel="noopener">
       <div class="cat-row">
-        <h3>Segmentation</h3>
+        <h3><span class="live-dot"></span>Segmentation</h3>
         <span class="demo-chip">demo</span>
       </div>
-      <p>Fetal Brain Tissues &middot; Kidney Tumor &middot; Pancreas Tumor &middot; Pancreas OAR</p>
+      <p>multi-organ segmentation &middot; tumor segmentation &middot; tumor OAR segmentation</p>
     </a>
 
     <div class="cat-card muted">
@@ -237,7 +246,7 @@ footer {
         <h3>Image Enhancement</h3>
         <span class="soon-chip">coming soon</span>
       </div>
-      <p>LDCT Denoising &middot; MRI Super-Resolution</p>
+      <p>image denoising &middot; image super-resolution</p>
     </div>
 
     <div class="cat-card muted">
@@ -245,7 +254,7 @@ footer {
         <h3>VQA</h3>
         <span class="soon-chip">coming soon</span>
       </div>
-      <p>Pathology VQA &middot; Radiology VQA &middot; Semantic Radiology VQA &middot; Expert Multimodal VQA</p>
+      <p>pathology QA &middot; radiology QA &middot; expert multi-modal QA</p>
     </div>
 
     <div class="cat-card muted">
@@ -253,7 +262,7 @@ footer {
         <h3>Report Generation</h3>
         <span class="soon-chip">coming soon</span>
       </div>
-      <p>Chest X-ray Report Generation</p>
+      <p>radiology report generation</p>
     </div>
 
     <div class="cat-card muted">
@@ -261,7 +270,7 @@ footer {
         <h3>Lesion Detection</h3>
         <span class="soon-chip">coming soon</span>
       </div>
-      <p>Chest X-ray Abnormality Detection</p>
+      <p>2D lesion detection</p>
     </div>
   </div>
 
