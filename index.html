@@ -2016,9 +2016,9 @@ footer a:hover { color: var(--primary); text-decoration: none; }
             </button>
           </li>
           <li role="none">
-            <button type="button" role="menuitem" disabled aria-disabled="true">
+            <button type="button" role="menuitem" data-cat-leaderboard="vqa">
               <span class="nm-label">VQA</span>
-              <span class="nm-hint">coming soon</span>
+              <span class="nm-hint"><span class="live-dot"></span>live</span>
             </button>
           </li>
           <li role="none">
@@ -2028,9 +2028,9 @@ footer a:hover { color: var(--primary); text-decoration: none; }
             </button>
           </li>
           <li role="none">
-            <button type="button" role="menuitem" disabled aria-disabled="true">
+            <button type="button" role="menuitem" data-cat-leaderboard="detection">
               <span class="nm-label">Lesion Detection</span>
-              <span class="nm-hint">coming soon</span>
+              <span class="nm-hint"><span class="live-dot"></span>live</span>
             </button>
           </li>
         </ul>
@@ -2077,8 +2077,8 @@ footer a:hover { color: var(--primary); text-decoration: none; }
   </div>
   <aside class="hero-stats" aria-label="benchmark at a glance">
     <div class="stat-item"><span class="stat-num">7</span><span class="stat-label">agentic models<span class="info-pop info-pop-right" tabindex="0" role="button" aria-label="What is an agentic model?"><span class="info-bang">!</span><span class="info-bubble">We evaluate the <strong>base LLM as the agent</strong> driving the pipeline directly &mdash; not a vendor&rsquo;s own agent harness or tool-use wrapper.</span></span></span></div>
-    <div class="stat-item"><span class="stat-num">16</span><span class="stat-label">task combos</span></div>
-    <div class="stat-item"><span class="stat-num">1,760+</span><span class="stat-label">total runs</span></div>
+    <div class="stat-item"><span class="stat-num">18</span><span class="stat-label">task combos</span></div>
+    <div class="stat-item"><span class="stat-num">1,880+</span><span class="stat-label">total runs</span></div>
   </aside>
 </section>
 
@@ -2092,14 +2092,14 @@ footer a:hover { color: var(--primary); text-decoration: none; }
   <button class="cat-tab" data-cat="enhancement">
     <span class="live-dot"></span> Image Enhancement
   </button>
-  <button class="cat-tab coming-soon" data-cat="vqa" disabled aria-disabled="true">
-    VQA <span class="badge">coming soon</span>
+  <button class="cat-tab" data-cat="vqa">
+    <span class="live-dot"></span> VQA
   </button>
   <button class="cat-tab" data-cat="reporting">
     <span class="live-dot"></span> Report Generation
   </button>
-  <button class="cat-tab coming-soon" data-cat="detection" disabled aria-disabled="true">
-    Lesion Detection <span class="badge">coming soon</span>
+  <button class="cat-tab" data-cat="detection">
+    <span class="live-dot"></span> Lesion Detection
   </button>
 </div>
 
@@ -2364,12 +2364,104 @@ footer a:hover { color: var(--primary); text-decoration: none; }
 
   <!-- ================= VQA · PERFORMANCE ================= -->
   <div id="vqa-panel-performance" class="panel active">
-    <div class="scores-pending">
-      <h3>Scores pending — sweeps queued</h3>
-      <p>
-        Workflow · Task Setting · Scoring Rubrics are finalized.
-        Leaderboard fills in once the first VQA runs land.
-      </p>
+
+    <div class="perf-grid">
+      <div class="chart-card span-4 dark" id="overallPerformance-vqa">
+        <h3>Overall Score — averaged across all tasks</h3>
+        <p class="sub">Overall = (<span class="info-pop on-dark" tabindex="0" role="button" aria-label="What is the Agentic score?"><strong>Agentic</strong><span class="info-bang">!</span><span class="info-bubble"><strong>Agentic</strong> — how well the agent <em>ran the research pipeline</em>. Weighted sum of S1–S5 stage scores (plan, setup, validate, infer, submit). ∈ [0, 100].</span></span> + <span class="info-pop on-dark" tabindex="0" role="button" aria-label="What is the Task score?"><strong>Task</strong><span class="info-bang">!</span><span class="info-bubble"><strong>Task</strong> — how good the <em>final output</em> was. Mean per-question accuracy (exact-match for MCQ, max(EM, token-F1) or LLM-judge for open-ended). ∈ [0, 100].</span></span>) / 2</p>
+        <div class="chart-legend" id="chartOverallLegend-vqa">
+          <span class="legend-hint">
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+              <path d="M5 3 L5 17 L9 13 L12 20 L14.5 19 L11.5 12 L17 12 Z" fill="#FFFFFF"/>
+            </svg>
+            click a chip to toggle
+          </span>
+          <div class="legend-chips"></div>
+        </div>
+        <div class="chart-wrap"><canvas id="chartOverall-vqa"></canvas></div>
+      </div>
+      <div class="chart-card">
+        <h3>Avg Turns</h3>
+        <p class="sub">Conversational turns / run</p>
+        <div class="chart-wrap"><canvas id="chartTurns-vqa"></canvas></div>
+      </div>
+      <div class="chart-card">
+        <h3>Avg Time</h3>
+        <p class="sub">Wall-clock per run</p>
+        <div class="chart-wrap"><canvas id="chartTime-vqa"></canvas></div>
+      </div>
+      <div class="chart-card">
+        <h3>Avg Tokens</h3>
+        <p class="sub">Total LLM tokens / run</p>
+        <div class="chart-wrap"><canvas id="chartTokens-vqa"></canvas></div>
+      </div>
+      <div class="chart-card">
+        <h3>Avg Cost</h3>
+        <p class="sub">USD / run</p>
+        <div class="chart-wrap"><canvas id="chartCost-vqa"></canvas></div>
+      </div>
+    </div>
+
+    <div class="disclosure-bar">
+      <button class="disclosure-btn" id="moreMetricsBtn-vqa">
+        <span class="info-i">i</span>
+        More metrics
+        <span class="chev">▸</span>
+      </button>
+    </div>
+
+    <div class="disclosure-content" id="moreMetrics-vqa">
+      <div class="metric-grid-1">
+        <div class="chart-card">
+          <h3>
+            Failure Rate
+            <span class="info-pop" tabindex="0" role="button" aria-label="How is failure defined?">
+              <span class="info-bang">!</span>
+              <span class="info-bubble">
+                <strong>Failure</strong> = run did not finish all five stages.
+                <br>Causes: error, timeout, turn / cost limit, or no submission produced.
+              </span>
+            </span>
+          </h3>
+          <p class="sub">% of runs that did not reach a final submission.</p>
+          <div class="chart-wrap"><canvas id="chartFail-vqa"></canvas></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="pertask-section">
+      <h2 class="section-title">Per-Task Leaderboard</h2>
+      <p class="section-sub">Pick a task and difficulty tier.</p>
+
+      <div class="task-bar">
+        <div class="variant-picker">
+          <label for="vqaTaskSelect">Task</label>
+          <select class="variant-select" id="vqaTaskSelect">
+            <option value="vqa-medxpertqa-mm-task" selected>vqa-medxpertqa-mm-task</option>
+          </select>
+        </div>
+        <div class="variant-picker" style="margin-left: auto">
+          <label for="vqaTierSelect">
+            Difficulty
+            <span class="info-pop info-pop-right" tabindex="0" role="button" aria-label="How is difficulty defined?">
+              <span class="info-bang">!</span>
+              <span class="info-bubble">
+                <strong>Two tiers</strong> — more scaffolding = lower difficulty.
+                <ul class="bubble-list">
+                  <li><strong>Lite</strong> · exact VLM given</li>
+                  <li><strong>Standard</strong> · pick from VLM families</li>
+                </ul>
+              </span>
+            </span>
+          </label>
+          <select class="variant-select" id="vqaTierSelect">
+            <option value="standard" selected>Standard</option>
+            <option value="lite">Lite · pending</option>
+          </select>
+        </div>
+      </div>
+
+      <div id="vqaPertaskBody"></div>
     </div>
   </div>
 
@@ -2400,42 +2492,19 @@ footer a:hover { color: var(--primary); text-decoration: none; }
       </div>
 
       <div class="content-block">
-        <h3>Dataset <small>five public medical VQA corpora</small></h3>
+        <h3>Dataset</h3>
         <table class="simple dataset-table">
           <thead><tr><th>Task</th><th>Modality</th><th>Task Time Range</th><th>Source</th><th>Description</th></tr></thead>
           <tbody>
             <tr>
-              <td>Pathology VQA</td><td>Histopathology</td>
-              <td><code class="time-chip">—</code></td>
-              <td><a href="https://huggingface.co/datasets/flaviagiammarino/path-vqa" target="_blank" rel="noopener">PathVQA</a></td>
-              <td style="color:var(--ink-soft); font-size:13px">Open-ended pathology QA.</td>
-            </tr>
-            <tr>
-              <td>Radiology VQA</td><td>CT · MRI · X-ray</td>
-              <td><code class="time-chip">—</code></td>
-              <td><a href="https://huggingface.co/datasets/flaviagiammarino/vqa-rad" target="_blank" rel="noopener">VQA-RAD</a></td>
-              <td style="color:var(--ink-soft); font-size:13px">Radiology QA, mixed.</td>
-            </tr>
-            <tr>
-              <td>Semantic Radiology VQA</td><td>Radiology · EN</td>
-              <td><code class="time-chip">—</code></td>
-              <td><a href="https://huggingface.co/datasets/BoKelvin/SLAKE" target="_blank" rel="noopener">SLAKE-EN</a></td>
-              <td style="color:var(--ink-soft); font-size:13px">Semantic radiology QA.</td>
-            </tr>
-            <tr class="is-pending">
-              <td>Multi-frame Medical VQA <span class="pending-pill">pending</span></td><td>Multi-frame video</td>
-              <td><code class="time-chip">—</code></td>
-              <td><a href="https://huggingface.co/datasets/SuhaoYu1020/MedFrameQA" target="_blank" rel="noopener">MedFrameQA</a></td>
-              <td style="color:var(--ink-soft); font-size:13px">Multi-frame MCQ (A–E).</td>
-            </tr>
-            <tr class="is-pending">
-              <td>Expert Multimodal VQA <span class="pending-pill">pending</span></td><td>Multi-modal</td>
+              <td>Expert Multimodal VQA</td><td>Multi-modal</td>
               <td><code class="time-chip">—</code></td>
               <td><a href="https://huggingface.co/datasets/TsinghuaC3I/MedXpertQA" target="_blank" rel="noopener">MedXpertQA · MM</a></td>
               <td style="color:var(--ink-soft); font-size:13px">Expert multi-image MCQ.</td>
             </tr>
           </tbody>
         </table>
+        <!-- Backup VQA datasets (PathVQA, VQA-RAD, SLAKE-EN, MedFrameQA) reserved for later sweeps. -->
       </div>
 
       <div class="content-block">
@@ -2443,31 +2512,23 @@ footer a:hover { color: var(--primary); text-decoration: none; }
         <dl class="constraints">
           <div class="row">
             <dt>Policy</dt>
-            <dd><strong>Inference-only.</strong> Download checkpoints, run forward passes. No fine-tuning on benchmark data.</dd>
+            <dd><strong>Inference-only.</strong> No fine-tuning on benchmark data.</dd>
           </div>
           <div class="row">
             <dt>Allowed</dt>
             <dd>
               <code>/data/public/</code> <span class="note">read-only</span>
               <span class="sep">·</span>
-              <code>/workspace/</code> <span class="note">read-write</span>
+              <code>/workspace/</code>
               <span class="sep">·</span>
-              remote API keys <span class="note">env-injected</span>
+              API keys <span class="note">env-injected</span>
             </dd>
           </div>
           <div class="row forbidden">
             <dt>Forbidden</dt>
             <dd>
               <code>/data/private/</code>
-              <span class="sep">·</span> ground-truth answer files
-              <span class="sep">·</span> other agents' runs
-            </dd>
-          </div>
-          <div class="row">
-            <dt>Preflight</dt>
-            <dd>
-              <code>/dev/shm</code> checked against <code>max(4 GiB, 4 × workers)</code>
-              when <code>--parallel-workers &gt; 1</code>.
+              <span class="sep">·</span> ground-truth files
             </dd>
           </div>
         </dl>
@@ -2809,12 +2870,104 @@ footer a:hover { color: var(--primary); text-decoration: none; }
 
   <!-- ================= DETECTION · PERFORMANCE ================= -->
   <div id="detection-panel-performance" class="panel active">
-    <div class="scores-pending">
-      <h3>Scores pending — first sweep queued</h3>
-      <p>
-        Workflow · Task Setting · Scoring Rubrics are finalized.
-        Leaderboard fills in once the first runs land on <span class="mono">vindr-cxr-det-task</span>.
-      </p>
+
+    <div class="perf-grid">
+      <div class="chart-card span-4 dark" id="overallPerformance-detection">
+        <h3>Overall Score — averaged across all tasks</h3>
+        <p class="sub">Overall = (<span class="info-pop on-dark" tabindex="0" role="button" aria-label="What is the Agentic score?"><strong>Agentic</strong><span class="info-bang">!</span><span class="info-bubble"><strong>Agentic</strong> — how well the agent <em>ran the research pipeline</em>. Weighted sum of S1–S5 stage scores (plan, setup, validate, infer, submit). ∈ [0, 100].</span></span> + <span class="info-pop on-dark" tabindex="0" role="button" aria-label="What is the Task score?"><strong>Task</strong><span class="info-bang">!</span><span class="info-bubble"><strong>Task</strong> — how good the <em>final output</em> was. 14-class mAP@0.5 over the predicted bounding boxes. ∈ [0, 100].</span></span>) / 2</p>
+        <div class="chart-legend" id="chartOverallLegend-detection">
+          <span class="legend-hint">
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+              <path d="M5 3 L5 17 L9 13 L12 20 L14.5 19 L11.5 12 L17 12 Z" fill="#FFFFFF"/>
+            </svg>
+            click a chip to toggle
+          </span>
+          <div class="legend-chips"></div>
+        </div>
+        <div class="chart-wrap"><canvas id="chartOverall-detection"></canvas></div>
+      </div>
+      <div class="chart-card">
+        <h3>Avg Turns</h3>
+        <p class="sub">Conversational turns / run</p>
+        <div class="chart-wrap"><canvas id="chartTurns-detection"></canvas></div>
+      </div>
+      <div class="chart-card">
+        <h3>Avg Time</h3>
+        <p class="sub">Wall-clock per run</p>
+        <div class="chart-wrap"><canvas id="chartTime-detection"></canvas></div>
+      </div>
+      <div class="chart-card">
+        <h3>Avg Tokens</h3>
+        <p class="sub">Total LLM tokens / run</p>
+        <div class="chart-wrap"><canvas id="chartTokens-detection"></canvas></div>
+      </div>
+      <div class="chart-card">
+        <h3>Avg Cost</h3>
+        <p class="sub">USD / run</p>
+        <div class="chart-wrap"><canvas id="chartCost-detection"></canvas></div>
+      </div>
+    </div>
+
+    <div class="disclosure-bar">
+      <button class="disclosure-btn" id="moreMetricsBtn-detection">
+        <span class="info-i">i</span>
+        More metrics
+        <span class="chev">▸</span>
+      </button>
+    </div>
+
+    <div class="disclosure-content" id="moreMetrics-detection">
+      <div class="metric-grid-1">
+        <div class="chart-card">
+          <h3>
+            Failure Rate
+            <span class="info-pop" tabindex="0" role="button" aria-label="How is failure defined?">
+              <span class="info-bang">!</span>
+              <span class="info-bubble">
+                <strong>Failure</strong> = run did not finish all five stages.
+                <br>Causes: error, timeout, turn / cost limit, or no submission produced.
+              </span>
+            </span>
+          </h3>
+          <p class="sub">% of runs that did not reach a final submission.</p>
+          <div class="chart-wrap"><canvas id="chartFail-detection"></canvas></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="pertask-section">
+      <h2 class="section-title">Per-Task Leaderboard</h2>
+      <p class="section-sub">Pick a task and difficulty tier.</p>
+
+      <div class="task-bar">
+        <div class="variant-picker">
+          <label for="detTaskSelect">Task</label>
+          <select class="variant-select" id="detTaskSelect">
+            <option value="detection-cxr-abnormality-vindr" selected>detection-cxr-abnormality-vindr</option>
+          </select>
+        </div>
+        <div class="variant-picker" style="margin-left: auto">
+          <label for="detTierSelect">
+            Difficulty
+            <span class="info-pop info-pop-right" tabindex="0" role="button" aria-label="How is difficulty defined?">
+              <span class="info-bang">!</span>
+              <span class="info-bubble">
+                <strong>Two tiers</strong> — more scaffolding = lower difficulty.
+                <ul class="bubble-list">
+                  <li><strong>Lite</strong> · exact detector given</li>
+                  <li><strong>Standard</strong> · pick from detector families</li>
+                </ul>
+              </span>
+            </span>
+          </label>
+          <select class="variant-select" id="detTierSelect">
+            <option value="standard" selected>Standard</option>
+            <option value="lite">Lite · pending</option>
+          </select>
+        </div>
+      </div>
+
+      <div id="detPertaskBody"></div>
     </div>
   </div>
 
@@ -2842,12 +2995,11 @@ footer a:hover { color: var(--primary); text-decoration: none; }
 
     <div class="content-block">
       <h3>Difficulty Tiers</h3>
-      <p>Defined in <code>eval_det2d/tier_config.py</code>. Tiers differ by model-selection strategy and plan-artefact requirements at S1.</p>
       <div class="tier-grid" id="tierGrid-detection"></div>
     </div>
 
     <div class="content-block">
-      <h3>Dataset <small>chest X-ray abnormality detection</small></h3>
+      <h3>Dataset</h3>
       <table class="simple dataset-table">
         <thead><tr><th>Task</th><th>Modality</th><th>Task Time Range</th><th>Source</th><th>Description</th></tr></thead>
         <tbody>
@@ -2856,7 +3008,7 @@ footer a:hover { color: var(--primary); text-decoration: none; }
             <td>Chest X-ray</td>
             <td><code class="time-chip">—</code></td>
             <td><a href="https://vindr.ai/datasets/vindr-cxr" target="_blank" rel="noopener">VinDr-CXR</a></td>
-            <td style="color:var(--ink-soft); font-size:13px">Single-class bbox detection; all positive findings mapped to <code>abnormality</code>. Task score = mAP@0.5.</td>
+            <td style="color:var(--ink-soft); font-size:13px">14-class bbox detection. Task score = mAP@0.5.</td>
           </tr>
         </tbody>
       </table>
@@ -2867,40 +3019,36 @@ footer a:hover { color: var(--primary); text-decoration: none; }
       <dl class="constraints">
         <div class="row">
           <dt>Policy</dt>
-          <dd><strong>Inference-only.</strong> Agents run pre-trained detectors on real chest X-rays; no training or fine-tuning on benchmark data.</dd>
+          <dd><strong>Inference-only.</strong> No training on benchmark data.</dd>
         </div>
         <div class="row">
           <dt>Allowed</dt>
           <dd>
-            <code>data/VinDrCXR_Detection10/public/&lt;case_id&gt;/image.png</code> <span class="note">read-only</span>
+            <code>data/VinDrCXR_Detection1000/public/</code> <span class="note">read-only</span>
             <span class="sep">·</span>
-            <code>/workspace/</code> <span class="note">read-write</span>
+            <code>/workspace/</code>
           </dd>
         </div>
         <div class="row forbidden">
           <dt>Forbidden</dt>
           <dd>
-            <code>data/VinDrCXR_Detection10/private/</code>
-            <span class="sep">·</span> ground-truth <code>boxes.json</code>
-            <span class="sep">·</span> <code>ground_truth.csv</code>
-            <span class="sep">·</span> other agents' runs
+            <code>data/VinDrCXR_Detection1000/private/</code>
+            <span class="sep">·</span> ground-truth files
           </dd>
         </div>
         <div class="row">
           <dt>Limits</dt>
           <dd>
-            Time limit <code>3 600 s</code> per run <span class="sep">·</span>
-            IoU threshold <code>0.5</code> (configurable via <code>iou_threshold</code>)
+            Time <code>3 600 s</code> / run <span class="sep">·</span>
+            IoU <code>0.5</code>
           </dd>
         </div>
         <div class="row">
           <dt>On violation</dt>
           <dd>
             <span class="sev warn" data-n="1">Warning</span>
-            <span class="sev-body">execution blocked; agent continues</span>
             <span class="sep">·</span>
             <span class="sev fail" data-n="2">Disqualified</span>
-            <span class="sev-body">run zeroed; no credit</span>
           </dd>
         </div>
       </dl>
@@ -5589,6 +5737,307 @@ document.getElementById('rptTierSelect')?.addEventListener('change', (e) => {
 
 renderReportingFirstViewCharts();
 renderReportPerTaskTable();
+
+/* ======================================================================= */
+/*  VQA — performance charts + per-task leaderboard                         */
+/* ======================================================================= */
+const VQA_DATA = {
+  'vqa-pathvqa-task':       { lite: [], standard: [] },
+  'vqa-vqa-rad-task':       { lite: [], standard: [] },
+  'vqa-slake-task':         { lite: [], standard: [] },
+  'vqa-medframeqa-task':    { lite: [], standard: [] },
+  'vqa-medxpertqa-mm-task': {
+    lite: [],
+    standard: [
+      {agent:"gemini-3.1-pro",  n:10, overall:0.6121, agentic:1.0000, task:0.2243, turns:14.7, time_s:951.0,  cost:1.1209, tokens:141724, fail:0.0},
+      {agent:"chatgpt-5.4",     n:10, overall:0.6040, agentic:0.9899, task:0.2180, turns:7.1,  time_s:1783.2, cost:1.0935, tokens:56890,  fail:0.0},
+      {agent:"qwen3.5",         n:10, overall:0.5874, agentic:0.9549, task:0.2200, turns:37.3, time_s:1555.1, cost:1.7419, tokens:813720, fail:0.0},
+      {agent:"glm-5",           n:10, overall:0.5637, agentic:0.9145, task:0.2130, turns:26.2, time_s:1354.9, cost:0.6041, tokens:273072, fail:0.0},
+      {agent:"claude-opus-4.6", n:10, overall:0.5090, agentic:0.8219, task:0.1960, turns:20.9, time_s:1550.3, cost:6.0239, tokens:347654, fail:0.0},
+      {agent:"minimax-m2.5",    n:10, overall:0.4385, agentic:0.7441, task:0.1328, turns:20.8, time_s:1149.7, cost:0.5734, tokens:250638, fail:0.0}
+    ]
+  }
+};
+const VQA_TASKS = Object.keys(VQA_DATA);
+let vqaTask = 'vqa-medxpertqa-mm-task';
+let vqaTier = 'standard';
+let vqaSortKey = 'overall';
+let vqaSortDir = 'desc';
+
+function vqaGetRows(task, tier) {
+  return ((VQA_DATA[task] || {})[tier]) || null;
+}
+function buildVqaAgentStats() {
+  const acc = {};
+  for (const t of VQA_TASKS) {
+    for (const v of ['lite', 'standard']) {
+      const rows = vqaGetRows(t, v);
+      if (!rows) continue;
+      for (const r of rows) {
+        if (!acc[r.agent]) {
+          acc[r.agent] = { overall:[], agentic:[], task:[], turns:[], time:[], tokens:[], cost:[], fail:[] };
+        }
+        const a = acc[r.agent];
+        a.overall.push(r.overall); a.agentic.push(r.agentic); a.task.push(r.task);
+        a.turns.push(r.turns); a.time.push(r.time_s); a.tokens.push(r.tokens);
+        a.cost.push(r.cost); a.fail.push(r.fail);
+      }
+    }
+  }
+  const agents = Object.keys(acc).sort((a, b) => mean(acc[b].overall) - mean(acc[a].overall));
+  return agents.map(a => ({
+    agent: a, color: AGENT_COLORS[a] || '#8A6B4A',
+    avgOverall: mean(acc[a].overall), avgAgentic: mean(acc[a].agentic),
+    avgTask: mean(acc[a].task), avgTurns: mean(acc[a].turns),
+    avgTime: mean(acc[a].time), avgTokens: mean(acc[a].tokens),
+    avgCost: mean(acc[a].cost), avgFail: mean(acc[a].fail),
+  }));
+}
+function renderVqaFirstViewCharts() {
+  const stats = buildVqaAgentStats();
+  if (!stats.length) return;
+  const overall = overallGroupedChart('chartOverall-vqa', stats);
+  renderOverallLegend('chartOverallLegend-vqa', overall, '#ECEFE5');
+  Object.values(AGENT_BRAND).forEach(b => {
+    if (!b.slug) return;
+    loadBrandLogo(b.slug).then(img => { if (img) overall.update('none'); });
+  });
+  simpleBarChart('chartTurns-vqa',  stats, { value: d => d.avgTurns, label: 'Turns', smallTicks: true, yFmt: v => v, tooltip: v => v.toFixed(1) + ' turns' });
+  simpleBarChart('chartTime-vqa',   stats, { value: d => d.avgTime / 60, label: 'Time', smallTicks: true, yFmt: v => v + 'm', tooltip: v => v.toFixed(1) + ' min' });
+  simpleBarChart('chartTokens-vqa', stats, { value: d => d.avgTokens / 1e6, label: 'Tokens', smallTicks: true, yFmt: v => v.toFixed(1) + 'M', tooltip: v => v.toFixed(2) + 'M tokens' });
+  simpleBarChart('chartCost-vqa',   stats, { value: d => d.avgCost, label: 'Cost', smallTicks: true, yFmt: v => '$' + v, tooltip: v => fmtCost(v) });
+}
+let _vqaSecondaryRendered = false;
+function renderVqaSecondaryCharts() {
+  if (_vqaSecondaryRendered) return;
+  const stats = buildVqaAgentStats();
+  if (!stats.length) return;
+  _vqaSecondaryRendered = true;
+  simpleBarChart('chartFail-vqa', stats, { value: d => d.avgFail, label: 'Fail %', yMax: 100, yFmt: v => v + '%', smallTicks: true, tooltip: v => v.toFixed(1) + '%' });
+}
+function renderVqaPerTaskTable() {
+  const rows = vqaGetRows(vqaTask, vqaTier);
+  const host = document.getElementById('vqaPertaskBody');
+  if (!host) return;
+  if (!rows || rows.length === 0) {
+    host.innerHTML = pendingCard(`Runs for <code style="font-family:JetBrains Mono,monospace;background:var(--primary-soft);color:var(--primary);padding:1px 6px;border-radius:4px">${vqaTask} · ${vqaTier}</code> are still being collected.`);
+    return;
+  }
+  const sorted = [...rows].sort((a, b) => compareRows(a, b, vqaSortKey, vqaSortDir));
+  const medal = i => i < 3 ? `medal-${i+1}` : '';
+  const failClass = v => v >= 70 ? 'fail-hi' : v >= 30 ? 'fail-mid' : '';
+  const thFor = (c) => {
+    const activeCls = (vqaSortKey === c.key) ? `active ${vqaSortDir}` : '';
+    const numCls    = c.num ? 'num' : '';
+    return `<th class="sortable ${numCls} ${activeCls}" data-sort="${c.key}" title="Sort by ${c.label.replace('&nbsp;', ' ')}"><span class="th-inner">${c.label}${SORT_CARET_SVG}</span></th>`;
+  };
+  host.innerHTML = `
+    <div class="table-card">
+      <table class="leaderboard">
+        <thead><tr><th>#</th><th>Agent</th>${SORT_COLUMNS.map(thFor).join('')}</tr></thead>
+        <tbody>
+          ${sorted.map((r, i) => `
+            <tr>
+              <td class="rank ${medal(i)}">${i + 1}</td>
+              <td><div class="agent-cell"><span class="agent-dot" style="background:${AGENT_COLORS[r.agent] || '#8A6B4A'}"></span><span class="agent-name">${r.agent}</span></div></td>
+              <td class="num overall-score">${(r.overall * 100).toFixed(1)}</td>
+              <td class="num">${(r.agentic * 100).toFixed(1)}</td>
+              <td class="num">${(r.task * 100).toFixed(1)}</td>
+              <td class="num muted">${r.turns.toFixed(1)}</td>
+              <td class="num muted">${fmtTime(r.time_s)}</td>
+              <td class="num">${fmtCost(r.cost)}</td>
+              <td class="num muted">${fmtTokens(r.tokens)}</td>
+              <td class="num ${failClass(r.fail)}">${r.fail.toFixed(1)}%</td>
+            </tr>`).join('')}
+        </tbody>
+      </table>
+    </div>`;
+  host.querySelectorAll('th.sortable').forEach(th => {
+    th.addEventListener('click', () => {
+      const key = th.dataset.sort;
+      if (vqaSortKey === key) vqaSortDir = (vqaSortDir === 'asc') ? 'desc' : 'asc';
+      else { vqaSortKey = key; vqaSortDir = SORT_DEFAULTS[key] || 'desc'; }
+      renderVqaPerTaskTable();
+    });
+  });
+}
+document.getElementById('vqaTaskSelect')?.addEventListener('change', (e) => { vqaTask = e.target.value; renderVqaPerTaskTable(); });
+document.getElementById('vqaTierSelect')?.addEventListener('change', (e) => { vqaTier = e.target.value; renderVqaPerTaskTable(); });
+(function wireVqaDisclosure() {
+  const btn  = document.getElementById('moreMetricsBtn-vqa');
+  const body = document.getElementById('moreMetrics-vqa');
+  if (!btn || !body) return;
+  btn.addEventListener('click', () => {
+    const open = body.classList.toggle('open');
+    btn.classList.toggle('open', open);
+    if (open) renderVqaSecondaryCharts();
+  });
+})();
+renderVqaFirstViewCharts();
+renderVqaPerTaskTable();
+
+/* ======================================================================= */
+/*  LESION DETECTION — performance charts + per-task leaderboard           */
+/* ======================================================================= */
+const DETECTION_DATA = {
+  'detection-cxr-abnormality-vindr': {
+    lite: [],
+    standard: [
+      {agent:"claude-opus-4.6", n:10, overall:0.7146, agentic:0.9660, task:0.4632, turns:25.4, time_s:341.0, cost:6.3383, tokens:366129,  fail:0.0},
+      {agent:"glm-5",           n:10, overall:0.6961, agentic:0.9080, task:0.4841, turns:57.3, time_s:532.9, cost:2.3469, tokens:1115434, fail:0.0},
+      {agent:"gemini-3.1-pro",  n:10, overall:0.6729, agentic:0.8785, task:0.4672, turns:34.3, time_s:417.0, cost:4.0718, tokens:558301,  fail:0.0},
+      {agent:"qwen3.5",         n:10, overall:0.6506, agentic:0.9788, task:0.3226, turns:38.5, time_s:363.1, cost:1.5360, tokens:714882,  fail:10.0},
+      {agent:"minimax-m2.5",    n:10, overall:0.6179, agentic:0.8572, task:0.3786, turns:44.6, time_s:594.8, cost:1.9492, tokens:913656,  fail:20.0},
+      {agent:"chatgpt-5.4",     n:10, overall:0.4827, agentic:0.7930, task:0.1723, turns:18.7, time_s:330.9, cost:4.8079, tokens:297001,  fail:20.0}
+    ]
+  }
+};
+const DETECTION_TASKS = Object.keys(DETECTION_DATA);
+let detTask = 'detection-cxr-abnormality-vindr';
+let detTier = 'standard';
+let detSortKey = 'overall';
+let detSortDir = 'desc';
+
+function detGetRows(task, tier) {
+  return ((DETECTION_DATA[task] || {})[tier]) || null;
+}
+function buildDetectionAgentStats() {
+  const acc = {};
+  for (const t of DETECTION_TASKS) {
+    for (const v of ['lite', 'standard']) {
+      const rows = detGetRows(t, v);
+      if (!rows) continue;
+      for (const r of rows) {
+        if (!acc[r.agent]) {
+          acc[r.agent] = { overall:[], agentic:[], task:[], turns:[], time:[], tokens:[], cost:[], fail:[] };
+        }
+        const a = acc[r.agent];
+        a.overall.push(r.overall); a.agentic.push(r.agentic); a.task.push(r.task);
+        a.turns.push(r.turns); a.time.push(r.time_s); a.tokens.push(r.tokens);
+        a.cost.push(r.cost); a.fail.push(r.fail);
+      }
+    }
+  }
+  const agents = Object.keys(acc).sort((a, b) => mean(acc[b].overall) - mean(acc[a].overall));
+  return agents.map(a => ({
+    agent: a, color: AGENT_COLORS[a] || '#8A6B4A',
+    avgOverall: mean(acc[a].overall), avgAgentic: mean(acc[a].agentic),
+    avgTask: mean(acc[a].task), avgTurns: mean(acc[a].turns),
+    avgTime: mean(acc[a].time), avgTokens: mean(acc[a].tokens),
+    avgCost: mean(acc[a].cost), avgFail: mean(acc[a].fail),
+  }));
+}
+function renderDetectionFirstViewCharts() {
+  const stats = buildDetectionAgentStats();
+  if (!stats.length) return;
+  const overall = overallGroupedChart('chartOverall-detection', stats);
+  renderOverallLegend('chartOverallLegend-detection', overall, '#ECEFE5');
+  Object.values(AGENT_BRAND).forEach(b => {
+    if (!b.slug) return;
+    loadBrandLogo(b.slug).then(img => { if (img) overall.update('none'); });
+  });
+  simpleBarChart('chartTurns-detection',  stats, { value: d => d.avgTurns, label: 'Turns', smallTicks: true, yFmt: v => v, tooltip: v => v.toFixed(1) + ' turns' });
+  simpleBarChart('chartTime-detection',   stats, { value: d => d.avgTime / 60, label: 'Time', smallTicks: true, yFmt: v => v + 'm', tooltip: v => v.toFixed(1) + ' min' });
+  simpleBarChart('chartTokens-detection', stats, { value: d => d.avgTokens / 1e6, label: 'Tokens', smallTicks: true, yFmt: v => v.toFixed(1) + 'M', tooltip: v => v.toFixed(2) + 'M tokens' });
+  simpleBarChart('chartCost-detection',   stats, { value: d => d.avgCost, label: 'Cost', smallTicks: true, yFmt: v => '$' + v, tooltip: v => fmtCost(v) });
+}
+let _detSecondaryRendered = false;
+function renderDetectionSecondaryCharts() {
+  if (_detSecondaryRendered) return;
+  const stats = buildDetectionAgentStats();
+  if (!stats.length) return;
+  _detSecondaryRendered = true;
+  simpleBarChart('chartFail-detection', stats, { value: d => d.avgFail, label: 'Fail %', yMax: 100, yFmt: v => v + '%', smallTicks: true, tooltip: v => v.toFixed(1) + '%' });
+}
+function renderDetectionPerTaskTable() {
+  const rows = detGetRows(detTask, detTier);
+  const host = document.getElementById('detPertaskBody');
+  if (!host) return;
+  if (!rows || rows.length === 0) {
+    host.innerHTML = pendingCard(`Runs for <code style="font-family:JetBrains Mono,monospace;background:var(--primary-soft);color:var(--primary);padding:1px 6px;border-radius:4px">${detTask} · ${detTier}</code> are still being collected.`);
+    return;
+  }
+  const sorted = [...rows].sort((a, b) => compareRows(a, b, detSortKey, detSortDir));
+  const medal = i => i < 3 ? `medal-${i+1}` : '';
+  const failClass = v => v >= 70 ? 'fail-hi' : v >= 30 ? 'fail-mid' : '';
+  const thFor = (c) => {
+    const activeCls = (detSortKey === c.key) ? `active ${detSortDir}` : '';
+    const numCls    = c.num ? 'num' : '';
+    return `<th class="sortable ${numCls} ${activeCls}" data-sort="${c.key}" title="Sort by ${c.label.replace('&nbsp;', ' ')}"><span class="th-inner">${c.label}${SORT_CARET_SVG}</span></th>`;
+  };
+  host.innerHTML = `
+    <div class="table-card">
+      <table class="leaderboard">
+        <thead><tr><th>#</th><th>Agent</th>${SORT_COLUMNS.map(thFor).join('')}</tr></thead>
+        <tbody>
+          ${sorted.map((r, i) => `
+            <tr>
+              <td class="rank ${medal(i)}">${i + 1}</td>
+              <td><div class="agent-cell"><span class="agent-dot" style="background:${AGENT_COLORS[r.agent] || '#8A6B4A'}"></span><span class="agent-name">${r.agent}</span></div></td>
+              <td class="num overall-score">${(r.overall * 100).toFixed(1)}</td>
+              <td class="num">${(r.agentic * 100).toFixed(1)}</td>
+              <td class="num">${(r.task * 100).toFixed(1)}</td>
+              <td class="num muted">${r.turns.toFixed(1)}</td>
+              <td class="num muted">${fmtTime(r.time_s)}</td>
+              <td class="num">${fmtCost(r.cost)}</td>
+              <td class="num muted">${fmtTokens(r.tokens)}</td>
+              <td class="num ${failClass(r.fail)}">${r.fail.toFixed(1)}%</td>
+            </tr>`).join('')}
+        </tbody>
+      </table>
+    </div>`;
+  host.querySelectorAll('th.sortable').forEach(th => {
+    th.addEventListener('click', () => {
+      const key = th.dataset.sort;
+      if (detSortKey === key) detSortDir = (detSortDir === 'asc') ? 'desc' : 'asc';
+      else { detSortKey = key; detSortDir = SORT_DEFAULTS[key] || 'desc'; }
+      renderDetectionPerTaskTable();
+    });
+  });
+}
+document.getElementById('detTaskSelect')?.addEventListener('change', (e) => { detTask = e.target.value; renderDetectionPerTaskTable(); });
+document.getElementById('detTierSelect')?.addEventListener('change', (e) => { detTier = e.target.value; renderDetectionPerTaskTable(); });
+(function wireDetDisclosure() {
+  const btn  = document.getElementById('moreMetricsBtn-detection');
+  const body = document.getElementById('moreMetrics-detection');
+  if (!btn || !body) return;
+  btn.addEventListener('click', () => {
+    const open = body.classList.toggle('open');
+    btn.classList.toggle('open', open);
+    if (open) renderDetectionSecondaryCharts();
+  });
+})();
+renderDetectionFirstViewCharts();
+renderDetectionPerTaskTable();
+
+/* Time-range chips for VQA + Detection task-setting tables */
+function _timeRangeFromRows(rows) {
+  const vals = [];
+  for (const r of rows) if (typeof r.time_s === 'number') vals.push(r.time_s);
+  if (!vals.length) return '—';
+  const fmt = n => Math.round(n).toLocaleString('en-US').replace(/,/g, ' ');
+  return `${fmt(Math.min(...vals))} – ${fmt(Math.max(...vals))} s`;
+}
+(function renderVqaTimeChip() {
+  const chip = document.querySelector('#vqa-panel-tiers .time-chip');
+  if (!chip) return;
+  const all = [];
+  for (const t of VQA_TASKS) for (const v of ['lite','standard']) {
+    const rows = vqaGetRows(t, v);
+    if (rows) all.push(...rows);
+  }
+  if (all.length) chip.textContent = _timeRangeFromRows(all);
+})();
+(function renderDetectionTimeChip() {
+  const chip = document.querySelector('#detection-panel-tiers .time-chip');
+  if (!chip) return;
+  const all = [];
+  for (const t of DETECTION_TASKS) for (const v of ['lite','standard']) {
+    const rows = detGetRows(t, v);
+    if (rows) all.push(...rows);
+  }
+  if (all.length) chip.textContent = _timeRangeFromRows(all);
+})();
 
 // Eagerly render workflow + tier grids + per-step rubrics for all incoming
 // tracks so the content is in the DOM regardless of which tab the user opens
