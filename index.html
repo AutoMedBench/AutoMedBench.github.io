@@ -2077,8 +2077,8 @@ footer a:hover { color: var(--primary); text-decoration: none; }
   </div>
   <aside class="hero-stats" aria-label="benchmark at a glance">
     <div class="stat-item"><span class="stat-num">7</span><span class="stat-label">agentic models<span class="info-pop info-pop-right" tabindex="0" role="button" aria-label="What is an agentic model?"><span class="info-bang">!</span><span class="info-bubble">We evaluate the <strong>base LLM as the agent</strong> driving the pipeline directly &mdash; not a vendor&rsquo;s own agent harness or tool-use wrapper.</span></span></span></div>
-    <div class="stat-item"><span class="stat-num">19</span><span class="stat-label">task combos</span></div>
-    <div class="stat-item"><span class="stat-num">1,940+</span><span class="stat-label">total runs</span></div>
+    <div class="stat-item"><span class="stat-num">20</span><span class="stat-label">task combos</span></div>
+    <div class="stat-item"><span class="stat-num">2,000+</span><span class="stat-label">total runs</span></div>
   </aside>
 </section>
 
@@ -2455,8 +2455,8 @@ footer a:hover { color: var(--primary); text-decoration: none; }
             </span>
           </label>
           <select class="variant-select" id="vqaTierSelect">
-            <option value="standard" selected>Standard</option>
-            <option value="lite">Lite · pending</option>
+            <option value="lite" selected>Lite</option>
+            <option value="standard">Standard</option>
           </select>
         </div>
       </div>
@@ -5747,7 +5747,14 @@ const VQA_DATA = {
   'vqa-slake-task':         { lite: [], standard: [] },
   'vqa-medframeqa-task':    { lite: [], standard: [] },
   'vqa-medxpertqa-mm-task': {
-    lite: [],
+    lite: [
+      {agent:"glm-5",           n:10, overall:0.6114, agentic:1.0000, task:0.2228, turns:27.4, time_s:956.5,  cost:0.4585, tokens:204091, fail:0.0},
+      {agent:"chatgpt-5.4",     n:10, overall:0.5562, agentic:0.9025, task:0.2100, turns:6.1,  time_s:1217.2, cost:1.0316, tokens:55878,  fail:10.0},
+      {agent:"gemini-3.1-pro",  n:10, overall:0.5499, agentic:0.9000, task:0.1999, turns:13.8, time_s:1288.4, cost:1.1918, tokens:152938, fail:10.0},
+      {agent:"qwen3.5",         n:10, overall:0.4344, agentic:0.7020, task:0.1668, turns:26.8, time_s:2130.8, cost:1.3959, tokens:654357, fail:40.0},
+      {agent:"minimax-m2.5",    n:10, overall:0.3637, agentic:0.5857, task:0.1417, turns:18.1, time_s:2281.4, cost:0.8064, tokens:371218, fail:50.0},
+      {agent:"claude-opus-4.6", n:10, overall:0.3516, agentic:0.5519, task:0.1514, turns:9.3,  time_s:2444.6, cost:2.0451, tokens:112958, fail:50.0}
+    ],
     standard: [
       {agent:"gemini-3.1-pro",  n:10, overall:0.6121, agentic:1.0000, task:0.2243, turns:14.7, time_s:951.0,  cost:1.1209, tokens:141724, fail:0.0},
       {agent:"chatgpt-5.4",     n:10, overall:0.6040, agentic:0.9899, task:0.2180, turns:7.1,  time_s:1783.2, cost:1.0935, tokens:56890,  fail:20.0},
@@ -5760,7 +5767,7 @@ const VQA_DATA = {
 };
 const VQA_TASKS = Object.keys(VQA_DATA);
 let vqaTask = 'vqa-medxpertqa-mm-task';
-let vqaTier = 'standard';
+let vqaTier = 'lite';
 let vqaSortKey = 'overall';
 let vqaSortDir = 'desc';
 
