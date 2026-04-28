@@ -2077,8 +2077,8 @@ footer a:hover { color: var(--primary); text-decoration: none; }
   </div>
   <aside class="hero-stats" aria-label="benchmark at a glance">
     <div class="stat-item"><span class="stat-num">7</span><span class="stat-label">agentic models<span class="info-pop info-pop-right" tabindex="0" role="button" aria-label="What is an agentic model?"><span class="info-bang">!</span><span class="info-bubble">We evaluate the <strong>base LLM as the agent</strong> driving the pipeline directly &mdash; not a vendor&rsquo;s own agent harness or tool-use wrapper.</span></span></span></div>
-    <div class="stat-item"><span class="stat-num">24</span><span class="stat-label">task combos</span></div>
-    <div class="stat-item"><span class="stat-num">2,260+</span><span class="stat-label">total runs</span></div>
+    <div class="stat-item"><span class="stat-num">26</span><span class="stat-label">task combos</span></div>
+    <div class="stat-item"><span class="stat-num">2,380+</span><span class="stat-label">total runs</span></div>
   </aside>
 </section>
 
@@ -2438,6 +2438,7 @@ footer a:hover { color: var(--primary); text-decoration: none; }
           <label for="vqaTaskSelect">Task</label>
           <select class="variant-select" id="vqaTaskSelect">
             <option value="vqa-pathvqa-task" selected>vqa-pathvqa-task</option>
+            <option value="vqa-radvqa-task">vqa-radvqa-task</option>
             <option value="vqa-medxpertqa-mm-task">vqa-medxpertqa-mm-task</option>
           </select>
         </div>
@@ -2504,6 +2505,12 @@ footer a:hover { color: var(--primary); text-decoration: none; }
               <td style="color:var(--ink-soft); font-size:13px">Open-ended pathology QA.</td>
             </tr>
             <tr>
+              <td>Radiology VQA</td><td>CT · MRI · X-ray</td>
+              <td><code class="time-chip" data-task="vqa-radvqa-task">—</code></td>
+              <td><a href="https://huggingface.co/datasets/flaviagiammarino/vqa-rad" target="_blank" rel="noopener">VQA-RAD</a></td>
+              <td style="color:var(--ink-soft); font-size:13px">Mixed-modality radiology QA.</td>
+            </tr>
+            <tr>
               <td>Expert Multimodal VQA</td><td>Multi-modal</td>
               <td><code class="time-chip" data-task="vqa-medxpertqa-mm-task">—</code></td>
               <td><a href="https://huggingface.co/datasets/TsinghuaC3I/MedXpertQA" target="_blank" rel="noopener">MedXpertQA · MM</a></td>
@@ -2511,7 +2518,7 @@ footer a:hover { color: var(--primary); text-decoration: none; }
             </tr>
           </tbody>
         </table>
-        <!-- Backup VQA datasets (VQA-RAD, SLAKE-EN, MedFrameQA) reserved for later sweeps. -->
+        <!-- Backup VQA datasets (SLAKE-EN, MedFrameQA) reserved for later sweeps. -->
       </div>
 
       <div class="content-block">
@@ -5799,7 +5806,24 @@ const VQA_DATA = {
       {agent:"chatgpt-5.4",     n:10, overall:0.4705, agentic:0.6825, task:0.2585, turns:7.4,  time_s:504.9,  cost:2.5568, tokens:149132,  fail:30.0}
     ]
   },
-  'vqa-vqa-rad-task':       { lite: [], standard: [] },
+  'vqa-radvqa-task': {
+    lite: [
+      {agent:"glm-5",           n:10, overall:0.6515, agentic:0.8930, task:0.4100, turns:42.3, time_s:2110.4, cost:3.1930,  tokens:1508578, fail:20.0},
+      {agent:"gemini-3.1-pro",  n:10, overall:0.6404, agentic:0.8787, task:0.4020, turns:20.8, time_s:1995.5, cost:5.6595,  tokens:769196,  fail:20.0},
+      {agent:"minimax-m2.5",    n:10, overall:0.5792, agentic:0.8354, task:0.3230, turns:42.5, time_s:2309.5, cost:3.2363,  tokens:1516796, fail:40.0},
+      {agent:"qwen3.5",         n:10, overall:0.5579, agentic:0.8149, task:0.3010, turns:40.2, time_s:2035.1, cost:3.5562,  tokens:1691458, fail:30.0},
+      {agent:"claude-opus-4.6", n:10, overall:0.4965, agentic:0.7625, task:0.2305, turns:24.3, time_s:2002.4, cost:13.4224, tokens:809650,  fail:60.0},
+      {agent:"chatgpt-5.4",     n:10, overall:0.1999, agentic:0.3927, task:0.0070, turns:12.0, time_s:1120.4, cost:5.3789,  tokens:327676,  fail:100.0}
+    ],
+    standard: [
+      {agent:"glm-5",           n:10, overall:0.7198, agentic:0.8650, task:0.5745, turns:21.0, time_s:904.2,  cost:0.9674, tokens:439031,  fail:0.0},
+      {agent:"claude-opus-4.6", n:10, overall:0.7072, agentic:0.8383, task:0.5760, turns:16.1, time_s:742.8,  cost:6.0829, tokens:348926,  fail:0.0},
+      {agent:"gemini-3.1-pro",  n:10, overall:0.7027, agentic:0.8733, task:0.5320, turns:15.5, time_s:1000.9, cost:2.6903, tokens:355575,  fail:0.0},
+      {agent:"minimax-m2.5",    n:10, overall:0.6587, agentic:0.8803, task:0.4370, turns:40.9, time_s:1847.1, cost:3.3977, tokens:1569622, fail:10.0},
+      {agent:"qwen3.5",         n:10, overall:0.5649, agentic:0.7833, task:0.3465, turns:23.2, time_s:1046.4, cost:1.5949, tokens:741219,  fail:20.0},
+      {agent:"chatgpt-5.4",     n:10, overall:0.5433, agentic:0.6825, task:0.4040, turns:6.4,  time_s:569.1,  cost:2.0523, tokens:118401,  fail:30.0}
+    ]
+  },
   'vqa-slake-task':         { lite: [], standard: [] },
   'vqa-medframeqa-task':    { lite: [], standard: [] },
   'vqa-medxpertqa-mm-task': {
