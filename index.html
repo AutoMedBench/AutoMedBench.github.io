@@ -2499,13 +2499,13 @@ footer a:hover { color: var(--primary); text-decoration: none; }
           <tbody>
             <tr>
               <td>Pathology VQA</td><td>Histopathology</td>
-              <td><code class="time-chip">—</code></td>
+              <td><code class="time-chip" data-task="vqa-pathvqa-task">—</code></td>
               <td><a href="https://huggingface.co/datasets/flaviagiammarino/path-vqa" target="_blank" rel="noopener">PathVQA</a></td>
               <td style="color:var(--ink-soft); font-size:13px">Open-ended pathology QA.</td>
             </tr>
             <tr>
               <td>Expert Multimodal VQA</td><td>Multi-modal</td>
-              <td><code class="time-chip">—</code></td>
+              <td><code class="time-chip" data-task="vqa-medxpertqa-mm-task">—</code></td>
               <td><a href="https://huggingface.co/datasets/TsinghuaC3I/MedXpertQA" target="_blank" rel="noopener">MedXpertQA · MM</a></td>
               <td style="color:var(--ink-soft); font-size:13px">Expert multi-image MCQ.</td>
             </tr>
@@ -6088,15 +6088,17 @@ function _timeRangeFromRows(rows) {
   const fmt = n => Math.round(n).toLocaleString('en-US').replace(/,/g, ' ');
   return `${fmt(Math.min(...vals))} – ${fmt(Math.max(...vals))} s`;
 }
-(function renderVqaTimeChip() {
-  const chip = document.querySelector('#vqa-panel-tiers .time-chip');
-  if (!chip) return;
-  const all = [];
-  for (const t of VQA_TASKS) for (const v of ['lite','standard']) {
-    const rows = vqaGetRows(t, v);
-    if (rows) all.push(...rows);
-  }
-  if (all.length) chip.textContent = _timeRangeFromRows(all);
+(function renderVqaTimeChips() {
+  const chips = document.querySelectorAll('#vqa-panel-tiers .time-chip[data-task]');
+  chips.forEach(chip => {
+    const t = chip.dataset.task;
+    const rows = [];
+    for (const v of ['lite', 'standard']) {
+      const r = vqaGetRows(t, v);
+      if (r) rows.push(...r);
+    }
+    if (rows.length) chip.textContent = _timeRangeFromRows(rows);
+  });
 })();
 (function renderDetectionTimeChip() {
   const chip = document.querySelector('#detection-panel-tiers .time-chip');
