@@ -2077,8 +2077,8 @@ footer a:hover { color: var(--primary); text-decoration: none; }
   </div>
   <aside class="hero-stats" aria-label="benchmark at a glance">
     <div class="stat-item"><span class="stat-num">7</span><span class="stat-label">agentic models<span class="info-pop info-pop-right" tabindex="0" role="button" aria-label="What is an agentic model?"><span class="info-bang">!</span><span class="info-bubble">We evaluate the <strong>base LLM as the agent</strong> driving the pipeline directly &mdash; not a vendor&rsquo;s own agent harness or tool-use wrapper.</span></span></span></div>
-    <div class="stat-item"><span class="stat-num">20</span><span class="stat-label">task combos</span></div>
-    <div class="stat-item"><span class="stat-num">2,000+</span><span class="stat-label">total runs</span></div>
+    <div class="stat-item"><span class="stat-num">22</span><span class="stat-label">task combos</span></div>
+    <div class="stat-item"><span class="stat-num">2,140+</span><span class="stat-label">total runs</span></div>
   </aside>
 </section>
 
@@ -3577,11 +3577,30 @@ const DATA = {
     {agent:"glm-5",           n:20, overall:0.2884, agentic:0.3955, task:0.1812, turns:62.5,  time_s:3920.6, cost:2.8039,  tokens:1356448, fail:50.0},
     {agent:"kimi-k2.5",       n:20, overall:0.2439, agentic:0.3485, task:0.1393, turns:111.7, time_s:2949.3, cost:11.4304, tokens:4506246, fail:50.0}
   ],
-  "aeropath-pro": []
+  "aeropath-pro": [],
+  "totalsegmentator-lite": [
+    {agent:"gemini-3.1-pro",  n:10, overall:0.8367, agentic:0.7980, task:0.8755, turns:25.4, time_s:3300.5, cost:4.0301,  tokens:547680,  fail:0.0},
+    {agent:"claude-opus-4.6", n:10, overall:0.7622, agentic:0.9697, task:0.5548, turns:24.3, time_s:3606.5, cost:11.7927, tokens:673326,  fail:0.0},
+    {agent:"qwen3.5",         n:10, overall:0.5542, agentic:0.7853, task:0.3231, turns:32.5, time_s:3045.2, cost:1.8331,  tokens:859107,  fail:0.0},
+    {agent:"glm-5",           n:10, overall:0.5409, agentic:0.8395, task:0.2422, turns:42.6, time_s:3263.6, cost:2.2114,  tokens:1048506, fail:0.0},
+    {agent:"minimax-m2.5",    n:10, overall:0.4963, agentic:0.7112, task:0.2813, turns:65.5, time_s:2756.5, cost:5.3105,  tokens:2562168, fail:0.0},
+    {agent:"kimi-k2.5",       n:10, overall:0.4503, agentic:0.7030, task:0.1977, turns:26.8, time_s:3075.4, cost:1.6538,  tokens:607868,  fail:0.0},
+    {agent:"chatgpt-5.4",     n:10, overall:0.3897, agentic:0.6544, task:0.1250, turns:18.1, time_s:2779.0, cost:6.0888,  tokens:373757,  fail:10.0}
+  ],
+  "totalsegmentator-standard": [
+    {agent:"glm-5",           n:10, overall:0.8357, agentic:0.8748, task:0.7965, turns:45.8, time_s:3594.6, cost:2.5091,  tokens:1182788, fail:0.0},
+    {agent:"qwen3.5",         n:10, overall:0.6745, agentic:0.8033, task:0.5457, turns:34.9, time_s:3144.1, cost:2.1983,  tokens:1031796, fail:10.0},
+    {agent:"claude-opus-4.6", n:10, overall:0.6359, agentic:0.7115, task:0.5603, turns:24.2, time_s:3160.0, cost:10.8708, tokens:643103,  fail:10.0},
+    {agent:"minimax-m2.5",    n:10, overall:0.5211, agentic:0.6476, task:0.3945, turns:58.1, time_s:2731.3, cost:4.1279,  tokens:1952110, fail:10.0},
+    {agent:"gemini-3.1-pro",  n:10, overall:0.4235, agentic:0.7665, task:0.0805, turns:11.1, time_s:3584.7, cost:1.2518,  tokens:167126,  fail:0.0},
+    {agent:"chatgpt-5.4",     n:10, overall:0.4037, agentic:0.6367, task:0.1707, turns:19.7, time_s:1822.6, cost:6.9843,  tokens:438873,  fail:0.0},
+    {agent:"kimi-k2.5",       n:10, overall:0.3409, agentic:0.5486, task:0.1332, turns:26.6, time_s:2170.3, cost:1.9036,  tokens:707871,  fail:40.0}
+  ],
+  "totalsegmentator-pro": []
 };
 
 const CATEGORY  = 'segmentation';
-const BASE_TASKS = ['feta', 'kidney', 'pancreas', 'pancreas_oar', 'aeropath'];
+const BASE_TASKS = ['feta', 'kidney', 'pancreas', 'pancreas_oar', 'aeropath', 'totalsegmentator'];
 const VARIANTS   = ['lite', 'standard', 'pro'];
 
 /* ======================================================================= */
@@ -3638,6 +3657,15 @@ const CONTENT = {
       source: 'AeroPath',
       sourceUrl: 'https://github.com/raidionics/AeroPath',
       description: 'Segment the airway tree from chest CT (single foreground class).'
+    },
+    totalsegmentator: {
+      display: 'Multi-Organ',
+      tabSlug: 'segmentation-ct-multi-organ',
+      modality: 'CT',
+      samples: 10,
+      source: 'TotalSegmentator',
+      sourceUrl: 'https://github.com/wasserth/TotalSegmentator',
+      description: 'Multi-organ segmentation across whole-body CT.'
     }
   },
 
@@ -4236,18 +4264,22 @@ document.addEventListener('click', (e) => {
  * scroll to the Overall Score chart, even if the user previously
  * switched to another primary tab. */
 function gotoLeaderboard() {
-  // Tracks with live scores (Segmentation, Image Enhancement) keep their
-  // current view; the still-pending tracks (VQA / Report Gen) redirect to
-  // Segmentation since they have no numbers yet.
-  const LIVE_TRACKS = ['segmentation', 'enhancement'];
-  if (typeof activeCategory !== 'undefined' && !LIVE_TRACKS.includes(activeCategory)) {
-    const segTab = document.querySelector('.cat-tab[data-cat="segmentation"]');
-    if (segTab) segTab.click();
+  // All five tracks are now live; jump to the current track's Performance
+  // panel rather than always redirecting to Segmentation.
+  const LIVE_TRACKS = ['segmentation', 'enhancement', 'vqa', 'reporting', 'detection'];
+  const cat = (typeof activeCategory !== 'undefined' && LIVE_TRACKS.includes(activeCategory))
+    ? activeCategory : 'segmentation';
+  if (cat !== activeCategory) {
+    const tab = document.querySelector('.cat-tab[data-cat="' + cat + '"]');
+    if (tab) tab.click();
   }
-  const perfTab = document.querySelector('#primaryTabs .primary-tab[data-panel="performance"]');
+  const tabsId = (cat === 'segmentation') ? 'primaryTabs' : 'primaryTabs-' + cat;
+  const perfTab = document.querySelector('#' + tabsId + ' .primary-tab[data-panel="performance"]');
   if (perfTab && !perfTab.classList.contains('active')) perfTab.click();
   requestAnimationFrame(() => {
-    const target = document.getElementById('overallPerformance');
+    const target = (cat === 'segmentation')
+      ? document.getElementById('overallPerformance')
+      : document.getElementById(cat + '-panel-performance');
     if (!target) return;
     const navH = document.querySelector('.nav')?.offsetHeight || 0;
     const y = target.getBoundingClientRect().top + window.scrollY - navH - 16;
