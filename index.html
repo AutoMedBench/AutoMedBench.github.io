@@ -2077,8 +2077,8 @@ footer a:hover { color: var(--primary); text-decoration: none; }
   </div>
   <aside class="hero-stats" aria-label="benchmark at a glance">
     <div class="stat-item"><span class="stat-num">7</span><span class="stat-label">agentic models<span class="info-pop info-pop-right" tabindex="0" role="button" aria-label="What is an agentic model?"><span class="info-bang">!</span><span class="info-bubble">We evaluate the <strong>base LLM as the agent</strong> driving the pipeline directly &mdash; not a vendor&rsquo;s own agent harness or tool-use wrapper.</span></span></span></div>
-    <div class="stat-item"><span class="stat-num">36</span><span class="stat-label">task combos</span></div>
-    <div class="stat-item"><span class="stat-num">2,980+</span><span class="stat-label">total runs</span></div>
+    <div class="stat-item"><span class="stat-num">40</span><span class="stat-label">task combos</span></div>
+    <div class="stat-item"><span class="stat-num">3,260+</span><span class="stat-label">total runs</span></div>
   </aside>
 </section>
 
@@ -2710,6 +2710,8 @@ footer a:hover { color: var(--primary); text-decoration: none; }
           <label for="rptTaskSelect">Task</label>
           <select class="variant-select" id="rptTaskSelect">
             <option value="mimic-cxr-report-task" selected>mimic-cxr-report-task</option>
+            <option value="chexpert-plus-cxr-task">chexpert-plus-cxr-task</option>
+            <option value="pathology-caption-task">pathology-caption-task</option>
           </select>
         </div>
         <div class="variant-picker" style="margin-left: auto">
@@ -2771,11 +2773,25 @@ footer a:hover { color: var(--primary); text-decoration: none; }
         <thead><tr><th>Task</th><th>Modality</th><th>Task Time Range</th><th>Source</th><th>Description</th></tr></thead>
         <tbody>
           <tr>
-            <td>Chest X-ray Report Generation</td>
+            <td>Chest X-ray Findings Report</td>
             <td>Chest X-ray</td>
-            <td><code class="time-chip">—</code></td>
+            <td><code class="time-chip" data-task="mimic-cxr-report-task">—</code></td>
             <td><a href="https://physionet.org/content/mimic-cxr/2.0.0/" target="_blank" rel="noopener">MIMIC-CXR</a></td>
             <td style="color:var(--ink-soft); font-size:13px">Findings-only reports.</td>
+          </tr>
+          <tr>
+            <td>Chest X-ray Full Report</td>
+            <td>Chest X-ray</td>
+            <td><code class="time-chip" data-task="chexpert-plus-cxr-task">—</code></td>
+            <td><a href="https://stanfordaimi.azurewebsites.net/datasets/5158c524-d3ab-4e02-96e9-6ee9efc110a1" target="_blank" rel="noopener">CheXpert Plus</a></td>
+            <td style="color:var(--ink-soft); font-size:13px">Full structured reports (findings + impression).</td>
+          </tr>
+          <tr>
+            <td>Pathology Captioning</td>
+            <td>Histopathology</td>
+            <td><code class="time-chip" data-task="pathology-caption-task">—</code></td>
+            <td><a href="https://huggingface.co/datasets/jamessyx/PathCap" target="_blank" rel="noopener">PathCap</a></td>
+            <td style="color:var(--ink-soft); font-size:13px">Histopathology image captioning.</td>
           </tr>
         </tbody>
       </table>
@@ -5620,45 +5636,91 @@ const REPORTING_DATA = {
   'mimic-cxr-report-task': {
     lite: [
       {agent:"claude-opus-4.6", n:10, overall:0.6809, agentic:0.9706, task:0.3911, turns:25.1, time_s:427.9, cost:18.2016, tokens:1150436, fail:0.0},
-      {agent:"glm-5",           n:10, overall:0.5953, agentic:0.8390, task:0.3515, turns:44.0, time_s:515.7, cost:2.4739,  tokens:1195174, fail:10.0},
-      {agent:"gemini-3.1-pro",  n:10, overall:0.5392, agentic:0.7621, task:0.3163, turns:29.1, time_s:354.2, cost:11.0896, tokens:1562939, fail:10.0},
-      {agent:"minimax-m2.5",    n:10, overall:0.3453, agentic:0.5410, task:0.1495, turns:44.7, time_s:738.3, cost:3.2768,  tokens:1574652, fail:50.0},
-      {agent:"qwen3.5",         n:10, overall:0.2844, agentic:0.4948, task:0.0741, turns:48.6, time_s:508.1, cost:4.5587,  tokens:2211920, fail:60.0},
-      {agent:"kimi-k2.5",       n:10, overall:0.1332, agentic:0.2247, task:0.0418, turns:19.0, time_s:792.7, cost:1.7626,  tokens:656595,  fail:80.0},
-      {agent:"chatgpt-5.4",     n:10, overall:0.1224, agentic:0.2449, task:0.0000, turns:8.0,  time_s:181.3, cost:3.3865,  tokens:208016,  fail:100.0}
+      {agent:"glm-5",           n:10, overall:0.6021, agentic:0.8390, task:0.3653, turns:44.0, time_s:515.7, cost:2.4739,  tokens:1195174, fail:10.0},
+      {agent:"gemini-3.1-pro",  n:10, overall:0.5461, agentic:0.7621, task:0.3301, turns:29.1, time_s:354.2, cost:11.0896, tokens:1562939, fail:10.0},
+      {agent:"minimax-m2.5",    n:10, overall:0.3797, agentic:0.5410, task:0.2184, turns:44.7, time_s:738.3, cost:3.2768,  tokens:1574652, fail:50.0},
+      {agent:"qwen3.5",         n:10, overall:0.3358, agentic:0.4948, task:0.1768, turns:48.6, time_s:508.1, cost:4.5587,  tokens:2211920, fail:60.0},
+      {agent:"chatgpt-5.4",     n:10, overall:0.1919, agentic:0.2449, task:0.1390, turns:8.0,  time_s:181.3, cost:3.3865,  tokens:208016,  fail:100.0},
+      {agent:"kimi-k2.5",       n:10, overall:0.1877, agentic:0.2247, task:0.1508, turns:19.0, time_s:792.7, cost:1.7625,  tokens:656595,  fail:80.0}
     ],
     standard: [
       {agent:"claude-opus-4.6", n:10, overall:0.6848, agentic:0.9900, task:0.3795, turns:20.6, time_s:420.4,  cost:11.2072, tokens:685335,  fail:0.0},
-      {agent:"glm-5",           n:10, overall:0.5398, agentic:0.8020, task:0.2777, turns:48.2, time_s:347.2,  cost:3.3880,  tokens:1649215, fail:20.0},
-      {agent:"gemini-3.1-pro",  n:10, overall:0.4481, agentic:0.6507, task:0.2456, turns:39.8, time_s:359.8,  cost:10.6871, tokens:1503886, fail:30.0},
-      {agent:"chatgpt-5.4",     n:10, overall:0.4117, agentic:0.6835, task:0.1398, turns:16.6, time_s:241.6,  cost:6.8116,  tokens:434270,  fail:20.0},
-      {agent:"qwen3.5",         n:10, overall:0.3529, agentic:0.5481, task:0.1577, turns:41.0, time_s:429.5,  cost:3.6273,  tokens:1748341, fail:50.0},
-      {agent:"minimax-m2.5",    n:10, overall:0.1645, agentic:0.3064, task:0.0226, turns:38.2, time_s:497.6,  cost:2.6955,  tokens:1283832, fail:90.0},
-      {agent:"kimi-k2.5",       n:10, overall:0.1406, agentic:0.2452, task:0.0359, turns:22.4, time_s:1035.7, cost:2.2890,  tokens:861856,  fail:80.0}
+      {agent:"glm-5",           n:10, overall:0.5536, agentic:0.8020, task:0.3053, turns:48.2, time_s:347.2,  cost:3.3880,  tokens:1649215, fail:20.0},
+      {agent:"gemini-3.1-pro",  n:10, overall:0.4688, agentic:0.6507, task:0.2869, turns:39.8, time_s:359.8,  cost:10.6871, tokens:1503886, fail:30.0},
+      {agent:"chatgpt-5.4",     n:10, overall:0.4254, agentic:0.6835, task:0.1673, turns:16.6, time_s:241.6,  cost:6.8116,  tokens:434270,  fail:20.0},
+      {agent:"qwen3.5",         n:10, overall:0.3873, agentic:0.5481, task:0.2266, turns:41.0, time_s:429.5,  cost:3.6273,  tokens:1748341, fail:50.0},
+      {agent:"minimax-m2.5",    n:10, overall:0.2265, agentic:0.3064, task:0.1466, turns:38.2, time_s:497.6,  cost:2.6955,  tokens:1283832, fail:90.0},
+      {agent:"kimi-k2.5",       n:10, overall:0.1956, agentic:0.2452, task:0.1461, turns:22.4, time_s:1035.7, cost:2.2890,  tokens:861856,  fail:80.0}
+    ]
+  },
+  'chexpert-plus-cxr-task': {
+    lite: [
+      {agent:"gemini-3.1-pro",  n:10, overall:0.5632, agentic:0.7304, task:0.3961, turns:15.0, time_s:564.7, cost:14.5941, tokens:2072211, fail:0.0},
+      {agent:"claude-opus-4.6", n:10, overall:0.5550, agentic:0.7359, task:0.3740, turns:16.2, time_s:513.7, cost:15.9440, tokens:1027335, fail:0.0},
+      {agent:"glm-5",           n:10, overall:0.5237, agentic:0.6911, task:0.3562, turns:26.4, time_s:549.8, cost:2.5015,  tokens:1222926, fail:10.0},
+      {agent:"qwen3.5",         n:10, overall:0.3184, agentic:0.4254, task:0.2113, turns:16.2, time_s:283.4, cost:1.4938,  tokens:722929,  fail:50.0},
+      {agent:"chatgpt-5.4",     n:10, overall:0.3175, agentic:0.4859, task:0.1492, turns:5.3,  time_s:181.7, cost:2.8558,  tokens:178297,  fail:100.0},
+      {agent:"minimax-m2.5",    n:10, overall:0.2723, agentic:0.4495, task:0.0952, turns:24.4, time_s:579.7, cost:1.2663,  tokens:594373,  fail:80.0}
+    ],
+    standard: [
+      {agent:"claude-opus-4.6", n:10, overall:0.6387, agentic:0.8979, task:0.3796, turns:15.0, time_s:585.5, cost:10.8234, tokens:677032,  fail:0.0},
+      {agent:"glm-5",           n:10, overall:0.5726, agentic:0.8053, task:0.3401, turns:39.5, time_s:601.4, cost:2.5336,  tokens:1228748, fail:10.0},
+      {agent:"chatgpt-5.4",     n:10, overall:0.5627, agentic:0.8528, task:0.2726, turns:7.0,  time_s:861.4, cost:2.0172,  tokens:120746,  fail:30.0},
+      {agent:"gemini-3.1-pro",  n:10, overall:0.4861, agentic:0.6678, task:0.3044, turns:22.0, time_s:606.0, cost:7.1547,  tokens:1006010, fail:20.0},
+      {agent:"qwen3.5",         n:10, overall:0.4598, agentic:0.7241, task:0.1955, turns:22.0, time_s:424.4, cost:1.0036,  tokens:462059,  fail:40.0},
+      {agent:"minimax-m2.5",    n:10, overall:0.2369, agentic:0.3971, task:0.0767, turns:21.3, time_s:486.6, cost:1.6353,  tokens:777389,  fail:80.0}
+    ]
+  },
+  'pathology-caption-task': {
+    lite: [
+      {agent:"claude-opus-4.6", n:10, overall:0.4533, agentic:0.6124, task:0.2942, turns:8.7,  time_s:1273.0, cost:2.6140, tokens:144567,  fail:100.0},
+      {agent:"chatgpt-5.4",     n:10, overall:0.3811, agentic:0.4750, task:0.2873, turns:5.6,  time_s:166.5,  cost:1.1803, tokens:62927,   fail:100.0},
+      {agent:"glm-5",           n:10, overall:0.3736, agentic:0.5055, task:0.2418, turns:45.4, time_s:1889.4, cost:2.5332, tokens:1218806, fail:100.0},
+      {agent:"qwen3.5",         n:10, overall:0.3621, agentic:0.4851, task:0.2391, turns:37.9, time_s:2059.8, cost:2.5705, tokens:1238647, fail:100.0},
+      {agent:"gemini-3.1-pro",  n:10, overall:0.3554, agentic:0.4376, task:0.2732, turns:18.1, time_s:2117.9, cost:3.1279, tokens:432644,  fail:100.0},
+      {agent:"kimi-k2.5",       n:10, overall:0.1987, agentic:0.2893, task:0.1081, turns:17.7, time_s:1371.8, cost:1.2147, tokens:445849,  fail:90.0},
+      {agent:"minimax-m2.5",    n:10, overall:0.1851, agentic:0.2542, task:0.1160, turns:20.8, time_s:614.9,  cost:0.7954, tokens:360967,  fail:70.0}
+    ],
+    standard: [
+      {agent:"claude-opus-4.6", n:10, overall:0.5405, agentic:0.7441, task:0.3370, turns:21.8, time_s:2934.7, cost:11.7349, tokens:719279,  fail:100.0},
+      {agent:"chatgpt-5.4",     n:10, overall:0.5199, agentic:0.7342, task:0.3055, turns:11.9, time_s:734.6,  cost:3.6932,  tokens:225661,  fail:40.0},
+      {agent:"glm-5",           n:10, overall:0.4757, agentic:0.6409, task:0.3105, turns:46.9, time_s:1925.1, cost:2.7284,  tokens:1319274, fail:100.0},
+      {agent:"gemini-3.1-pro",  n:10, overall:0.4423, agentic:0.5457, task:0.3388, turns:20.9, time_s:2657.9, cost:3.5605,  tokens:489691,  fail:100.0},
+      {agent:"qwen3.5",         n:10, overall:0.3255, agentic:0.4475, task:0.2034, turns:39.0, time_s:2119.7, cost:3.3025,  tokens:1591680, fail:90.0},
+      {agent:"minimax-m2.5",    n:10, overall:0.3202, agentic:0.4557, task:0.1846, turns:26.4, time_s:1561.8, cost:1.6261,  tokens:763089,  fail:60.0},
+      {agent:"kimi-k2.5",       n:10, overall:0.0766, agentic:0.1136, task:0.0396, turns:16.5, time_s:1130.9, cost:1.2422,  tokens:441328,  fail:90.0}
     ]
   }
 };
 
+const REPORTING_TASKS = Object.keys(REPORTING_DATA);
+let rptTask = 'mimic-cxr-report-task';
 let rptTier = 'lite';
+
+function rptGetRows(task, tier) {
+  return ((REPORTING_DATA[task] || {})[tier]) || null;
+}
 
 function buildReportingAgentStats() {
   const acc = {};
-  for (const v of ['lite', 'standard']) {
-    const rows = (REPORTING_DATA['mimic-cxr-report-task'] || {})[v];
-    if (!rows) continue;
-    for (const r of rows) {
-      if (!acc[r.agent]) {
-        acc[r.agent] = { overall:[], agentic:[], task:[], turns:[], time:[], tokens:[], cost:[], fail:[] };
+  for (const t of REPORTING_TASKS) {
+    for (const v of ['lite', 'standard']) {
+      const rows = rptGetRows(t, v);
+      if (!rows) continue;
+      for (const r of rows) {
+        if (!acc[r.agent]) {
+          acc[r.agent] = { overall:[], agentic:[], task:[], turns:[], time:[], tokens:[], cost:[], fail:[] };
+        }
+        const a = acc[r.agent];
+        a.overall.push(r.overall);
+        a.agentic.push(r.agentic);
+        a.task.push(r.task);
+        a.turns.push(r.turns);
+        a.time.push(r.time_s);
+        a.tokens.push(r.tokens);
+        a.cost.push(r.cost);
+        a.fail.push(r.fail);
       }
-      const a = acc[r.agent];
-      a.overall.push(r.overall);
-      a.agentic.push(r.agentic);
-      a.task.push(r.task);
-      a.turns.push(r.turns);
-      a.time.push(r.time_s);
-      a.tokens.push(r.tokens);
-      a.cost.push(r.cost);
-      a.fail.push(r.fail);
     }
   }
   const agents = Object.keys(acc).sort((a, b) => mean(acc[b].overall) - mean(acc[a].overall));
@@ -5723,26 +5785,36 @@ let rptSortDir = 'desc';
 
 function rptTimeRange() {
   const vals = [];
-  for (const v of ['lite', 'standard']) {
-    const rows = (REPORTING_DATA['mimic-cxr-report-task'] || {})[v];
-    if (!rows) continue;
-    for (const r of rows) if (typeof r.time_s === 'number') vals.push(r.time_s);
+  for (const t of REPORTING_TASKS) {
+    for (const v of ['lite', 'standard']) {
+      const rows = rptGetRows(t, v);
+      if (!rows) continue;
+      for (const r of rows) if (typeof r.time_s === 'number') vals.push(r.time_s);
+    }
   }
   if (!vals.length) return '—';
   const fmt = n => Math.round(n).toLocaleString('en-US').replace(/,/g, ' ');
   return `${fmt(Math.min(...vals))} – ${fmt(Math.max(...vals))} s`;
 }
-(function renderRptTimeChip() {
-  const chip = document.querySelector('#reporting-panel-tiers .time-chip');
-  if (chip) chip.textContent = rptTimeRange();
+(function renderRptTimeChips() {
+  const chips = document.querySelectorAll('#reporting-panel-tiers .time-chip[data-task]');
+  chips.forEach(chip => {
+    const t = chip.dataset.task;
+    const rows = [];
+    for (const v of ['lite', 'standard']) {
+      const r = rptGetRows(t, v);
+      if (r) rows.push(...r);
+    }
+    if (rows.length) chip.textContent = _timeRangeFromRows(rows);
+  });
 })();
 
 function renderReportPerTaskTable() {
-  const rows = (REPORTING_DATA['mimic-cxr-report-task'] || {})[rptTier];
+  const rows = rptGetRows(rptTask, rptTier);
   const host = document.getElementById('rptPertaskBody');
   if (!host) return;
   if (!rows || rows.length === 0) {
-    host.innerHTML = pendingCard(`Runs for <code style="font-family:JetBrains Mono,monospace;background:var(--primary-soft);color:var(--primary);padding:1px 6px;border-radius:4px">mimic-cxr-report-task · ${rptTier}</code> are still being collected.`);
+    host.innerHTML = pendingCard(`Runs for <code style="font-family:JetBrains Mono,monospace;background:var(--primary-soft);color:var(--primary);padding:1px 6px;border-radius:4px">${rptTask} · ${rptTier}</code> are still being collected.`);
     return;
   }
   const sorted = [...rows].sort((a, b) => compareRows(a, b, rptSortKey, rptSortDir));
@@ -5801,6 +5873,10 @@ function renderReportPerTaskTable() {
   });
 }
 
+document.getElementById('rptTaskSelect')?.addEventListener('change', (e) => {
+  rptTask = e.target.value;
+  renderReportPerTaskTable();
+});
 document.getElementById('rptTierSelect')?.addEventListener('change', (e) => {
   rptTier = e.target.value;
   renderReportPerTaskTable();
