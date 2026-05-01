@@ -2124,7 +2124,7 @@ footer a:hover { color: var(--primary); text-decoration: none; }
     <div class="perf-grid">
       <div class="chart-card span-4 dark" id="overallPerformance">
         <h3>Overall Score — averaged across all tasks</h3>
-        <p class="sub">Overall = (<span class="info-pop on-dark" tabindex="0" role="button" aria-label="What is the Agentic score?"><strong>Agentic</strong><span class="info-bang">!</span><span class="info-bubble"><strong>Agentic</strong> — how well the agent <em>ran the research pipeline</em>. Weighted sum of S1–S5 stage scores (plan, setup, validate, infer, submit). ∈ [0, 100].</span></span> + <span class="info-pop on-dark" tabindex="0" role="button" aria-label="What is the Task score?"><strong>Task</strong><span class="info-bang">!</span><span class="info-bubble"><strong>Task</strong> — how good the <em>final output</em> was. Macro-average Dice over all segmentation targets. ∈ [0, 100].</span></span>) / 2</p>
+        <p class="sub">Overall = (<span class="info-pop on-dark" tabindex="0" role="button" aria-label="What is the Agentic score?"><strong>Agentic</strong><span class="info-bang">!</span><span class="info-bubble"><strong>Agentic</strong> — how well the agent <em>ran the research pipeline</em>. Weighted sum of S1–S5 stage scores (plan, setup, validate, infer, submit). ∈ [0, 100].</span></span> + <span class="info-pop on-dark" tabindex="0" role="button" aria-label="What is the Task score?"><strong>Task</strong><span class="info-bang">!</span><span class="info-bubble"><strong>Task (Segmentation)</strong> = macro Dice × completion rate.</span></span>) / 2</p>
         <div class="chart-legend" id="chartOverallLegend">
           <span class="legend-hint">
             <svg width="12" height="12" viewBox="0 0 24 24" fill="none" aria-hidden="true">
@@ -2174,8 +2174,7 @@ footer a:hover { color: var(--primary); text-decoration: none; }
             <span class="info-pop" tabindex="0" role="button" aria-label="How is failure defined?">
               <span class="info-bang">!</span>
               <span class="info-bubble">
-                <strong>Failure</strong> = run did not finish all five stages.
-                <br>Causes: error, timeout, turn / cost limit, or no submission produced.
+                <strong>Failure</strong> = not able to finish the end-to-end workflow or provide complete submission.
               </span>
             </span>
           </h3>
@@ -2368,7 +2367,7 @@ footer a:hover { color: var(--primary); text-decoration: none; }
     <div class="perf-grid">
       <div class="chart-card span-4 dark" id="overallPerformance-vqa">
         <h3>Overall Score — averaged across all tasks</h3>
-        <p class="sub">Overall = (<span class="info-pop on-dark" tabindex="0" role="button" aria-label="What is the Agentic score?"><strong>Agentic</strong><span class="info-bang">!</span><span class="info-bubble"><strong>Agentic</strong> — how well the agent <em>ran the research pipeline</em>. Weighted sum of S1–S5 stage scores (plan, setup, validate, infer, submit). ∈ [0, 100].</span></span> + <span class="info-pop on-dark" tabindex="0" role="button" aria-label="What is the Task score?"><strong>Task</strong><span class="info-bang">!</span><span class="info-bubble"><strong>Task</strong> — how good the <em>final output</em> was. Mean per-question accuracy (exact-match for MCQ, max(EM, token-F1) or LLM-judge for open-ended). ∈ [0, 100].</span></span>) / 2</p>
+        <p class="sub">Overall = (<span class="info-pop on-dark" tabindex="0" role="button" aria-label="What is the Agentic score?"><strong>Agentic</strong><span class="info-bang">!</span><span class="info-bubble"><strong>Agentic</strong> — how well the agent <em>ran the research pipeline</em>. Weighted sum of S1–S5 stage scores (plan, setup, validate, infer, submit). ∈ [0, 100].</span></span> + <span class="info-pop on-dark" tabindex="0" role="button" aria-label="What is the Task score?"><strong>Task</strong><span class="info-bang">!</span><span class="info-bubble"><strong>Task (VQA)</strong> = exact-match accuracy × completion rate.</span></span>) / 2</p>
         <div class="chart-legend" id="chartOverallLegend-vqa">
           <span class="legend-hint">
             <svg width="12" height="12" viewBox="0 0 24 24" fill="none" aria-hidden="true">
@@ -2418,8 +2417,7 @@ footer a:hover { color: var(--primary); text-decoration: none; }
             <span class="info-pop" tabindex="0" role="button" aria-label="How is failure defined?">
               <span class="info-bang">!</span>
               <span class="info-bubble">
-                <strong>Failure</strong> = run did not finish all five stages.
-                <br>Causes: error, timeout, turn / cost limit, or no submission produced.
+                <strong>Failure</strong> = not able to finish the end-to-end workflow or provide complete submission.
               </span>
             </span>
           </h3>
@@ -2640,7 +2638,7 @@ footer a:hover { color: var(--primary); text-decoration: none; }
     <div class="perf-grid">
       <div class="chart-card span-4 dark" id="overallPerformance-rpt">
         <h3>Overall Score — averaged across all tasks</h3>
-        <p class="sub">Overall = (<span class="info-pop on-dark" tabindex="0" role="button" aria-label="What is the Agentic score?"><strong>Agentic</strong><span class="info-bang">!</span><span class="info-bubble"><strong>Agentic</strong> — how well the agent <em>ran the research pipeline</em>. Weighted sum of S1–S5 stage scores (plan, setup, validate, infer, submit). ∈ [0, 100].</span></span> + <span class="info-pop on-dark" tabindex="0" role="button" aria-label="What is the Task score?"><strong>Task</strong><span class="info-bang">!</span><span class="info-bubble"><strong>Task</strong> — how good the <em>final output</em> was. Mean over BLEU, METEOR, ROUGE-L, F1RadGraph, μP, μR, μF1 against the reference report. ∈ [0, 100].</span></span>) / 2</p>
+        <p class="sub">Overall = (<span class="info-pop on-dark" tabindex="0" role="button" aria-label="What is the Agentic score?"><strong>Agentic</strong><span class="info-bang">!</span><span class="info-bubble"><strong>Agentic</strong> — how well the agent <em>ran the research pipeline</em>. Weighted sum of S1–S5 stage scores (plan, setup, validate, infer, submit). ∈ [0, 100].</span></span> + <span class="info-pop on-dark" tabindex="0" role="button" aria-label="What is the Task score?"><strong>Task</strong><span class="info-bang">!</span><span class="info-bubble"><strong>Task (Report Gen)</strong> = mean(BLEU, METEOR, ROUGE-L, F1RadGraph) × completion rate.</span></span>) / 2</p>
         <div class="chart-legend" id="chartOverallLegend-rpt">
           <span class="legend-hint">
             <svg width="12" height="12" viewBox="0 0 24 24" fill="none" aria-hidden="true">
@@ -2690,8 +2688,7 @@ footer a:hover { color: var(--primary); text-decoration: none; }
             <span class="info-pop" tabindex="0" role="button" aria-label="How is failure defined?">
               <span class="info-bang">!</span>
               <span class="info-bubble">
-                <strong>Failure</strong> = run did not finish all five stages.
-                <br>Causes: error, timeout, turn / cost limit, or no submission produced.
+                <strong>Failure</strong> = not able to finish the end-to-end workflow or provide complete submission.
               </span>
             </span>
           </h3>
@@ -2917,7 +2914,7 @@ footer a:hover { color: var(--primary); text-decoration: none; }
     <div class="perf-grid">
       <div class="chart-card span-4 dark" id="overallPerformance-detection">
         <h3>Overall Score — averaged across all tasks</h3>
-        <p class="sub">Overall = (<span class="info-pop on-dark" tabindex="0" role="button" aria-label="What is the Agentic score?"><strong>Agentic</strong><span class="info-bang">!</span><span class="info-bubble"><strong>Agentic</strong> — how well the agent <em>ran the research pipeline</em>. Weighted sum of S1–S5 stage scores (plan, setup, validate, infer, submit). ∈ [0, 100].</span></span> + <span class="info-pop on-dark" tabindex="0" role="button" aria-label="What is the Task score?"><strong>Task</strong><span class="info-bang">!</span><span class="info-bubble"><strong>Task</strong> — how good the <em>final output</em> was. mAP@0.5 over the predicted bounding boxes (per-task class count varies: 3-cls BCCD, 4-cls DENTEX, 9-cls GRAZPEDWRI, 14-cls VinDr-CXR). ∈ [0, 100].</span></span>) / 2</p>
+        <p class="sub">Overall = (<span class="info-pop on-dark" tabindex="0" role="button" aria-label="What is the Agentic score?"><strong>Agentic</strong><span class="info-bang">!</span><span class="info-bubble"><strong>Agentic</strong> — how well the agent <em>ran the research pipeline</em>. Weighted sum of S1–S5 stage scores (plan, setup, validate, infer, submit). ∈ [0, 100].</span></span> + <span class="info-pop on-dark" tabindex="0" role="button" aria-label="What is the Task score?"><strong>Task</strong><span class="info-bang">!</span><span class="info-bubble"><strong>Task (Detection)</strong> = mAP@0.5 × completion rate.</span></span>) / 2</p>
         <div class="chart-legend" id="chartOverallLegend-detection">
           <span class="legend-hint">
             <svg width="12" height="12" viewBox="0 0 24 24" fill="none" aria-hidden="true">
@@ -2967,8 +2964,7 @@ footer a:hover { color: var(--primary); text-decoration: none; }
             <span class="info-pop" tabindex="0" role="button" aria-label="How is failure defined?">
               <span class="info-bang">!</span>
               <span class="info-bubble">
-                <strong>Failure</strong> = run did not finish all five stages.
-                <br>Causes: error, timeout, turn / cost limit, or no submission produced.
+                <strong>Failure</strong> = not able to finish the end-to-end workflow or provide complete submission.
               </span>
             </span>
           </h3>
@@ -3114,8 +3110,10 @@ footer a:hover { color: var(--primary); text-decoration: none; }
           <dt>On violation</dt>
           <dd>
             <span class="sev warn" data-n="1">Warning</span>
+            <span class="sev-body">execution blocked; agent continues</span>
             <span class="sep">·</span>
             <span class="sev fail" data-n="2">Disqualified</span>
+            <span class="sev-body">run zeroed; no credit</span>
           </dd>
         </div>
       </dl>
@@ -3208,7 +3206,7 @@ footer a:hover { color: var(--primary); text-decoration: none; }
     <div class="perf-grid">
       <div class="chart-card span-4 dark" id="overallPerformance-enh">
         <h3>Overall Score — averaged across all tasks</h3>
-        <p class="sub">Overall = (<span class="info-pop on-dark" tabindex="0" role="button" aria-label="What is the Agentic score?"><strong>Agentic</strong><span class="info-bang">!</span><span class="info-bubble"><strong>Agentic</strong> — how well the agent <em>ran the research pipeline</em>. Weighted sum of S1–S5 stage scores (plan, setup, validate, infer, submit), judged from <code>conversation.json</code>. ∈ [0, 100].</span></span> + <span class="info-pop on-dark" tabindex="0" role="button" aria-label="What is the Task score?"><strong>Task</strong><span class="info-bang">!</span><span class="info-bubble"><strong>Task</strong> — how good the <em>final output</em> was. Mean SSIM between the agent's reconstruction and the reference, averaged over patients. ∈ [0, 100].</span></span>) / 2</p>
+        <p class="sub">Overall = (<span class="info-pop on-dark" tabindex="0" role="button" aria-label="What is the Agentic score?"><strong>Agentic</strong><span class="info-bang">!</span><span class="info-bubble"><strong>Agentic</strong> — how well the agent <em>ran the research pipeline</em>. Weighted sum of S1–S5 stage scores (plan, setup, validate, infer, submit), judged from <code>conversation.json</code>. ∈ [0, 100].</span></span> + <span class="info-pop on-dark" tabindex="0" role="button" aria-label="What is the Task score?"><strong>Task</strong><span class="info-bang">!</span><span class="info-bubble"><strong>Task (Enhancement)</strong> = mean SSIM × completion rate.</span></span>) / 2</p>
         <div class="chart-legend" id="chartOverallLegend-enh">
           <span class="legend-hint">
             <svg width="12" height="12" viewBox="0 0 24 24" fill="none" aria-hidden="true">
@@ -3258,8 +3256,7 @@ footer a:hover { color: var(--primary); text-decoration: none; }
             <span class="info-pop" tabindex="0" role="button" aria-label="How is failure defined?">
               <span class="info-bang">!</span>
               <span class="info-bubble">
-                <strong>Failure</strong> = repeat that could not be scored.
-                <br>Causes: timeout, isolation breach, score below floor, no output.
+                <strong>Failure</strong> = not able to finish the end-to-end workflow or provide complete submission.
               </span>
             </span>
           </h3>
@@ -3382,11 +3379,11 @@ footer a:hover { color: var(--primary); text-decoration: none; }
         <div class="row">
           <dt>On violation</dt>
           <dd>
-            <span class="sev warn" data-n="1">1st</span>
-            <span class="sev-body">warning; agent continues</span>
+            <span class="sev warn" data-n="1">Warning</span>
+            <span class="sev-body">execution blocked; agent continues</span>
             <span class="sep">·</span>
-            <span class="sev fail" data-n="2">2nd</span>
-            <span class="sev-body"><code>exit 99</code> → orchestrator zeros all stages → rating <strong>F</strong></span>
+            <span class="sev fail" data-n="2">Disqualified</span>
+            <span class="sev-body">run zeroed; no credit</span>
           </dd>
         </div>
       </dl>
