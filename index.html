@@ -2077,8 +2077,8 @@ footer a:hover { color: var(--primary); text-decoration: none; }
   </div>
   <aside class="hero-stats" aria-label="benchmark at a glance">
     <div class="stat-item"><span class="stat-num">7</span><span class="stat-label">agentic models<span class="info-pop info-pop-right" tabindex="0" role="button" aria-label="What is an agentic model?"><span class="info-bang">!</span><span class="info-bubble">We evaluate the <strong>base LLM as the agent</strong> driving the pipeline directly &mdash; not a vendor&rsquo;s own agent harness or tool-use wrapper.</span></span></span></div>
-    <div class="stat-item"><span class="stat-num">46</span><span class="stat-label">task combos<span class="info-pop info-pop-right" tabindex="0" role="button" aria-label="How task combos break down across tracks"><span class="info-bang">!</span><span class="info-bubble"><strong>Distribution across 5 tracks</strong><ul class="bubble-list"><li>Segmentation &middot; 16</li><li>Image Enhancement &middot; 4</li><li>VQA &middot; 10</li><li>Report Generation &middot; 8</li><li>Lesion Detection &middot; 8</li></ul></span></span></span></div>
-    <div class="stat-item"><span class="stat-num">3,670+</span><span class="stat-label">total runs</span></div>
+    <div class="stat-item"><span class="stat-num">48</span><span class="stat-label">task combos<span class="info-pop info-pop-right" tabindex="0" role="button" aria-label="How task combos break down across tracks"><span class="info-bang">!</span><span class="info-bubble"><strong>Distribution across 5 tracks</strong><ul class="bubble-list"><li>Segmentation &middot; 16</li><li>Image Enhancement &middot; 4</li><li>VQA &middot; 10</li><li>Report Generation &middot; 10</li><li>Lesion Detection &middot; 8</li></ul></span></span></span></div>
+    <div class="stat-item"><span class="stat-num">3,790+</span><span class="stat-label">total runs</span></div>
   </aside>
 </section>
 
@@ -2707,6 +2707,7 @@ footer a:hover { color: var(--primary); text-decoration: none; }
           <label for="rptTaskSelect">Task</label>
           <select class="variant-select" id="rptTaskSelect">
             <option value="mimic-cxr-report-task" selected>mimic-cxr-report-task</option>
+            <option value="iu-xray-report-task">iu-xray-report-task</option>
             <option value="chexpert-plus-cxr-task">chexpert-plus-cxr-task</option>
             <option value="pathology-caption-100-task">pathology-caption-100-task</option>
             <option value="pathology-caption-500-task">pathology-caption-500-task</option>
@@ -2776,6 +2777,13 @@ footer a:hover { color: var(--primary); text-decoration: none; }
             <td><code class="time-chip" data-task="mimic-cxr-report-task">—</code></td>
             <td><a href="https://physionet.org/content/mimic-cxr/2.0.0/" target="_blank" rel="noopener">MIMIC-CXR</a></td>
             <td style="color:var(--ink-soft); font-size:13px">Findings-only reports.</td>
+          </tr>
+          <tr>
+            <td>Chest X-ray Findings / Impression</td>
+            <td>Chest X-ray</td>
+            <td><code class="time-chip" data-task="iu-xray-report-task">—</code></td>
+            <td><a href="https://openi.nlm.nih.gov/" target="_blank" rel="noopener">IU / Open-i</a></td>
+            <td style="color:var(--ink-soft); font-size:13px">Frontal chest X-ray findings or impression.</td>
           </tr>
           <tr>
             <td>Chest X-ray Full Report</td>
@@ -5709,6 +5717,26 @@ const REPORTING_DATA = {
       {agent:"qwen3.5",         n:10, overall:0.3873, agentic:0.5481, task:0.2266, turns:41.0, time_s:429.5,  cost:3.6273,  tokens:1748341, fail:50.0},
       {agent:"minimax-m2.5",    n:10, overall:0.2265, agentic:0.3064, task:0.1466, turns:38.2, time_s:497.6,  cost:2.6955,  tokens:1283832, fail:90.0},
       {agent:"kimi-k2.5",       n:10, overall:0.1956, agentic:0.2452, task:0.1461, turns:22.4, time_s:1035.7, cost:2.2890,  tokens:861856,  fail:80.0}
+    ]
+  },
+  'iu-xray-report-task': {
+    lite: [
+      {agent:"glm-5",           n:10, overall:0.4797, agentic:0.6022, task:0.3572, turns:31.5, time_s:492.3, cost:2.1180,  tokens:1019605, fail:90.0},
+      {agent:"claude-opus-4.6", n:10, overall:0.4482, agentic:0.5152, task:0.3811, turns:14.1, time_s:388.5, cost:18.2719, tokens:1184088, fail:90.0},
+      {agent:"gemini-3.1-pro",  n:10, overall:0.4364, agentic:0.5028, task:0.3701, turns:18.1, time_s:519.0, cost:33.2631, tokens:4735090, fail:90.0},
+      {agent:"chatgpt-5.4",     n:10, overall:0.3812, agentic:0.4697, task:0.2928, turns:4.9,  time_s:189.0, cost:5.1537,  tokens:329724,  fail:100.0},
+      {agent:"qwen3.5",         n:10, overall:0.3551, agentic:0.4202, task:0.2900, turns:21.4, time_s:439.7, cost:3.6536,  tokens:1788911, fail:100.0},
+      {agent:"minimax-m2.5",    n:10, overall:0.3083, agentic:0.3597, task:0.2569, turns:20.7, time_s:439.7, cost:1.4825,  tokens:697703,  fail:100.0},
+      {agent:"kimi-k2.5",       n:10, overall:0.1598, agentic:0.1330, task:0.1866, turns:6.4,  time_s:333.6, cost:0.4205,  tokens:151787,  fail:100.0}
+    ],
+    standard: [
+      {agent:"claude-opus-4.6", n:10, overall:0.5723, agentic:0.7479, task:0.3966, turns:13.4, time_s:473.2, cost:18.4519, tokens:1182956, fail:40.0},
+      {agent:"gemini-3.1-pro",  n:10, overall:0.5316, agentic:0.7149, task:0.3483, turns:18.6, time_s:487.3, cost:5.8199,  tokens:815877,  fail:40.0},
+      {agent:"chatgpt-5.4",     n:10, overall:0.5003, agentic:0.7554, task:0.2451, turns:10.4, time_s:553.8, cost:2.6455,  tokens:159645,  fail:60.0},
+      {agent:"glm-5",           n:10, overall:0.4578, agentic:0.5697, task:0.3460, turns:45.9, time_s:462.8, cost:3.5441,  tokens:1726782, fail:60.0},
+      {agent:"minimax-m2.5",    n:10, overall:0.4493, agentic:0.6140, task:0.2846, turns:31.9, time_s:576.0, cost:1.9922,  tokens:935528,  fail:80.0},
+      {agent:"qwen3.5",         n:10, overall:0.4330, agentic:0.6272, task:0.2388, turns:26.3, time_s:349.9, cost:1.3173,  tokens:615077,  fail:30.0},
+      {agent:"kimi-k2.5",       n:10, overall:0.1962, agentic:0.1812, task:0.2112, turns:10.1, time_s:781.1, cost:0.5597,  tokens:182735,  fail:90.0}
     ]
   },
   'chexpert-plus-cxr-task': {
