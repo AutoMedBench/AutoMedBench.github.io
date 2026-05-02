@@ -2077,8 +2077,8 @@ footer a:hover { color: var(--primary); text-decoration: none; }
   </div>
   <aside class="hero-stats" aria-label="benchmark at a glance">
     <div class="stat-item"><span class="stat-num">7</span><span class="stat-label">agentic models<span class="info-pop info-pop-right" tabindex="0" role="button" aria-label="What is an agentic model?"><span class="info-bang">!</span><span class="info-bubble">We evaluate the <strong>base LLM as the agent</strong> driving the pipeline directly &mdash; not a vendor&rsquo;s own agent harness or tool-use wrapper.</span></span></span></div>
-    <div class="stat-item"><span class="stat-num">44</span><span class="stat-label">task combos</span></div>
-    <div class="stat-item"><span class="stat-num">3,400+</span><span class="stat-label">total runs</span></div>
+    <div class="stat-item"><span class="stat-num">48</span><span class="stat-label">task combos</span></div>
+    <div class="stat-item"><span class="stat-num">3,670+</span><span class="stat-label">total runs</span></div>
   </aside>
 </section>
 
@@ -3668,11 +3668,48 @@ const DATA = {
     {agent:"chatgpt-5.4",     n:10, overall:0.4037, agentic:0.6367, task:0.1707, turns:19.7, time_s:1822.6, cost:6.9843,  tokens:438873,  fail:0.0},
     {agent:"kimi-k2.5",       n:10, overall:0.3409, agentic:0.5486, task:0.1332, turns:26.6, time_s:2170.3, cost:1.9036,  tokens:707871,  fail:40.0}
   ],
-  "totalsegmentator-pro": []
+  "totalsegmentator-pro": [],
+  "panther_t1-lite": [
+    {agent:"claude-opus-4.6", n:10, overall:0.9417, agentic:0.9940, task:0.8895, turns:34.1, time_s:1622.5, cost:9.7391, tokens:599301,  fail:0.0},
+    {agent:"gemini-3.1-pro",  n:10, overall:0.5930, agentic:0.7758, task:0.4103, turns:30.6, time_s:4396.9, cost:3.8480, tokens:527122,  fail:0.0},
+    {agent:"minimax-m2.5",    n:10, overall:0.4942, agentic:0.7657, task:0.2228, turns:45.9, time_s:6402.3, cost:2.3952, tokens:1133684, fail:0.0},
+    {agent:"glm-5",           n:10, overall:0.4901, agentic:0.8054, task:0.1748, turns:39.8, time_s:6751.9, cost:1.1923, tokens:565705,  fail:0.0},
+    {agent:"kimi-k2.5",       n:10, overall:0.4748, agentic:0.6129, task:0.3367, turns:51.8, time_s:5237.6, cost:4.5707, tokens:1723337, fail:20.0},
+    {agent:"chatgpt-5.4",     n:10, overall:0.4366, agentic:0.6627, task:0.2105, turns:12.9, time_s:5993.6, cost:2.7669, tokens:166483,  fail:0.0},
+    {agent:"qwen3.5",         n:10, overall:0.2414, agentic:0.4325, task:0.0503, turns:29.8, time_s:4257.9, cost:1.3888, tokens:655936,  fail:40.0}
+  ],
+  "panther_t1-standard": [
+    {agent:"gemini-3.1-pro",  n:10, overall:0.5695, agentic:0.6615, task:0.4775, turns:37.6, time_s:3281.8, cost:5.0023,  tokens:692180,  fail:0.0},
+    {agent:"glm-5",           n:10, overall:0.4388, agentic:0.6680, task:0.2097, turns:68.3, time_s:6348.0, cost:2.8870,  tokens:1397696, fail:0.0},
+    {agent:"kimi-k2.5",       n:10, overall:0.4069, agentic:0.5585, task:0.2552, turns:56.0, time_s:5300.8, cost:5.6578,  tokens:2160569, fail:20.0},
+    {agent:"claude-opus-4.6", n:10, overall:0.3727, agentic:0.6093, task:0.1362, turns:41.3, time_s:4678.2, cost:13.2859, tokens:827921,  fail:20.0},
+    {agent:"chatgpt-5.4",     n:10, overall:0.3616, agentic:0.6315, task:0.0917, turns:32.1, time_s:5617.6, cost:9.3341,  tokens:593595,  fail:0.0},
+    {agent:"qwen3.5",         n:10, overall:0.3492, agentic:0.5300, task:0.1685, turns:53.1, time_s:3917.8, cost:2.9238,  tokens:1405740, fail:30.0},
+    {agent:"minimax-m2.5",    n:10, overall:0.3310, agentic:0.5837, task:0.0783, turns:78.6, time_s:5506.6, cost:5.0488,  tokens:2430127, fail:0.0}
+  ],
+  "panther_t1-pro": [],
+  "panther_t2-lite": [
+    {agent:"gemini-3.1-pro",  n:10, overall:0.3402, agentic:0.5600, task:0.1204, turns:36.0, time_s:3702.7, cost:5.7190,  tokens:789885,  fail:0.0},
+    {agent:"claude-opus-4.6", n:10, overall:0.2875, agentic:0.5750, task:0.0000, turns:43.7, time_s:7207.3, cost:18.3902, tokens:1159088, fail:0.0},
+    {agent:"glm-5",           n:10, overall:0.2859, agentic:0.5712, task:0.0006, turns:64.2, time_s:7215.5, cost:3.6867,  tokens:1790112, fail:0.0},
+    {agent:"minimax-m2.5",    n:10, overall:0.2669, agentic:0.5120, task:0.0217, turns:71.7, time_s:6527.7, cost:4.7897,  tokens:2297095, fail:0.0},
+    {agent:"kimi-k2.5",       n:10, overall:0.2560, agentic:0.5080, task:0.0041, turns:22.9, time_s:5833.9, cost:1.2614,  tokens:459295,  fail:10.0},
+    {agent:"chatgpt-5.4",     n:10, overall:0.2214, agentic:0.4400, task:0.0028, turns:13.6, time_s:7232.7, cost:3.1506,  tokens:190516,  fail:10.0},
+    {agent:"qwen3.5",         n:10, overall:0.1851, agentic:0.3702, task:0.0000, turns:43.7, time_s:6271.4, cost:2.6864,  tokens:1291329, fail:20.0}
+  ],
+  "panther_t2-standard": [
+    {agent:"gemini-3.1-pro",  n:10, overall:0.3935, agentic:0.6324, task:0.1546, turns:40.3, time_s:3838.9, cost:5.2891,  tokens:735735,   fail:0.0},
+    {agent:"claude-opus-4.6", n:10, overall:0.3300, agentic:0.4986, task:0.1613, turns:60.0, time_s:7211.4, cost:28.3962, tokens:1810140, fail:10.0},
+    {agent:"kimi-k2.5",       n:10, overall:0.3241, agentic:0.5673, task:0.0809, turns:183.3, time_s:5002.6, cost:25.1417, tokens:9908241, fail:10.0},
+    {agent:"chatgpt-5.4",     n:10, overall:0.2936, agentic:0.5353, task:0.0520, turns:32.8, time_s:4127.8, cost:10.6471, tokens:679188,  fail:10.0},
+    {agent:"glm-5",           n:10, overall:0.2777, agentic:0.4893, task:0.0662, turns:63.4, time_s:7021.7, cost:3.1361,  tokens:1518323, fail:0.0},
+    {agent:"qwen3.5",         n:10, overall:0.2411, agentic:0.4817, task:0.0006, turns:50.9, time_s:7205.8, cost:2.5375,  tokens:1211819, fail:0.0}
+  ],
+  "panther_t2-pro": []
 };
 
 const CATEGORY  = 'segmentation';
-const BASE_TASKS = ['feta', 'kidney', 'pancreas', 'pancreas_oar', 'aeropath', 'totalsegmentator'];
+const BASE_TASKS = ['feta', 'kidney', 'pancreas', 'pancreas_oar', 'aeropath', 'totalsegmentator', 'panther_t1', 'panther_t2'];
 const VARIANTS   = ['lite', 'standard', 'pro'];
 
 /* ======================================================================= */
@@ -3738,6 +3775,22 @@ const CONTENT = {
       source: 'TotalSegmentator',
       sourceUrl: 'https://github.com/wasserth/TotalSegmentator',
       description: 'Multi-organ segmentation across whole-body CT.'
+    },
+    panther_t1: {
+      display: 'Pancreas Tumor · MRI T1',
+      tabSlug: 'segmentation-mri-pancreas-tumor-t1',
+      modality: 'MRI T1W-CE',
+      source: 'PANTHER 2025',
+      sourceUrl: 'https://panther.grand-challenge.org/',
+      description: 'Segment pancreas and pancreatic tumor on contrast-enhanced T1-weighted arterial-phase MRI from the PANTHER 2025 Task 1 cohort.'
+    },
+    panther_t2: {
+      display: 'Pancreas Tumor · MRI T2 (MR-Linac)',
+      tabSlug: 'segmentation-mri-pancreas-tumor-t2',
+      modality: 'MRI T2w',
+      source: 'PANTHER 2025',
+      sourceUrl: 'https://panther.grand-challenge.org/',
+      description: 'Segment pancreas and pancreatic tumor on T2-weighted MR-Linac MRI; few-shot setting from the PANTHER 2025 Task 2 cohort.'
     }
   },
 
