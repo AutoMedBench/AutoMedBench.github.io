@@ -2077,8 +2077,8 @@ footer a:hover { color: var(--primary); text-decoration: none; }
   </div>
   <aside class="hero-stats" aria-label="benchmark at a glance">
     <div class="stat-item"><span class="stat-num">7</span><span class="stat-label">agentic models<span class="info-pop info-pop-right" tabindex="0" role="button" aria-label="What is an agentic model?"><span class="info-bang">!</span><span class="info-bubble">We evaluate the <strong>base LLM as the agent</strong> driving the pipeline directly &mdash; not a vendor&rsquo;s own agent harness or tool-use wrapper.</span></span></span></div>
-    <div class="stat-item"><span class="stat-num">40</span><span class="stat-label">task combos</span></div>
-    <div class="stat-item"><span class="stat-num">3,260+</span><span class="stat-label">total runs</span></div>
+    <div class="stat-item"><span class="stat-num">44</span><span class="stat-label">task combos</span></div>
+    <div class="stat-item"><span class="stat-num">3,400+</span><span class="stat-label">total runs</span></div>
   </aside>
 </section>
 
@@ -2708,7 +2708,8 @@ footer a:hover { color: var(--primary); text-decoration: none; }
           <select class="variant-select" id="rptTaskSelect">
             <option value="mimic-cxr-report-task" selected>mimic-cxr-report-task</option>
             <option value="chexpert-plus-cxr-task">chexpert-plus-cxr-task</option>
-            <option value="pathology-caption-task">pathology-caption-task</option>
+            <option value="pathology-caption-100-task">pathology-caption-100-task</option>
+            <option value="pathology-caption-500-task">pathology-caption-500-task</option>
           </select>
         </div>
         <div class="variant-picker" style="margin-left: auto">
@@ -2784,11 +2785,18 @@ footer a:hover { color: var(--primary); text-decoration: none; }
             <td style="color:var(--ink-soft); font-size:13px">Full structured reports (findings + impression).</td>
           </tr>
           <tr>
-            <td>Pathology Captioning</td>
+            <td>Pathology Captioning · 100</td>
             <td>Histopathology</td>
-            <td><code class="time-chip" data-task="pathology-caption-task">—</code></td>
+            <td><code class="time-chip" data-task="pathology-caption-100-task">—</code></td>
             <td><a href="https://huggingface.co/datasets/jamessyx/PathCap" target="_blank" rel="noopener">PathCap</a></td>
-            <td style="color:var(--ink-soft); font-size:13px">Histopathology image captioning.</td>
+            <td style="color:var(--ink-soft); font-size:13px">Histopathology image captioning · 100-case split.</td>
+          </tr>
+          <tr>
+            <td>Pathology Captioning · 500</td>
+            <td>Histopathology</td>
+            <td><code class="time-chip" data-task="pathology-caption-500-task">—</code></td>
+            <td><a href="https://huggingface.co/datasets/jamessyx/PathCap" target="_blank" rel="noopener">PathCap</a></td>
+            <td style="color:var(--ink-soft); font-size:13px">Histopathology image captioning · 500-case split.</td>
           </tr>
         </tbody>
       </table>
@@ -5668,7 +5676,27 @@ const REPORTING_DATA = {
       {agent:"minimax-m2.5",    n:10, overall:0.2369, agentic:0.3971, task:0.0767, turns:21.3, time_s:486.6, cost:1.6353,  tokens:777389,  fail:80.0}
     ]
   },
-  'pathology-caption-task': {
+  'pathology-caption-100-task': {
+    lite: [
+      {agent:"claude-opus-4.6", n:10, overall:0.4824, agentic:0.6527, task:0.3121, turns:11.6, time_s:808.6, cost:3.9792, tokens:231163,  fail:100.0},
+      {agent:"gemini-3.1-pro",  n:10, overall:0.4611, agentic:0.5753, task:0.3469, turns:23.8, time_s:935.3, cost:6.3212, tokens:882044,  fail:90.0},
+      {agent:"qwen3.5",         n:10, overall:0.4201, agentic:0.5381, task:0.3021, turns:41.1, time_s:881.3, cost:2.9811, tokens:1442168, fail:70.0},
+      {agent:"chatgpt-5.4",     n:10, overall:0.3439, agentic:0.3623, task:0.3254, turns:6.2,  time_s:137.4, cost:1.3530, tokens:74996,   fail:100.0},
+      {agent:"glm-5",           n:10, overall:0.3041, agentic:0.2754, task:0.3328, turns:34.2, time_s:524.7, cost:1.7695, tokens:848373,  fail:100.0},
+      {agent:"kimi-k2.5",       n:10, overall:0.1959, agentic:0.1920, task:0.1998, turns:18.2, time_s:949.4, cost:1.5607, tokens:575163,  fail:90.0},
+      {agent:"minimax-m2.5",    n:10, overall:0.1909, agentic:0.0522, task:0.3296, turns:10.8, time_s:203.6, cost:0.5087, tokens:231449,  fail:100.0}
+    ],
+    standard: [
+      {agent:"glm-5",           n:10, overall:0.5206, agentic:0.6993, task:0.3419, turns:47.8, time_s:896.6, cost:2.9011,  tokens:1401755, fail:90.0},
+      {agent:"claude-opus-4.6", n:10, overall:0.5203, agentic:0.7444, task:0.2962, turns:22.8, time_s:847.8, cost:11.9992, tokens:734240,  fail:100.0},
+      {agent:"gemini-3.1-pro",  n:10, overall:0.4828, agentic:0.6190, task:0.3465, turns:22.1, time_s:721.7, cost:3.8932,  tokens:538709,  fail:90.0},
+      {agent:"qwen3.5",         n:10, overall:0.4684, agentic:0.6110, task:0.3259, turns:39.7, time_s:879.2, cost:3.4585,  tokens:1667866, fail:60.0},
+      {agent:"chatgpt-5.4",     n:10, overall:0.4553, agentic:0.5941, task:0.3164, turns:9.5,  time_s:255.3, cost:2.0539,  tokens:119638,  fail:30.0},
+      {agent:"minimax-m2.5",    n:10, overall:0.3187, agentic:0.3427, task:0.2947, turns:34.4, time_s:483.2, cost:1.9805,  tokens:924078,  fail:90.0},
+      {agent:"kimi-k2.5",       n:10, overall:0.0886, agentic:0.0796, task:0.0975, turns:8.2,  time_s:463.5, cost:0.2917,  tokens:88078,   fail:100.0}
+    ]
+  },
+  'pathology-caption-500-task': {
     lite: [
       {agent:"claude-opus-4.6", n:10, overall:0.4533, agentic:0.6124, task:0.2942, turns:8.7,  time_s:1273.0, cost:2.6140, tokens:144567,  fail:100.0},
       {agent:"chatgpt-5.4",     n:10, overall:0.3811, agentic:0.4750, task:0.2873, turns:5.6,  time_s:166.5,  cost:1.1803, tokens:62927,   fail:100.0},
