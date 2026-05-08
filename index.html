@@ -5338,11 +5338,23 @@ function setTheme(theme) {
   Object.values(Chart.instances).forEach(ch => ch.destroy());
   _secondaryRendered = false;
   _enhSecondaryRendered = false;
+  _vqaSecondaryRendered = false;
+  _rptSecondaryRendered = false;
+  _detSecondaryRendered = false;
   renderFirstViewCharts();
   renderEnhFirstViewCharts();
+  renderVqaFirstViewCharts();
+  renderReportingFirstViewCharts();
+  renderDetectionFirstViewCharts();
   if (disclosureBox.classList.contains('open')) renderSecondaryCharts();
   const enhBox = document.getElementById('moreMetrics-enh');
   if (enhBox && enhBox.classList.contains('open')) renderEnhSecondaryCharts();
+  const vqaBox = document.getElementById('moreMetrics-vqa');
+  if (vqaBox && vqaBox.classList.contains('open')) renderVqaSecondaryCharts();
+  const rptBox = document.getElementById('moreMetrics-rpt');
+  if (rptBox && rptBox.classList.contains('open')) renderReportingSecondaryCharts();
+  const detBox = document.getElementById('moreMetrics-detection');
+  if (detBox && detBox.classList.contains('open')) renderDetectionSecondaryCharts();
 }
 document.getElementById('themeToggle').addEventListener('click', () => {
   const cur = document.documentElement.dataset.theme === 'dark' ? 'dark' : 'light';
