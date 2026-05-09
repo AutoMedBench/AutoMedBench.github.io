@@ -2077,8 +2077,8 @@ footer a:hover { color: var(--primary); text-decoration: none; }
   </div>
   <aside class="hero-stats" aria-label="benchmark at a glance">
     <div class="stat-item"><span class="stat-num">7</span><span class="stat-label">agentic models<span class="info-pop info-pop-right" tabindex="0" role="button" aria-label="What is an agentic model?"><span class="info-bang">!</span><span class="info-bubble">We evaluate the <strong>base LLM as the agent</strong> driving the pipeline directly &mdash; not a vendor&rsquo;s own agent harness or tool-use wrapper.</span></span></span></div>
-    <div class="stat-item"><span class="stat-num">48</span><span class="stat-label">task combos<span class="info-pop info-pop-right" tabindex="0" role="button" aria-label="How task combos break down across tracks"><span class="info-bang">!</span><span class="info-bubble"><strong>Distribution across 5 tracks</strong><ul class="bubble-list"><li>Segmentation &middot; 16</li><li>Image Enhancement &middot; 4</li><li>VQA &middot; 10</li><li>Report Generation &middot; 10</li><li>Lesion Detection &middot; 8</li></ul></span></span></span></div>
-    <div class="stat-item"><span class="stat-num">3,700+</span><span class="stat-label">total runs</span></div>
+    <div class="stat-item"><span class="stat-num">56</span><span class="stat-label">task combos<span class="info-pop info-pop-right" tabindex="0" role="button" aria-label="How task combos break down across tracks"><span class="info-bang">!</span><span class="info-bubble"><strong>Distribution across 5 tracks</strong><ul class="bubble-list"><li>Segmentation &middot; 18</li><li>Image Enhancement &middot; 4</li><li>VQA &middot; 16</li><li>Report Generation &middot; 10</li><li>Lesion Detection &middot; 8</li></ul></span></span></span></div>
+    <div class="stat-item"><span class="stat-num">4,100+</span><span class="stat-label">total runs</span></div>
   </aside>
 </section>
 
@@ -2440,6 +2440,9 @@ footer a:hover { color: var(--primary); text-decoration: none; }
             <option value="vqa-medframeqa-task">vqa-medframeqa-task</option>
             <option value="vqa-slake-task">vqa-slake-task</option>
             <option value="vqa-medxpertqa-mm-task">vqa-medxpertqa-mm-task</option>
+            <option value="vqa-kvasir-task">vqa-kvasir-task</option>
+            <option value="vqa-omnimedvqa-task">vqa-omnimedvqa-task</option>
+            <option value="vqa-pmc-vqa-task">vqa-pmc-vqa-task</option>
           </select>
         </div>
         <div class="variant-picker" style="margin-left: auto">
@@ -2528,8 +2531,29 @@ footer a:hover { color: var(--primary); text-decoration: none; }
               <td><a href="https://huggingface.co/datasets/TsinghuaC3I/MedXpertQA" target="_blank" rel="noopener">MedXpertQA · MM</a></td>
               <td style="color:var(--ink-soft); font-size:13px">Expert multi-image MCQ.</td>
             </tr>
+            <tr>
+              <td>Endoscopy VQA</td><td>GI endoscopy</td>
+              <td><code class="time-chip" data-task="vqa-kvasir-task">—</code></td>
+              <td><a href="https://huggingface.co/datasets/SimulaMet-HOST/Kvasir-VQA" target="_blank" rel="noopener">Kvasir-VQA</a></td>
+              <td style="color:var(--ink-soft); font-size:13px">Open-ended GI-endoscopy QA — yes/no, MCQ, short-answer.</td>
+            </tr>
+            <tr>
+              <td>Comprehensive VQA</td><td>Multi-modal</td>
+              <td><code class="time-chip" data-task="vqa-omnimedvqa-task">—</code></td>
+              <td><a href="https://huggingface.co/datasets/foreverbeliever/OmniMedVQA" target="_blank" rel="noopener">OmniMedVQA</a></td>
+              <td style="color:var(--ink-soft); font-size:13px">Multi-modality medical MCQ — 12 modalities, 73 source datasets.</td>
+            </tr>
+            <tr>
+              <td>Literature VQA</td><td>Mixed biomedical</td>
+              <td><code class="time-chip" data-task="vqa-pmc-vqa-task">—</code></td>
+              <td><a href="https://huggingface.co/datasets/xmcmic/PMC-VQA" target="_blank" rel="noopener">PMC-VQA</a></td>
+              <td style="color:var(--ink-soft); font-size:13px">MCQ on PubMed Central biomedical figures.</td>
+            </tr>
           </tbody>
         </table>
+        <p style="margin:10px 0 0; color:var(--ink-mute); font-size:12px">
+          Datasets remain the property of their respective authors. AutoMedBench reports leaderboard scores only and does not redistribute dataset content; benchmark runs download data directly from the linked sources.
+        </p>
       </div>
 
       <div class="content-block">
@@ -3639,6 +3663,23 @@ const DATA = {
     {agent:"minimax-m2.5",    n:20, overall:0.0000, agentic:0.0000, task:0.0000, turns:24.7,  time_s:272.0,  cost:0.8466,  tokens:400150,  fail:100.0}
   ],
   "pancreas_oar-pro": [],
+  "liver-lite": [
+    {agent:"claude-opus-4.6", n:10, overall:0.8998, agentic:0.9875, task:0.8120, turns:34.7, time_s:1863.3, cost:13.9970, tokens:848630,  fail:0.0},
+    {agent:"gemini-3.1-pro",  n:10, overall:0.8131, agentic:0.9700, task:0.6563, turns:47.4, time_s:1525.3, cost:8.5723,  tokens:1185092, fail:10.0},
+    {agent:"glm-5",           n:10, overall:0.8078, agentic:0.9625, task:0.6531, turns:54.4, time_s:2818.1, cost:2.7969,  tokens:1335517, fail:10.0},
+    {agent:"qwen3.5",         n:10, overall:0.6640, agentic:0.8524, task:0.4756, turns:53.9, time_s:2855.0, cost:3.5587,  tokens:1704890, fail:20.0},
+    {agent:"chatgpt-5.4",     n:10, overall:0.6112, agentic:0.8125, task:0.4099, turns:23.4, time_s:1394.6, cost:6.0400,  tokens:378725,  fail:60.0},
+    {agent:"minimax-m2.5",    n:10, overall:0.5238, agentic:0.8360, task:0.2117, turns:67.3, time_s:2307.3, cost:4.1889,  tokens:2006990, fail:70.0}
+  ],
+  "liver-standard": [
+    {agent:"claude-opus-4.6", n:10, overall:0.9076, agentic:0.9708, task:0.8444, turns:41.0, time_s:2325.0, cost:16.7027, tokens:1019568, fail:0.0},
+    {agent:"glm-5",           n:10, overall:0.7823, agentic:0.8752, task:0.6895, turns:58.4, time_s:3120.0, cost:3.1173,  tokens:1484570, fail:0.0},
+    {agent:"chatgpt-5.4",     n:10, overall:0.6594, agentic:0.7983, task:0.5207, turns:23.5, time_s:2192.9, cost:5.8301,  tokens:363736,  fail:40.0},
+    {agent:"gemini-3.1-pro",  n:10, overall:0.6521, agentic:0.8078, task:0.4965, turns:49.2, time_s:1595.6, cost:7.2669,  tokens:1006441, fail:30.0},
+    {agent:"qwen3.5",         n:10, overall:0.5940, agentic:0.8010, task:0.3870, turns:59.2, time_s:2899.7, cost:3.7877,  tokens:1804787, fail:50.0},
+    {agent:"minimax-m2.5",    n:10, overall:0.4894, agentic:0.6761, task:0.3027, turns:71.6, time_s:2623.5, cost:5.1608,  tokens:2474933, fail:60.0}
+  ],
+  "liver-pro": [],
   "aeropath-lite": [
     {agent:"claude-opus-4.6", n:20, overall:0.9122, agentic:0.9354, task:0.8891, turns:12.5, time_s:5420, cost:2.7499, tokens:160518, fail:0.0},
     {agent:"chatgpt-5.4",     n:20, overall:0.9120, agentic:0.9354, task:0.8886, turns:6.8,  time_s:5421, cost:1.2846, tokens:73398,  fail:0.0},
@@ -3717,7 +3758,7 @@ const DATA = {
 };
 
 const CATEGORY  = 'segmentation';
-const BASE_TASKS = ['feta', 'kidney', 'pancreas', 'pancreas_oar', 'aeropath', 'totalsegmentator', 'panther_t1', 'panther_t2'];
+const BASE_TASKS = ['feta', 'kidney', 'pancreas', 'pancreas_oar', 'liver', 'aeropath', 'totalsegmentator', 'panther_t1', 'panther_t2'];
 const VARIANTS   = ['lite', 'standard', 'pro'];
 
 /* ======================================================================= */
@@ -3765,6 +3806,14 @@ const CONTENT = {
       source: 'PanTS',
       sourceUrl: 'https://github.com/MrGiovanni/PanTS',
       description: 'Segment the pancreatic tumor together with surrounding organs-at-risk on abdominal CT (multi-organ).'
+    },
+    liver: {
+      display: 'Liver Tumor',
+      tabSlug: 'segmentation-ct-liver-tumor',
+      modality: 'CT',
+      source: 'LiTS',
+      sourceUrl: 'https://competitions.codalab.org/competitions/17094',
+      description: 'Segment liver and detect liver tumors / lesions on contrast-enhanced abdominal CT (LiTS challenge cohort).'
     },
     aeropath: {
       display: 'Airway Tree',
@@ -6107,6 +6156,60 @@ const VQA_DATA = {
       {agent:"glm-5",           n:10, overall:0.5637, agentic:0.9145, task:0.2130, turns:26.2, time_s:1354.9, cost:0.6041, tokens:273072, fail:10.0},
       {agent:"claude-opus-4.6", n:10, overall:0.5090, agentic:0.8219, task:0.1960, turns:20.9, time_s:1550.3, cost:6.0239, tokens:347654, fail:20.0},
       {agent:"minimax-m2.5",    n:10, overall:0.4385, agentic:0.7441, task:0.1328, turns:20.8, time_s:1149.7, cost:0.5734, tokens:250638, fail:40.0}
+    ]
+  },
+  'vqa-kvasir-task': {
+    lite: [
+      {agent:"qwen3.5",         n:10, overall:0.5702, agentic:0.9003, task:0.2400, turns:41.1, time_s:1831.3, cost:3.8395,  tokens:1830462, fail:10.0},
+      {agent:"claude-opus-4.6", n:10, overall:0.5273, agentic:0.8795, task:0.1750, turns:28.6, time_s:1203.6, cost:15.5760, tokens:947854,  fail:20.0},
+      {agent:"glm-5",           n:10, overall:0.5272, agentic:0.8758, task:0.1785, turns:40.8, time_s:1626.3, cost:3.1321,  tokens:1484980, fail:10.0},
+      {agent:"gemini-3.1-pro",  n:10, overall:0.5262, agentic:0.8784, task:0.1740, turns:17.9, time_s:1407.1, cost:4.9357,  tokens:666515,  fail:20.0},
+      {agent:"minimax-m2.5",    n:10, overall:0.4647, agentic:0.7983, task:0.1310, turns:50.5, time_s:2533.8, cost:4.4741,  tokens:2091365, fail:20.0},
+      {agent:"chatgpt-5.4",     n:10, overall:0.2666, agentic:0.4917, task:0.0415, turns:9.4,  time_s:1898.3, cost:3.9408,  tokens:236189,  fail:70.0}
+    ],
+    standard: [
+      {agent:"glm-5",           n:10, overall:0.6235, agentic:0.8864, task:0.3605, turns:26.3, time_s:1011.7, cost:1.4464, tokens:666222, fail:0.0},
+      {agent:"claude-opus-4.6", n:10, overall:0.6133, agentic:0.8391, task:0.3875, turns:20.3, time_s:790.4,  cost:8.6959, tokens:507372, fail:0.0},
+      {agent:"gemini-3.1-pro",  n:10, overall:0.6006, agentic:0.8733, task:0.3280, turns:16.3, time_s:886.4,  cost:3.2836, tokens:430335, fail:0.0},
+      {agent:"minimax-m2.5",    n:10, overall:0.5950, agentic:0.9091, task:0.2810, turns:29.6, time_s:1515.2, cost:2.0082, tokens:916009, fail:0.0},
+      {agent:"qwen3.5",         n:10, overall:0.5459, agentic:0.8523, task:0.2395, turns:26.5, time_s:1399.7, cost:1.8235, tokens:839458, fail:10.0},
+      {agent:"chatgpt-5.4",     n:10, overall:0.2235, agentic:0.4150, task:0.0320, turns:4.1,  time_s:321.6,  cost:1.4685, tokens:83016,  fail:90.0}
+    ]
+  },
+  'vqa-omnimedvqa-task': {
+    lite: [
+      {agent:"claude-opus-4.6", n:10, overall:0.6847, agentic:0.9404, task:0.4290, turns:35.1, time_s:1054.6, cost:24.8143, tokens:1510798, fail:0.0},
+      {agent:"gemini-3.1-pro",  n:10, overall:0.5754, agentic:0.8419, task:0.3090, turns:19.9, time_s:896.6,  cost:6.1208,  tokens:827145,  fail:20.0},
+      {agent:"glm-5",           n:10, overall:0.5704, agentic:0.8207, task:0.3200, turns:37.3, time_s:1265.7, cost:2.6749,  tokens:1256830, fail:20.0},
+      {agent:"qwen3.5",         n:10, overall:0.4691, agentic:0.7122, task:0.2260, turns:39.1, time_s:969.1,  cost:3.6051,  tokens:1708055, fail:30.0},
+      {agent:"minimax-m2.5",    n:10, overall:0.4516, agentic:0.6993, task:0.2040, turns:55.5, time_s:2166.7, cost:6.1517,  tokens:2895268, fail:50.0},
+      {agent:"chatgpt-5.4",     n:10, overall:0.2522, agentic:0.4173, task:0.0870, turns:12.1, time_s:1672.8, cost:5.7069,  tokens:347976,  fail:70.0}
+    ],
+    standard: [
+      {agent:"gemini-3.1-pro",  n:10, overall:0.7534, agentic:0.9808, task:0.5260, turns:14.9, time_s:504.0,  cost:2.8840, tokens:378318,  fail:0.0},
+      {agent:"claude-opus-4.6", n:10, overall:0.7268, agentic:0.9437, task:0.5100, turns:21.7, time_s:553.1,  cost:8.4014, tokens:496920,  fail:10.0},
+      {agent:"glm-5",           n:10, overall:0.6898, agentic:0.8517, task:0.5280, turns:22.1, time_s:727.6,  cost:1.0411, tokens:476426,  fail:10.0},
+      {agent:"minimax-m2.5",    n:10, overall:0.6816, agentic:0.8822, task:0.4810, turns:24.5, time_s:720.8,  cost:1.3825, tokens:625805,  fail:20.0},
+      {agent:"qwen3.5",         n:10, overall:0.6736, agentic:0.8922, task:0.4550, turns:30.0, time_s:620.9,  cost:2.1620, tokens:1012309, fail:10.0},
+      {agent:"chatgpt-5.4",     n:10, overall:0.3355, agentic:0.4969, task:0.1740, turns:4.9,  time_s:332.0,  cost:1.8547, tokens:105733,  fail:70.0}
+    ]
+  },
+  'vqa-pmc-vqa-task': {
+    lite: [
+      {agent:"glm-5",           n:10, overall:0.6015, agentic:0.9349, task:0.2680, turns:39.8, time_s:1470.0, cost:2.6702,  tokens:1263241, fail:0.0},
+      {agent:"qwen3.5",         n:10, overall:0.5338, agentic:0.8105, task:0.2570, turns:40.4, time_s:1040.9, cost:4.0117,  tokens:1916795, fail:20.0},
+      {agent:"gemini-3.1-pro",  n:10, overall:0.5169, agentic:0.8238, task:0.2100, turns:18.7, time_s:1687.5, cost:5.7922,  tokens:779352,  fail:20.0},
+      {agent:"claude-opus-4.6", n:10, overall:0.4957, agentic:0.7974, task:0.1940, turns:26.5, time_s:1091.3, cost:17.1464, tokens:1025069, fail:30.0},
+      {agent:"minimax-m2.5",    n:10, overall:0.4395, agentic:0.7011, task:0.1780, turns:54.2, time_s:2401.8, cost:5.2137,  tokens:2442300, fail:30.0},
+      {agent:"chatgpt-5.4",     n:10, overall:0.1206, agentic:0.2412, task:0.0000, turns:12.2, time_s:993.9,  cost:6.5873,  tokens:403943,  fail:100.0}
+    ],
+    standard: [
+      {agent:"glm-5",           n:10, overall:0.7470, agentic:1.0000, task:0.4940, turns:18.5, time_s:1028.6, cost:0.7534, tokens:340646,  fail:0.0},
+      {agent:"claude-opus-4.6", n:10, overall:0.7432, agentic:0.9825, task:0.5040, turns:19.9, time_s:557.0,  cost:6.8799, tokens:407766,  fail:0.0},
+      {agent:"gemini-3.1-pro",  n:10, overall:0.7398, agentic:0.9475, task:0.5320, turns:12.5, time_s:488.9,  cost:2.0651, tokens:268672,  fail:0.0},
+      {agent:"qwen3.5",         n:10, overall:0.7242, agentic:0.9124, task:0.5360, turns:23.3, time_s:561.2,  cost:1.4446, tokens:663615,  fail:0.0},
+      {agent:"minimax-m2.5",    n:10, overall:0.5669, agentic:0.7928, task:0.3410, turns:45.0, time_s:1499.5, cost:3.9723, tokens:1866242, fail:10.0},
+      {agent:"chatgpt-5.4",     n:10, overall:0.3931, agentic:0.5723, task:0.2140, turns:5.5,  time_s:357.9,  cost:2.0818, tokens:120303,  fail:60.0}
     ]
   }
 };
