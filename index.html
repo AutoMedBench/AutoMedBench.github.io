@@ -2077,8 +2077,8 @@ footer a:hover { color: var(--primary); text-decoration: none; }
   </div>
   <aside class="hero-stats" aria-label="benchmark at a glance">
     <div class="stat-item"><span class="stat-num">7</span><span class="stat-label">agentic models<span class="info-pop info-pop-right" tabindex="0" role="button" aria-label="What is an agentic model?"><span class="info-bang">!</span><span class="info-bubble">We evaluate the <strong>base LLM as the agent</strong> driving the pipeline directly &mdash; not a vendor&rsquo;s own agent harness or tool-use wrapper.</span></span></span></div>
-    <div class="stat-item"><span class="stat-num">56</span><span class="stat-label">task combos<span class="info-pop info-pop-right" tabindex="0" role="button" aria-label="How task combos break down across tracks"><span class="info-bang">!</span><span class="info-bubble"><strong>Distribution across 5 tracks</strong><ul class="bubble-list"><li>Segmentation &middot; 18</li><li>Image Enhancement &middot; 4</li><li>VQA &middot; 16</li><li>Report Generation &middot; 10</li><li>Lesion Detection &middot; 8</li></ul></span></span></span></div>
-    <div class="stat-item"><span class="stat-num">4,100+</span><span class="stat-label">total runs</span></div>
+    <div class="stat-item"><span class="stat-num">58</span><span class="stat-label">task combos<span class="info-pop info-pop-right" tabindex="0" role="button" aria-label="How task combos break down across tracks"><span class="info-bang">!</span><span class="info-bubble"><strong>Distribution across 5 tracks</strong><ul class="bubble-list"><li>Segmentation &middot; 18</li><li>Image Enhancement &middot; 4</li><li>VQA &middot; 18</li><li>Report Generation &middot; 10</li><li>Lesion Detection &middot; 8</li></ul></span></span></span></div>
+    <div class="stat-item"><span class="stat-num">4,200+</span><span class="stat-label">total runs</span></div>
   </aside>
 </section>
 
@@ -2443,6 +2443,7 @@ footer a:hover { color: var(--primary); text-decoration: none; }
             <option value="vqa-kvasir-task">vqa-kvasir-task</option>
             <option value="vqa-omnimedvqa-task">vqa-omnimedvqa-task</option>
             <option value="vqa-pmc-vqa-task">vqa-pmc-vqa-task</option>
+            <option value="vqa-mmmu-medical-task">vqa-mmmu-medical-task</option>
           </select>
         </div>
         <div class="variant-picker" style="margin-left: auto">
@@ -2548,6 +2549,12 @@ footer a:hover { color: var(--primary); text-decoration: none; }
               <td><code class="time-chip" data-task="vqa-pmc-vqa-task">—</code></td>
               <td><a href="https://huggingface.co/datasets/xmcmic/PMC-VQA" target="_blank" rel="noopener">PMC-VQA</a></td>
               <td style="color:var(--ink-soft); font-size:13px">MCQ on PubMed Central biomedical figures.</td>
+            </tr>
+            <tr>
+              <td>MMMU-Medical-VQA</td><td>Multi-modal</td>
+              <td><code class="time-chip" data-task="vqa-mmmu-medical-task">—</code></td>
+              <td><a href="https://huggingface.co/datasets/MMMU/MMMU" target="_blank" rel="noopener">MMMU</a></td>
+              <td style="color:var(--ink-soft); font-size:13px">Health &amp; Medicine slice from MMMU (5 subjects, validation split).</td>
             </tr>
           </tbody>
         </table>
@@ -6210,6 +6217,24 @@ const VQA_DATA = {
       {agent:"qwen3.5",         n:10, overall:0.7242, agentic:0.9124, task:0.5360, turns:23.3, time_s:561.2,  cost:1.4446, tokens:663615,  fail:0.0},
       {agent:"minimax-m2.5",    n:10, overall:0.5669, agentic:0.7928, task:0.3410, turns:45.0, time_s:1499.5, cost:3.9723, tokens:1866242, fail:10.0},
       {agent:"chatgpt-5.4",     n:10, overall:0.3931, agentic:0.5723, task:0.2140, turns:5.5,  time_s:357.9,  cost:2.0818, tokens:120303,  fail:60.0}
+    ]
+  },
+  'vqa-mmmu-medical-task': {
+    lite: [
+      {agent:"claude-opus-4.6", n:10, overall:0.5413, agentic:0.8105, task:0.2720, turns:36.6, time_s:1218.1, cost:25.7083, tokens:1570129, fail:20.0},
+      {agent:"qwen3.5",         n:10, overall:0.4969, agentic:0.7357, task:0.2580, turns:58.1, time_s:2008.3, cost:5.9821,  tokens:2888244, fail:30.0},
+      {agent:"minimax-m2.5",    n:10, overall:0.3228, agentic:0.5216, task:0.1240, turns:65.1, time_s:2891.8, cost:7.7280,  tokens:3635703, fail:70.0},
+      {agent:"chatgpt-5.4",     n:10, overall:0.2123, agentic:0.3965, task:0.0280, turns:12.6, time_s:1600.3, cost:5.9277,  tokens:363212,  fail:90.0},
+      {agent:"glm-5",           n:10, overall:0.1853, agentic:0.2977, task:0.0730, turns:28.6, time_s:3411.1, cost:1.5273,  tokens:723919,  fail:80.0},
+      {agent:"gemini-3.1-pro",  n:10, overall:0.0000, agentic:0.0000, task:0.0000, turns:0.0,  time_s:0.0,    cost:0.0000,  tokens:0,       fail:100.0}
+    ],
+    standard: [
+      {agent:"gemini-3.1-pro",  n:10, overall:0.7163, agentic:0.9907, task:0.4420, turns:21.3, time_s:809.1,  cost:4.3573,  tokens:577170, fail:0.0},
+      {agent:"glm-5",           n:10, overall:0.7048, agentic:0.9626, task:0.4470, turns:29.9, time_s:2317.4, cost:1.6731,  tokens:773707, fail:0.0},
+      {agent:"claude-opus-4.6", n:10, overall:0.7041, agentic:0.9593, task:0.4490, turns:25.2, time_s:993.6,  cost:11.4447, tokens:671965, fail:0.0},
+      {agent:"qwen3.5",         n:10, overall:0.6187, agentic:0.8495, task:0.3880, turns:28.4, time_s:675.3,  cost:1.9239,  tokens:893577, fail:20.0},
+      {agent:"minimax-m2.5",    n:10, overall:0.6111, agentic:0.8811, task:0.3410, turns:31.3, time_s:1612.9, cost:2.0093,  tokens:918736, fail:20.0},
+      {agent:"chatgpt-5.4",     n:10, overall:0.3150, agentic:0.4841, task:0.1460, turns:6.3,  time_s:271.3,  cost:1.9270,  tokens:111544, fail:70.0}
     ]
   }
 };
