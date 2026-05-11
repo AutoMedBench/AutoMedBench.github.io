@@ -2077,8 +2077,8 @@ footer a:hover { color: var(--primary); text-decoration: none; }
   </div>
   <aside class="hero-stats" aria-label="benchmark at a glance">
     <div class="stat-item"><span class="stat-num">7</span><span class="stat-label">agentic models<span class="info-pop info-pop-right" tabindex="0" role="button" aria-label="What is an agentic model?"><span class="info-bang">!</span><span class="info-bubble">We evaluate the <strong>base LLM as the agent</strong> driving the pipeline directly &mdash; not a vendor&rsquo;s own agent harness or tool-use wrapper.</span></span></span></div>
-    <div class="stat-item"><span class="stat-num">58</span><span class="stat-label">task combos<span class="info-pop info-pop-right" tabindex="0" role="button" aria-label="How task combos break down across tracks"><span class="info-bang">!</span><span class="info-bubble"><strong>Distribution across 5 tracks</strong><ul class="bubble-list"><li>Segmentation &middot; 18</li><li>Image Enhancement &middot; 4</li><li>VQA &middot; 18</li><li>Report Generation &middot; 10</li><li>Lesion Detection &middot; 8</li></ul></span></span></span></div>
-    <div class="stat-item"><span class="stat-num">4,200+</span><span class="stat-label">total runs</span></div>
+    <div class="stat-item"><span class="stat-num">68</span><span class="stat-label">task combos<span class="info-pop info-pop-right" tabindex="0" role="button" aria-label="How task combos break down across tracks"><span class="info-bang">!</span><span class="info-bubble"><strong>Distribution across 5 tracks</strong><ul class="bubble-list"><li>Segmentation &middot; 28</li><li>Image Enhancement &middot; 4</li><li>VQA &middot; 18</li><li>Report Generation &middot; 10</li><li>Lesion Detection &middot; 8</li></ul></span></span></span></div>
+    <div class="stat-item"><span class="stat-num">4,800+</span><span class="stat-label">total runs</span></div>
   </aside>
 </section>
 
@@ -3530,7 +3530,7 @@ footer a:hover { color: var(--primary); text-decoration: none; }
     <span class="coming-chip" style="font-size:13px;padding:0">Paper</span> ·
     UC Santa Cruz · NVIDIA
   </div>
-  <div>Data updated: 2026-04-19</div>
+  <div>Data updated: 2026-05-11</div>
 </footer>
 
 <!-- ===================================================================== -->
@@ -3761,11 +3761,104 @@ const DATA = {
     {agent:"glm-5",           n:10, overall:0.2777, agentic:0.4893, task:0.0662, turns:63.4, time_s:7021.7, cost:3.1361,  tokens:1518323, fail:0.0},
     {agent:"qwen3.5",         n:10, overall:0.2411, agentic:0.4817, task:0.0006, turns:50.9, time_s:7205.8, cost:2.5375,  tokens:1211819, fail:0.0}
   ],
-  "panther_t2-pro": []
+  "panther_t2-pro": [],
+  "colon-lite": [
+    {agent:"claude-opus-4.6", n:10, overall:0.6926, agentic:0.9825, task:0.4027, turns:29.2, time_s:485.3,  cost:9.8808,  tokens:596109,  fail:30.0},
+    {agent:"qwen3.5",         n:10, overall:0.6536, agentic:0.9525, task:0.3547, turns:49.5, time_s:1225.4, cost:2.6740,  tokens:1273505, fail:40.0},
+    {agent:"gemini-3.1-pro",  n:10, overall:0.6327, agentic:0.8882, task:0.3770, turns:31.4, time_s:470.7,  cost:4.1397,  tokens:569745,  fail:30.0},
+    {agent:"glm-5",           n:10, overall:0.6210, agentic:0.9150, task:0.3271, turns:45.8, time_s:1257.7, cost:1.9287,  tokens:918643,  fail:40.0},
+    {agent:"chatgpt-5.4",     n:10, overall:0.5790, agentic:0.7725, task:0.3854, turns:17.0, time_s:311.1,  cost:3.6336,  tokens:224152,  fail:30.0},
+    {agent:"minimax-m2.5",    n:10, overall:0.5074, agentic:0.8290, task:0.1858, turns:47.3, time_s:2076.1, cost:2.0236,  tokens:966978,  fail:70.0}
+  ],
+  "colon-standard": [
+    {agent:"claude-opus-4.6", n:10, overall:0.7618, agentic:0.9830, task:0.5406, turns:43.0, time_s:552.1,  cost:15.5690, tokens:967560,  fail:0.0},
+    {agent:"gemini-3.1-pro",  n:10, overall:0.7231, agentic:0.9083, task:0.5379, turns:30.2, time_s:489.3,  cost:3.6936,  tokens:504705,  fail:0.0},
+    {agent:"chatgpt-5.4",     n:10, overall:0.6873, agentic:0.8905, task:0.4841, turns:25.4, time_s:428.0,  cost:6.3896,  tokens:403922,  fail:10.0},
+    {agent:"glm-5",           n:10, overall:0.6213, agentic:0.8514, task:0.3912, turns:50.0, time_s:1273.1, cost:1.9877,  tokens:947397,  fail:30.0},
+    {agent:"qwen3.5",         n:10, overall:0.5609, agentic:0.7520, task:0.3698, turns:37.0, time_s:761.5,  cost:1.7656,  tokens:836026,  fail:30.0},
+    {agent:"minimax-m2.5",    n:10, overall:0.4579, agentic:0.6700, task:0.2458, turns:52.3, time_s:1516.4, cost:2.5904,  tokens:1236246, fail:50.0}
+  ],
+  "colon-pro": [],
+  "heart-lite": [
+    {agent:"claude-opus-4.6", n:10, overall:0.8910, agentic:0.9090, task:0.8731, turns:41.9,  time_s:1351.2, cost:14.6620,  tokens:900308,   fail:10.0},
+    {agent:"glm-5",           n:10, overall:0.5775, agentic:0.6640, task:0.4911, turns:155.3, time_s:2593.7, cost:17.5812,  tokens:8657917,  fail:50.0},
+    {agent:"chatgpt-5.4",     n:10, overall:0.3773, agentic:0.6228, task:0.1319, turns:13.8,  time_s:183.4,  cost:2.0874,   tokens:124543,   fail:100.0},
+    {agent:"qwen3.5",         n:10, overall:0.3163, agentic:0.5741, task:0.0585, turns:67.5,  time_s:1376.1, cost:3.6166,   tokens:1753792,  fail:90.0},
+    {agent:"minimax-m2.5",    n:10, overall:0.2330, agentic:0.4413, task:0.0247, turns:135.5, time_s:2451.5, cost:14.3238,  tokens:6963320,  fail:100.0},
+    {agent:"gemini-3.1-pro",  n:10, overall:0.1370, agentic:0.2740, task:0.0000, turns:332.8, time_s:3443.1, cost:155.8419, tokens:21964466, fail:100.0}
+  ],
+  "heart-standard": [
+    {agent:"claude-opus-4.6", n:10, overall:0.9823, agentic:0.9792, task:0.9854, turns:38.5, time_s:919.8,  cost:12.6069, tokens:771293,  fail:0.0},
+    {agent:"gemini-3.1-pro",  n:10, overall:0.8657, agentic:0.8417, task:0.8898, turns:71.3, time_s:1260.8, cost:47.8666, tokens:6807898, fail:10.0},
+    {agent:"glm-5",           n:10, overall:0.6521, agentic:0.7107, task:0.5935, turns:78.7, time_s:2334.8, cost:4.8067,  tokens:2233704, fail:40.0},
+    {agent:"chatgpt-5.4",     n:10, overall:0.3708, agentic:0.6605, task:0.0810, turns:14.8, time_s:398.8,  cost:2.5159,  tokens:149681,  fail:100.0},
+    {agent:"qwen3.5",         n:10, overall:0.2900, agentic:0.5442, task:0.0358, turns:70.2, time_s:2341.2, cost:5.0080,  tokens:2423911, fail:100.0},
+    {agent:"minimax-m2.5",    n:10, overall:0.2398, agentic:0.4433, task:0.0364, turns:96.2, time_s:2288.4, cost:9.4379,  tokens:4592415, fail:90.0}
+  ],
+  "heart-pro": [],
+  "hepaticvessel-lite": [
+    {agent:"claude-opus-4.6", n:10, overall:0.4982, agentic:0.7644, task:0.2320, turns:39.1,  time_s:2735.1, cost:11.5674, tokens:715829,   fail:60.0},
+    {agent:"qwen3.5",         n:10, overall:0.4837, agentic:0.6461, task:0.3213, turns:57.9,  time_s:2556.6, cost:2.9453,  tokens:1423389,  fail:50.0},
+    {agent:"glm-5",           n:10, overall:0.4589, agentic:0.5980, task:0.3198, turns:132.8, time_s:3217.4, cost:13.4596, tokens:6450877,  fail:60.0},
+    {agent:"chatgpt-5.4",     n:10, overall:0.4062, agentic:0.6321, task:0.1804, turns:19.1,  time_s:1383.1, cost:4.0852,  tokens:253766,   fail:70.0},
+    {agent:"minimax-m2.5",    n:10, overall:0.2660, agentic:0.4881, task:0.0439, turns:127.1, time_s:2835.4, cost:11.5615, tokens:5539456,  fail:90.0},
+    {agent:"gemini-3.1-pro",  n:10, overall:0.1301, agentic:0.2602, task:0.0000, turns:279.7, time_s:3071.0, cost:84.3542, tokens:11755848, fail:100.0}
+  ],
+  "hepaticvessel-standard": [
+    {agent:"qwen3.5",         n:10, overall:0.5678, agentic:0.7406, task:0.3949, turns:63.2,  time_s:2079.9, cost:3.6826,  tokens:1769364, fail:40.0},
+    {agent:"glm-5",           n:10, overall:0.5660, agentic:0.7325, task:0.3994, turns:70.0,  time_s:2859.1, cost:3.4425,  tokens:1669080, fail:30.0},
+    {agent:"claude-opus-4.6", n:10, overall:0.5368, agentic:0.7752, task:0.2983, turns:38.0,  time_s:2318.8, cost:12.8551, tokens:795748,  fail:60.0},
+    {agent:"chatgpt-5.4",     n:10, overall:0.4674, agentic:0.6753, task:0.2596, turns:20.1,  time_s:890.1,  cost:4.6593,  tokens:288799,  fail:70.0},
+    {agent:"gemini-3.1-pro",  n:10, overall:0.1940, agentic:0.3088, task:0.0792, turns:196.2, time_s:3180.8, cost:48.2240, tokens:6575903, fail:90.0},
+    {agent:"minimax-m2.5",    n:10, overall:0.1186, agentic:0.2320, task:0.0052, turns:86.2,  time_s:2368.1, cost:5.7598,  tokens:2779936, fail:100.0}
+  ],
+  "hepaticvessel-pro": [],
+  "prostate-lite": [
+    {agent:"claude-opus-4.6", n:10, overall:0.8502, agentic:0.8775, task:0.8228, turns:52.1,  time_s:889.5,  cost:20.6930,  tokens:1295630,  fail:0.0},
+    {agent:"qwen3.5",         n:10, overall:0.6134, agentic:0.8390, task:0.3878, turns:47.9,  time_s:1156.4, cost:2.3769,   tokens:1131143,  fail:40.0},
+    {agent:"minimax-m2.5",    n:10, overall:0.5146, agentic:0.6943, task:0.3349, turns:79.0,  time_s:1344.5, cost:5.6713,   tokens:2736244,  fail:60.0},
+    {agent:"glm-5",           n:10, overall:0.4721, agentic:0.5635, task:0.3807, turns:195.2, time_s:2767.9, cost:25.1522,  tokens:12382410, fail:60.0},
+    {agent:"chatgpt-5.4",     n:10, overall:0.4333, agentic:0.6070, task:0.2595, turns:18.8,  time_s:176.2,  cost:3.4535,   tokens:211076,   fail:70.0},
+    {agent:"gemini-3.1-pro",  n:10, overall:0.1325, agentic:0.2650, task:0.0000, turns:321.0, time_s:3399.4, cost:122.6976, tokens:17327551, fail:100.0}
+  ],
+  "prostate-standard": [
+    {agent:"claude-opus-4.6", n:10, overall:0.7953, agentic:0.8902, task:0.7004, turns:41.7,  time_s:1055.7, cost:17.9827, tokens:1111977,  fail:10.0},
+    {agent:"qwen3.5",         n:10, overall:0.6473, agentic:0.8529, task:0.4418, turns:41.3,  time_s:1307.4, cost:1.7968,  tokens:840350,   fail:30.0},
+    {agent:"chatgpt-5.4",     n:10, overall:0.5486, agentic:0.7660, task:0.3312, turns:22.2,  time_s:407.4,  cost:5.1975,  tokens:322001,   fail:50.0},
+    {agent:"minimax-m2.5",    n:10, overall:0.4895, agentic:0.6860, task:0.2931, turns:78.7,  time_s:1273.7, cost:5.3529,  tokens:2584824,  fail:50.0},
+    {agent:"gemini-3.1-pro",  n:10, overall:0.4028, agentic:0.4718, task:0.3338, turns:239.1, time_s:2576.9, cost:74.2679, tokens:10499285, fail:60.0},
+    {agent:"glm-5",           n:10, overall:0.3938, agentic:0.4263, task:0.3613, turns:101.2, time_s:2113.8, cost:9.7957,  tokens:4813983,  fail:60.0}
+  ],
+  "prostate-pro": [],
+  "spleen-lite": [
+    {agent:"gemini-3.1-pro",  n:10, overall:0.9531, agentic:0.9525, task:0.9538, turns:11.3, time_s:618.4,  cost:0.8618, tokens:114882,  fail:0.0},
+    {agent:"claude-opus-4.6", n:10, overall:0.8999, agentic:0.9461, task:0.8536, turns:18.0, time_s:1294.4, cost:3.6822, tokens:219584,  fail:10.0},
+    {agent:"glm-5",           n:10, overall:0.7245, agentic:0.8254, task:0.6237, turns:47.5, time_s:1775.8, cost:1.6916, tokens:813212,  fail:30.0},
+    {agent:"minimax-m2.5",    n:10, overall:0.6606, agentic:0.6575, task:0.6636, turns:57.4, time_s:1227.2, cost:3.4524, tokens:1672065, fail:30.0},
+    {agent:"qwen3.5",         n:10, overall:0.6352, agentic:0.6000, task:0.6705, turns:33.1, time_s:1066.7, cost:1.2737, tokens:604571,  fail:40.0},
+    {agent:"chatgpt-5.4",     n:10, overall:0.4383, agentic:0.6677, task:0.2088, turns:17.2, time_s:1527.5, cost:4.0941, tokens:249405,  fail:70.0}
+  ],
+  "spleen-standard": [
+    {agent:"claude-opus-4.6", n:10, overall:0.9577, agentic:0.9617, task:0.9538, turns:18.9, time_s:788.3,  cost:3.9714, tokens:233825, fail:0.0},
+    {agent:"gemini-3.1-pro",  n:10, overall:0.9335, agentic:0.9125, task:0.9544, turns:16.0, time_s:787.0,  cost:1.3679, tokens:183954, fail:0.0},
+    {agent:"qwen3.5",         n:10, overall:0.8751, agentic:0.9110, task:0.8392, turns:30.5, time_s:1745.4, cost:1.1393, tokens:528185, fail:10.0},
+    {agent:"glm-5",           n:10, overall:0.7490, agentic:0.7252, task:0.7728, turns:48.3, time_s:1243.0, cost:1.4709, tokens:701359, fail:20.0},
+    {agent:"minimax-m2.5",    n:10, overall:0.5957, agentic:0.6202, task:0.5711, turns:47.3, time_s:1175.8, cost:1.8428, tokens:876884, fail:40.0},
+    {agent:"chatgpt-5.4",     n:10, overall:0.5633, agentic:0.6965, task:0.4301, turns:22.7, time_s:675.8,  cost:5.0512, tokens:313275, fail:50.0}
+  ],
+  "spleen-pro": []
 };
 
 const CATEGORY  = 'segmentation';
-const BASE_TASKS = ['feta', 'kidney', 'pancreas', 'pancreas_oar', 'liver', 'aeropath', 'totalsegmentator', 'panther_t1', 'panther_t2'];
+// Ordered CT-first, then MRI — keeps the per-tier task picker and the
+// dataset table visually grouped by modality.
+const BASE_TASKS = [
+  // CT
+  'kidney', 'pancreas', 'pancreas_oar', 'liver', 'aeropath', 'totalsegmentator',
+  'colon', 'hepaticvessel', 'spleen',
+  // MRI
+  'feta', 'panther_t1', 'panther_t2', 'heart', 'prostate'
+];
 const VARIANTS   = ['lite', 'standard', 'pro'];
 
 /* ======================================================================= */
@@ -3774,17 +3867,9 @@ const VARIANTS   = ['lite', 'standard', 'pro'];
 const CONTENT = {
 
   /* ---------- per-task metadata (from eval_seg/*-seg-task/config.yaml) -- */
+  // Ordered CT first, then MRI — must stay in sync with BASE_TASKS.
   taskMeta: {
-    feta: {
-      display: 'Fetal Brain Tissues',
-      tabSlug: 'segmentation-mri-brain-tissues',
-      modality: 'MRI T2w',
-      samples: 40,
-      source: 'FeTA Challenge',
-      sourceUrl: 'https://fetachallenge.github.io/',
-      sota: 'nnU-Net multi-class · 0.79',
-      description: 'Multi-tissue segmentation of fetal brain T2w super-resolution MRI into 7 tissue classes (eCSF, GM, WM, LV, CBM, SGM, BS).'
-    },
+    /* ---------- CT ---------- */
     kidney: {
       display: 'Kidney Tumor',
       tabSlug: 'segmentation-ct-kidney-tumor',
@@ -3840,6 +3925,45 @@ const CONTENT = {
       sourceUrl: 'https://github.com/wasserth/TotalSegmentator',
       description: 'Multi-organ segmentation across whole-body CT.'
     },
+    colon: {
+      display: 'Colon Cancer',
+      tabSlug: 'segmentation-ct-colon-cancer',
+      modality: 'CT',
+      samples: 20,
+      source: 'MSD Task10_Colon',
+      sourceUrl: 'http://medicaldecathlon.com/',
+      description: 'Segment colon-cancer primary tumor on CT (MSD Task 10). Single-class tumor mask; tumor-positive cases only.'
+    },
+    hepaticvessel: {
+      display: 'Hepatic Vessel + Tumor',
+      tabSlug: 'segmentation-ct-hepatic-vessel-tumor',
+      modality: 'CT (portal-venous)',
+      samples: 20,
+      source: 'MSD Task08_HepaticVessel',
+      sourceUrl: 'http://medicaldecathlon.com/',
+      description: 'Two-class segmentation of hepatic vessels and hepatic tumor on portal-venous CT (MSD Task 8). Thin tree-like vessels — macro-mean Dice.'
+    },
+    spleen: {
+      display: 'Spleen',
+      tabSlug: 'segmentation-ct-spleen',
+      modality: 'CT (portal-venous)',
+      samples: 20,
+      source: 'MSD Task09_Spleen',
+      sourceUrl: 'http://medicaldecathlon.com/',
+      description: 'Single-organ spleen segmentation on portal-venous CT (MSD Task 9).'
+    },
+
+    /* ---------- MRI ---------- */
+    feta: {
+      display: 'Fetal Brain Tissues',
+      tabSlug: 'segmentation-mri-brain-tissues',
+      modality: 'MRI T2w',
+      samples: 40,
+      source: 'FeTA Challenge',
+      sourceUrl: 'https://fetachallenge.github.io/',
+      sota: 'nnU-Net multi-class · 0.79',
+      description: 'Multi-tissue segmentation of fetal brain T2w super-resolution MRI into 7 tissue classes (eCSF, GM, WM, LV, CBM, SGM, BS).'
+    },
     panther_t1: {
       display: 'Pancreas Tumor · MRI T1',
       tabSlug: 'segmentation-mri-pancreas-tumor-t1',
@@ -3855,6 +3979,24 @@ const CONTENT = {
       source: 'PANTHER 2025',
       sourceUrl: 'https://panther.grand-challenge.org/',
       description: 'Segment pancreas and pancreatic tumor on T2-weighted MR-Linac MRI; few-shot setting from the PANTHER 2025 Task 2 cohort.'
+    },
+    heart: {
+      display: 'Left Atrium',
+      tabSlug: 'segmentation-mri-heart-left-atrium',
+      modality: 'MRI',
+      samples: 20,
+      source: 'MSD Task02_Heart',
+      sourceUrl: 'http://medicaldecathlon.com/',
+      description: 'Segment the left atrium on mono-modal cardiac MRI (MSD Task 2).'
+    },
+    prostate: {
+      display: 'Prostate Zones',
+      tabSlug: 'segmentation-mri-prostate-zones',
+      modality: 'MRI T2 + ADC',
+      samples: 20,
+      source: 'MSD Task05_Prostate',
+      sourceUrl: 'http://medicaldecathlon.com/',
+      description: 'Two-class segmentation of peripheral zone and transition zone on multi-channel prostate MRI (T2 + ADC; MSD Task 5). Macro-mean Dice.'
     }
   },
 
