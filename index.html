@@ -2077,8 +2077,8 @@ footer a:hover { color: var(--primary); text-decoration: none; }
   </div>
   <aside class="hero-stats" aria-label="benchmark at a glance">
     <div class="stat-item"><span class="stat-num">7</span><span class="stat-label">agentic models<span class="info-pop info-pop-right" tabindex="0" role="button" aria-label="What is an agentic model?"><span class="info-bang">!</span><span class="info-bubble">We evaluate the <strong>base LLM as the agent</strong> driving the pipeline directly &mdash; not a vendor&rsquo;s own agent harness or tool-use wrapper.</span></span></span></div>
-    <div class="stat-item"><span class="stat-num">68</span><span class="stat-label">task combos<span class="info-pop info-pop-right" tabindex="0" role="button" aria-label="How task combos break down across tracks"><span class="info-bang">!</span><span class="info-bubble"><strong>Distribution across 5 tracks</strong><ul class="bubble-list"><li>Segmentation &middot; 28</li><li>Image Enhancement &middot; 4</li><li>VQA &middot; 18</li><li>Report Generation &middot; 10</li><li>Lesion Detection &middot; 8</li></ul></span></span></span></div>
-    <div class="stat-item"><span class="stat-num">4,800+</span><span class="stat-label">total runs</span></div>
+    <div class="stat-item"><span class="stat-num">78</span><span class="stat-label">task combos<span class="info-pop info-pop-right" tabindex="0" role="button" aria-label="How task combos break down across tracks"><span class="info-bang">!</span><span class="info-bubble"><strong>Distribution across 5 tracks</strong><ul class="bubble-list"><li>Segmentation &middot; 28</li><li>Image Enhancement &middot; 14</li><li>VQA &middot; 18</li><li>Report Generation &middot; 10</li><li>Lesion Detection &middot; 8</li></ul></span></span></span></div>
+    <div class="stat-item"><span class="stat-num">5,400+</span><span class="stat-label">total runs</span></div>
   </aside>
 </section>
 
@@ -3322,8 +3322,7 @@ footer a:hover { color: var(--primary); text-decoration: none; }
         <div class="variant-picker">
           <label for="enhTaskSelect">Task</label>
           <select class="variant-select" id="enhTaskSelect">
-            <option value="ldct-denoising-task" selected>ldct-denoising-task</option>
-            <option value="mri-sr-task">mri-sr-task</option>
+            <!-- options populated from ENH_TASKS at runtime -->
           </select>
         </div>
         <div class="variant-picker" style="margin-left: auto">
@@ -3973,7 +3972,7 @@ const CONTENT = {
       description: 'Segment pancreas and pancreatic tumor on contrast-enhanced T1-weighted arterial-phase MRI from the PANTHER 2025 Task 1 cohort.'
     },
     panther_t2: {
-      display: 'Pancreas Tumor · MRI T2 (MR-Linac)',
+      display: 'Pancreas Tumor · MR-Linac',
       tabSlug: 'segmentation-mri-pancreas-tumor-t2',
       modality: 'MRI T2w',
       source: 'PANTHER 2025',
@@ -5612,13 +5611,109 @@ const ENHANCEMENT_DATA = {
       { agent:'glm-5',           n:9,  overall:0.5856, agentic:0.6571, task:0.5140, pass:0.400, turns:47.8, time_s:2750.2, cost:0.8404, tokens:805518,  fail:10.0 },
     ],
   },
+  'lidc-idri-denoising-task': {
+    lite: [
+      { agent:'claude-opus-4.6', n:10, overall:0.8207, agentic:1.0000, task:0.6414, turns:9.2,  time_s:98.2,  cost:1.8420, tokens:104497, fail:0.0  },
+      { agent:'chatgpt-5.4',     n:10, overall:0.8207, agentic:1.0000, task:0.6414, turns:4.3,  time_s:53.9,  cost:0.7522, tokens:42280,  fail:0.0  },
+      { agent:'glm-5',           n:10, overall:0.8192, agentic:1.0000, task:0.6384, turns:13.8, time_s:96.4,  cost:0.2971, tokens:134455, fail:0.0  },
+      { agent:'gemini-3.1-pro',  n:10, overall:0.8182, agentic:1.0000, task:0.6363, turns:8.9,  time_s:108.4, cost:0.8422, tokens:109087, fail:0.0  },
+      { agent:'qwen3.5',         n:10, overall:0.8131, agentic:1.0000, task:0.6261, turns:12.3, time_s:159.6, cost:0.3085, tokens:139223, fail:0.0  },
+      { agent:'minimax-m2.5',    n:10, overall:0.7208, agentic:0.9000, task:0.5415, turns:16.0, time_s:218.0, cost:0.4406, tokens:197166, fail:10.0 },
+    ],
+    standard: [
+      { agent:'chatgpt-5.4',     n:10, overall:0.8174, agentic:1.0000, task:0.6349, turns:7.0,  time_s:391.1,  cost:1.3012, tokens:72102,  fail:0.0  },
+      { agent:'claude-opus-4.6', n:10, overall:0.8149, agentic:1.0000, task:0.6298, turns:27.8, time_s:506.6,  cost:9.5896, tokens:569683, fail:0.0  },
+      { agent:'gemini-3.1-pro',  n:10, overall:0.7903, agentic:1.0000, task:0.5805, turns:31.5, time_s:684.1,  cost:4.8536, tokens:653670, fail:0.0  },
+      { agent:'minimax-m2.5',    n:10, overall:0.7679, agentic:1.0000, task:0.5358, turns:32.1, time_s:924.4,  cost:1.4183, tokens:643338, fail:0.0  },
+      { agent:'qwen3.5',         n:10, overall:0.7456, agentic:0.9203, task:0.5708, turns:29.0, time_s:1344.3, cost:1.3390, tokens:614193, fail:10.0 },
+      { agent:'glm-5',           n:10, overall:0.6510, agentic:0.8000, task:0.5020, turns:40.7, time_s:566.8,  cost:1.6737, tokens:783105, fail:20.0 },
+    ],
+  },
+  'deeplesion-denoising-task': {
+    lite: [
+      { agent:'claude-opus-4.6', n:10, overall:0.7948, agentic:1.0000, task:0.5895, turns:9.8,  time_s:110.6, cost:1.9579, tokens:110526, fail:0.0 },
+      { agent:'chatgpt-5.4',     n:10, overall:0.7948, agentic:1.0000, task:0.5895, turns:4.3,  time_s:54.5,  cost:0.7480, tokens:41622,  fail:0.0 },
+      { agent:'gemini-3.1-pro',  n:10, overall:0.7948, agentic:1.0000, task:0.5895, turns:6.2,  time_s:75.3,  cost:0.5243, tokens:66692,  fail:0.0 },
+      { agent:'glm-5',           n:10, overall:0.7948, agentic:1.0000, task:0.5895, turns:12.1, time_s:97.7,  cost:0.2558, tokens:113482, fail:0.0 },
+      { agent:'qwen3.5',         n:10, overall:0.7820, agentic:1.0000, task:0.5639, turns:13.3, time_s:251.4, cost:0.3085, tokens:139777, fail:0.0 },
+      { agent:'minimax-m2.5',    n:10, overall:0.7459, agentic:1.0000, task:0.4918, turns:16.0, time_s:245.1, cost:0.4374, tokens:192233, fail:0.0 },
+    ],
+    standard: [
+      { agent:'claude-opus-4.6', n:10, overall:0.7934, agentic:1.0000, task:0.5867, turns:27.9, time_s:506.1,  cost:9.2218, tokens:548735, fail:0.0  },
+      { agent:'chatgpt-5.4',     n:10, overall:0.7763, agentic:1.0000, task:0.5525, turns:7.6,  time_s:412.2,  cost:1.3854, tokens:75941,  fail:0.0  },
+      { agent:'glm-5',           n:10, overall:0.7707, agentic:1.0000, task:0.5413, turns:44.8, time_s:604.0,  cost:1.9755, tokens:927584, fail:0.0  },
+      { agent:'gemini-3.1-pro',  n:10, overall:0.7379, agentic:1.0000, task:0.4757, turns:22.8, time_s:451.8,  cost:2.7355, tokens:363189, fail:0.0  },
+      { agent:'minimax-m2.5',    n:10, overall:0.7047, agentic:0.9000, task:0.5094, turns:33.8, time_s:911.8,  cost:1.4488, tokens:661647, fail:10.0 },
+      { agent:'qwen3.5',         n:10, overall:0.6744, agentic:0.9000, task:0.4488, turns:29.2, time_s:1173.7, cost:1.2153, tokens:556252, fail:10.0 },
+    ],
+  },
+  'brats-t1c-sr-task': {
+    lite: [
+      { agent:'gemini-3.1-pro',  n:10, overall:0.7456, agentic:1.0000, task:0.4913, turns:8.9,  time_s:1058.6, cost:0.9771, tokens:125346, fail:0.0  },
+      { agent:'chatgpt-5.4',     n:10, overall:0.7150, agentic:0.9392, task:0.4907, turns:6.5,  time_s:1525.8, cost:1.4538, tokens:79260,  fail:10.0 },
+      { agent:'glm-5',           n:10, overall:0.7148, agentic:0.9386, task:0.4909, turns:17.0, time_s:1438.6, cost:0.4407, tokens:197982, fail:10.0 },
+      { agent:'claude-opus-4.6', n:10, overall:0.6957, agentic:0.9488, task:0.4426, turns:13.1, time_s:1391.1, cost:3.3777, tokens:189120, fail:10.0 },
+      { agent:'qwen3.5',         n:10, overall:0.6940, agentic:0.9458, task:0.4421, turns:19.6, time_s:1317.4, cost:0.6936, tokens:317895, fail:10.0 },
+      { agent:'minimax-m2.5',    n:10, overall:0.5682, agentic:0.8000, task:0.3364, turns:20.5, time_s:1243.2, cost:0.6568, tokens:295710, fail:20.0 },
+    ],
+    standard: [
+      { agent:'claude-opus-4.6', n:10, overall:0.9643, agentic:1.0000, task:0.9285, turns:19.2, time_s:1115.5, cost:5.9354, tokens:336228, fail:0.0  },
+      { agent:'gemini-3.1-pro',  n:10, overall:0.9379, agentic:1.0000, task:0.8757, turns:21.3, time_s:615.7,  cost:2.6286, tokens:347588, fail:0.0  },
+      { agent:'chatgpt-5.4',     n:10, overall:0.9191, agentic:1.0000, task:0.8382, turns:9.1,  time_s:805.1,  cost:1.9039, tokens:106048, fail:0.0  },
+      { agent:'glm-5',           n:10, overall:0.8916, agentic:1.0000, task:0.7832, turns:29.5, time_s:524.2,  cost:1.0332, tokens:477170, fail:0.0  },
+      { agent:'qwen3.5',         n:10, overall:0.6819, agentic:0.8000, task:0.5638, turns:23.3, time_s:1017.1, cost:1.0229, tokens:466306, fail:20.0 },
+      { agent:'minimax-m2.5',    n:10, overall:0.5830, agentic:0.7000, task:0.4660, turns:32.8, time_s:670.3,  cost:1.3912, tokens:634786, fail:30.0 },
+    ],
+  },
+  'ixi-t1-sr-task': {
+    lite: [
+      { agent:'claude-opus-4.6', n:10, overall:0.6362, agentic:1.0000, task:0.2723, turns:10.3, time_s:477.0,  cost:2.4177, tokens:134876, fail:0.0 },
+      { agent:'chatgpt-5.4',     n:10, overall:0.6356, agentic:1.0000, task:0.2711, turns:4.6,  time_s:570.7,  cost:0.9140, tokens:49470,  fail:0.0 },
+      { agent:'gemini-3.1-pro',  n:10, overall:0.6356, agentic:1.0000, task:0.2711, turns:6.8,  time_s:713.4,  cost:0.7113, tokens:88416,  fail:0.0 },
+      { agent:'glm-5',           n:10, overall:0.6356, agentic:1.0000, task:0.2711, turns:15.1, time_s:876.0,  cost:0.4022, tokens:179788, fail:0.0 },
+      { agent:'minimax-m2.5',    n:10, overall:0.6356, agentic:1.0000, task:0.2711, turns:17.9, time_s:916.8,  cost:0.5638, tokens:252637, fail:0.0 },
+      { agent:'qwen3.5',         n:10, overall:0.6356, agentic:1.0000, task:0.2711, turns:17.4, time_s:1055.9, cost:0.5465, tokens:249042, fail:0.0 },
+    ],
+    standard: [
+      { agent:'claude-opus-4.6', n:10, overall:0.9278, agentic:1.0000, task:0.8555, turns:17.5, time_s:752.1, cost:5.0083, tokens:285957, fail:0.0  },
+      { agent:'gemini-3.1-pro',  n:10, overall:0.9274, agentic:1.0000, task:0.8548, turns:17.1, time_s:563.6, cost:1.8811, tokens:247422, fail:0.0  },
+      { agent:'chatgpt-5.4',     n:10, overall:0.9040, agentic:1.0000, task:0.8080, turns:9.2,  time_s:688.5, cost:2.0204, tokens:114302, fail:0.0  },
+      { agent:'glm-5',           n:10, overall:0.8991, agentic:1.0000, task:0.7982, turns:24.5, time_s:563.4, cost:0.8526, tokens:387092, fail:0.0  },
+      { agent:'qwen3.5',         n:10, overall:0.8041, agentic:1.0000, task:0.6083, turns:28.8, time_s:783.6, cost:1.2948, tokens:595620, fail:0.0  },
+      { agent:'minimax-m2.5',    n:10, overall:0.5062, agentic:0.7000, task:0.3123, turns:27.1, time_s:630.9, cost:1.1149, tokens:503595, fail:30.0 },
+    ],
+  },
+  'nih-cxr-sr-task': {
+    lite: [
+      { agent:'claude-opus-4.6', n:10, overall:0.7055, agentic:1.0000, task:0.4110, turns:10.1, time_s:644.3, cost:2.2017, tokens:122354, fail:0.0  },
+      { agent:'chatgpt-5.4',     n:10, overall:0.7052, agentic:1.0000, task:0.4104, turns:3.8,  time_s:574.6, cost:0.7125, tokens:37865,  fail:0.0  },
+      { agent:'gemini-3.1-pro',  n:10, overall:0.7052, agentic:1.0000, task:0.4104, turns:6.0,  time_s:604.7, cost:0.5809, tokens:72571,  fail:0.0  },
+      { agent:'glm-5',           n:10, overall:0.7052, agentic:1.0000, task:0.4104, turns:13.2, time_s:652.9, cost:0.3072, tokens:135898, fail:0.0  },
+      { agent:'qwen3.5',         n:10, overall:0.6251, agentic:0.9000, task:0.3501, turns:17.3, time_s:820.5, cost:0.5427, tokens:245782, fail:10.0 },
+      { agent:'minimax-m2.5',    n:10, overall:0.5642, agentic:0.8000, task:0.3283, turns:17.5, time_s:659.5, cost:0.4905, tokens:219366, fail:20.0 },
+    ],
+    standard: [
+      { agent:'claude-opus-4.6', n:10, overall:0.9826, agentic:1.0000, task:0.9651, turns:21.8, time_s:859.1, cost:6.5767, tokens:382038, fail:0.0  },
+      { agent:'gemini-3.1-pro',  n:10, overall:0.9826, agentic:1.0000, task:0.9651, turns:19.9, time_s:780.4, cost:2.3557, tokens:309894, fail:0.0  },
+      { agent:'chatgpt-5.4',     n:10, overall:0.9682, agentic:1.0000, task:0.9364, turns:10.3, time_s:544.8, cost:2.4588, tokens:140234, fail:0.0  },
+      { agent:'qwen3.5',         n:10, overall:0.8856, agentic:1.0000, task:0.7712, turns:27.7, time_s:937.6, cost:1.3087, tokens:597053, fail:0.0  },
+      { agent:'glm-5',           n:10, overall:0.7969, agentic:0.9000, task:0.6937, turns:27.3, time_s:610.6, cost:0.9534, tokens:438095, fail:10.0 },
+      { agent:'minimax-m2.5',    n:10, overall:0.6748, agentic:0.8000, task:0.5496, turns:27.2, time_s:590.0, cost:1.0463, tokens:472904, fail:20.0 },
+    ],
+  },
 };
-const ENH_TASKS = ['ldct-denoising-task', 'mri-sr-task'];
+// Ordered: denoising first, then super-resolution. Drives task picker + meta table.
+const ENH_TASKS = [
+  'ldct-denoising-task', 'lidc-idri-denoising-task', 'deeplesion-denoising-task',
+  'mri-sr-task', 'brats-t1c-sr-task', 'ixi-t1-sr-task', 'nih-cxr-sr-task'
+];
 const ENH_TIERS = ['lite', 'standard'];
 
 // Dataset meta — mirrors CONTENT.taskMeta schema so the dataset table looks
 // 1:1 with segmentation (Task · Modality · Task Time Range · Source · Description).
+// Ordered to match ENH_TASKS: denoising first, then super-resolution.
 const ENH_TASK_META = {
+  /* ---------- Denoising ---------- */
   'ldct-denoising-task': {
     display:     'LDCT Denoising',
     modality:    'CT',
@@ -5626,12 +5721,49 @@ const ENH_TASK_META = {
     sourceUrl:   'https://www.aapm.org/grandchallenge/lowdosect/',
     description: 'Denoise low-dose CT to standard-dose quality.',
   },
+  'lidc-idri-denoising-task': {
+    display:     'LIDC-IDRI Denoising',
+    modality:    'CT',
+    source:      'LIDC-IDRI',
+    sourceUrl:   'https://www.cancerimagingarchive.net/collection/lidc-idri/',
+    description: 'Denoise lung CT (512×512, synthetic Gaussian σ=0.05 added to clean references).',
+  },
+  'deeplesion-denoising-task': {
+    display:     'DeepLesion Denoising',
+    modality:    'CT',
+    source:      'NIH DeepLesion',
+    sourceUrl:   'https://nihcc.app.box.com/v/DeepLesion',
+    description: 'Denoise multi-organ-lesion CT (512×512, synthetic Gaussian σ=0.05).',
+  },
+
+  /* ---------- Super-resolution ---------- */
   'mri-sr-task': {
-    display:     'MRI Super-Resolution',
+    display:     'fastMRI Knee SR',
     modality:    'MRI',
     source:      'fastMRI',
     sourceUrl:   'https://fastmri.med.nyu.edu/',
     description: 'Reconstruct 2× under-sampled knee MRI at full resolution.',
+  },
+  'brats-t1c-sr-task': {
+    display:     'BraTS T1c SR',
+    modality:    'MRI T1c',
+    source:      'BraTS 2023 GLI',
+    sourceUrl:   'https://www.synapse.org/Synapse:syn51156910/wiki/',
+    description: 'Super-resolve brain-tumour T1c MRI from 128×128 bicubic-downsampled inputs to 256×256.',
+  },
+  'ixi-t1-sr-task': {
+    display:     'IXI T1 SR',
+    modality:    'MRI T1w',
+    source:      'IXI',
+    sourceUrl:   'https://brain-development.org/ixi-dataset/',
+    description: 'Super-resolve brain T1w MRI (128×128 → 256×256).',
+  },
+  'nih-cxr-sr-task': {
+    display:     'NIH CXR SR',
+    modality:    'X-ray',
+    source:      'NIH Chest X-ray 14',
+    sourceUrl:   'https://nihcc.app.box.com/v/ChestXray-NIHCC',
+    description: 'Super-resolve chest X-ray (128×128 → 256×256).',
   },
 };
 
@@ -5880,11 +6012,19 @@ function renderEnhPerTaskTable() {
   });
 })();
 
-/* ---------- wire task select + tier picker (per-task table only) ---------- */
+/* ---------- wire task select + tier picker (per-task table only) ----------
+ * Task picker is populated from ENH_TASKS at runtime — adding a new task
+ * only requires updating ENH_TASKS / ENH_TASK_META / ENHANCEMENT_DATA. */
 (function wireEnhPertaskControls() {
   const taskSel = document.getElementById('enhTaskSelect');
   const tierSel = document.getElementById('enhTierSelect');
   if (!taskSel || !tierSel) return;
+  taskSel.innerHTML = ENH_TASKS.map(t => {
+    const m = ENH_TASK_META[t];
+    const label = m && m.display ? m.display : t;
+    const sel = t === enhTask ? ' selected' : '';
+    return `<option value="${t}"${sel}>${label}</option>`;
+  }).join('');
   taskSel.addEventListener('change', () => {
     enhTask = taskSel.value;
     renderEnhPerTaskTable();
