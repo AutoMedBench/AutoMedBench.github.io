@@ -179,18 +179,27 @@ h1, h2, h3 {
   color: var(--ink-soft); font-weight: 500; font-size: 14px;
 }
 .nav-links a:hover { color: var(--ink); text-decoration: none; }
-.nav-links .coming-chip {
-  color: var(--ink-mute);
-  font-size: 14px; font-weight: 500;
+/* ---------- "Paper" button (tactile press-down, arXiv link) ---------- */
+.nav-links .paper-btn {
   display: inline-flex; align-items: center; gap: 6px;
-  cursor: not-allowed;
+  padding: 5px 11px;
+  color: var(--ink); background: var(--panel);
+  border: 1.5px solid var(--ink); border-radius: 4px;
+  box-shadow: 3px 3px 0 var(--ink);
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 12px; font-weight: 600; letter-spacing: -0.01em;
+  line-height: 1; white-space: nowrap; text-decoration: none;
+  transition: background 0.15s ease, color 0.15s ease, transform 0.1s ease, box-shadow 0.1s ease;
 }
-.nav-links .coming-chip::after {
-  content: 'coming soon';
-  font-size: 9.5px; font-weight: 700; text-transform: uppercase;
-  letter-spacing: 0.08em;
-  background: var(--amber-soft); color: var(--walnut);
-  padding: 2px 6px; border-radius: 3px;
+.nav-links .paper-btn:hover {
+  background: var(--primary); color: #FFFFFF; border-color: var(--ink);
+  text-decoration: none;
+  transform: translate(2px, 2px);
+  box-shadow: 1px 1px 0 var(--ink);
+}
+.nav-links .paper-btn:active {
+  transform: translate(3px, 3px);
+  box-shadow: 0 0 0 var(--ink);
 }
 
 /* ---------- "I want to test my agent" CTA (terminal-bench style) ---------- */
@@ -1915,7 +1924,7 @@ footer a:hover { color: var(--primary); text-decoration: none; }
   .brand { font-size: 17px; }
   .nav-links { gap: 14px; margin-left: auto; flex-wrap: wrap; row-gap: 8px; }
   .nav-links a, .nav-dropdown-trigger { font-size: 13px; }
-  .nav-links .coming-chip { display: none; }
+  .nav-links .paper-btn { font-size: 12px; padding: 4px 9px; box-shadow: 2px 2px 0 var(--ink); }
   .theme-toggle { margin-left: 0; }
   .nav-menu { left: auto; right: 0; min-width: 220px; }
 
@@ -2037,7 +2046,7 @@ footer a:hover { color: var(--primary); text-decoration: none; }
       </div>
       <a href="#about">About</a>
       <a href="https://github.com/KumaKuma2002/AutoMedBench/tree/main" target="_blank" rel="noopener">GitHub</a>
-      <a href="https://arxiv.org/abs/2606.01961" target="_blank" rel="noopener">Paper</a>
+      <a href="https://arxiv.org/abs/2606.01961" class="paper-btn" target="_blank" rel="noopener">Paper</a>
       <a href="submit.html" class="test-agent-btn">I want to test my agent</a>
       <button type="button" class="theme-toggle" id="themeToggle" aria-label="Toggle theme">
         <svg class="icon-sun"  viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true">
