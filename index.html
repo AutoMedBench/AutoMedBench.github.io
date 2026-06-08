@@ -515,6 +515,16 @@ h1, h2, h3 {
   font-size: 10px;
 }
 .cat-tab.active .badge-pending { color: var(--ink-soft); border-color: var(--ink-mute); }
+.cat-tab .badge-new {
+  font-family: 'Inter', sans-serif;
+  font-size: 9.5px; font-weight: 600;
+  text-transform: uppercase; letter-spacing: 0.08em;
+  color: var(--primary);
+  background: transparent;
+  border: 1px solid var(--primary);
+  padding: 1.5px 6px; border-radius: 999px;
+  line-height: 1;
+}
 
 /* Blank-scores notice for incoming tracks */
 .scores-pending {
@@ -2042,6 +2052,12 @@ footer a:hover { color: var(--primary); text-decoration: none; }
               <span class="nm-hint"><span class="live-dot"></span>live</span>
             </button>
           </li>
+          <li role="none">
+            <button type="button" role="menuitem" data-cat-leaderboard="classification">
+              <span class="nm-label">Classification</span>
+              <span class="nm-hint"><span class="live-dot"></span>live</span>
+            </button>
+          </li>
         </ul>
       </div>
       <a href="#about">About</a>
@@ -2086,8 +2102,8 @@ footer a:hover { color: var(--primary); text-decoration: none; }
   </div>
   <aside class="hero-stats" aria-label="benchmark at a glance">
     <div class="stat-item"><span class="stat-num">7</span><span class="stat-label">agentic models<span class="info-pop info-pop-right" tabindex="0" role="button" aria-label="What is an agentic model?"><span class="info-bang">!</span><span class="info-bubble">We evaluate the <strong>base LLM as the agent</strong> driving the pipeline directly &mdash; not a vendor&rsquo;s own agent harness or tool-use wrapper.</span></span></span></div>
-    <div class="stat-item"><span class="stat-num">78</span><span class="stat-label">task combos<span class="info-pop info-pop-right" tabindex="0" role="button" aria-label="How task combos break down across tracks"><span class="info-bang">!</span><span class="info-bubble"><strong>Distribution across 5 tracks</strong><ul class="bubble-list"><li>Segmentation &middot; 28</li><li>Image Enhancement &middot; 14</li><li>VQA &middot; 18</li><li>Report Generation &middot; 10</li><li>Lesion Detection &middot; 8</li></ul></span></span></span></div>
-    <div class="stat-item"><span class="stat-num">5,400+</span><span class="stat-label">total runs</span></div>
+    <div class="stat-item"><span class="stat-num">80</span><span class="stat-label">task combos<span class="info-pop info-pop-right" tabindex="0" role="button" aria-label="How task combos break down across tracks"><span class="info-bang">!</span><span class="info-bubble"><strong>Distribution across 6 tracks</strong><ul class="bubble-list"><li>Segmentation &middot; 28</li><li>Image Enhancement &middot; 14</li><li>VQA &middot; 18</li><li>Report Generation &middot; 10</li><li>Lesion Detection &middot; 8</li><li>Classification &middot; 2</li></ul></span></span></span></div>
+    <div class="stat-item"><span class="stat-num">5,500+</span><span class="stat-label">total runs</span></div>
   </aside>
 </section>
 
@@ -2109,6 +2125,9 @@ footer a:hover { color: var(--primary); text-decoration: none; }
   </button>
   <button class="cat-tab" data-cat="detection">
     <span class="live-dot"></span> Lesion Detection
+  </button>
+  <button class="cat-tab" data-cat="classification">
+    <span class="live-dot"></span> Classification <span class="badge-new">new</span>
   </button>
 </div>
 
@@ -3242,6 +3261,273 @@ footer a:hover { color: var(--primary); text-decoration: none; }
   </div>
 
 </div>  <!-- end detection-view -->
+
+<!-- ===================================================================== -->
+<!--  CLASSIFICATION VIEW                                                   -->
+<!-- ===================================================================== -->
+<div id="classification-view" style="display:none">
+
+  <div class="primary-tabs" id="primaryTabs-classification">
+    <button class="primary-tab active" data-panel="performance">Performance</button>
+    <button class="primary-tab" data-panel="workflow">Workflow</button>
+    <button class="primary-tab" data-panel="tiers">Task Setting</button>
+    <button class="primary-tab" data-panel="rubrics">Scoring Rubrics</button>
+  </div>
+
+  <!-- ================= CLASSIFICATION · PERFORMANCE ================= -->
+  <div id="classification-panel-performance" class="panel active">
+
+    <div class="perf-grid">
+      <div class="chart-card span-4 dark" id="overallPerformance-classification">
+        <h3>Overall Score — averaged across all tasks</h3>
+        <p class="sub">Overall = (<span class="info-pop on-dark" tabindex="0" role="button" aria-label="What is the Agentic score?"><strong>Agentic</strong><span class="info-bang">!</span><span class="info-bubble"><strong>Agentic</strong> — how well the agent <em>ran the research pipeline</em>. Weighted sum of S1–S5 stage scores (plan, setup, validate, infer, submit). ∈ [0, 100].</span></span> + <span class="info-pop on-dark" tabindex="0" role="button" aria-label="What is the Task score?"><strong>Task</strong><span class="info-bang">!</span><span class="info-bubble"><strong>Task (Classification)</strong> = accuracy (correct ÷ patients; a missing prediction counts as wrong).</span></span>) / 2</p>
+        <div class="chart-legend" id="chartOverallLegend-classification">
+          <span class="legend-hint">
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+              <path d="M5 3 L5 17 L9 13 L12 20 L14.5 19 L11.5 12 L17 12 Z" fill="#FFFFFF"/>
+            </svg>
+            click a chip to toggle
+          </span>
+          <div class="legend-chips"></div>
+        </div>
+        <div class="chart-wrap"><canvas id="chartOverall-classification"></canvas></div>
+      </div>
+      <div class="chart-card">
+        <h3>Avg Turns</h3>
+        <p class="sub">Conversational turns / run</p>
+        <div class="chart-wrap"><canvas id="chartTurns-classification"></canvas></div>
+      </div>
+      <div class="chart-card">
+        <h3>Avg Time</h3>
+        <p class="sub">Wall-clock per run</p>
+        <div class="chart-wrap"><canvas id="chartTime-classification"></canvas></div>
+      </div>
+      <div class="chart-card">
+        <h3>Avg Tokens</h3>
+        <p class="sub">Total LLM tokens / run</p>
+        <div class="chart-wrap"><canvas id="chartTokens-classification"></canvas></div>
+      </div>
+      <div class="chart-card">
+        <h3>Avg Cost</h3>
+        <p class="sub">USD / run</p>
+        <div class="chart-wrap"><canvas id="chartCost-classification"></canvas></div>
+      </div>
+    </div>
+
+    <div class="disclosure-bar">
+      <button class="disclosure-btn" id="moreMetricsBtn-classification">
+        <span class="info-i">i</span>
+        More metrics
+        <span class="chev">▸</span>
+      </button>
+    </div>
+
+    <div class="disclosure-content" id="moreMetrics-classification">
+      <div class="metric-grid-1">
+        <div class="chart-card">
+          <h3>
+            Failure Rate
+            <span class="info-pop" tabindex="0" role="button" aria-label="How is failure defined?">
+              <span class="info-bang">!</span>
+              <span class="info-bubble">
+                <strong>Failure</strong> = not able to finish the end-to-end workflow or provide complete submission.
+              </span>
+            </span>
+          </h3>
+          <p class="sub">% of runs that did not reach a final submission.</p>
+          <div class="chart-wrap"><canvas id="chartFail-classification"></canvas></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="pertask-section">
+      <h2 class="section-title">Per-Task Leaderboard</h2>
+      <p class="section-sub">Pick a task and difficulty tier.</p>
+
+      <div class="task-bar">
+        <div class="variant-picker">
+          <label for="clsTaskSelect">Task</label>
+          <select class="variant-select" id="clsTaskSelect">
+            <option value="classification-braintumor-mri" selected>classification-braintumor-mri</option>
+          </select>
+        </div>
+        <div class="variant-picker" style="margin-left: auto">
+          <label for="clsTierSelect">
+            Difficulty
+            <span class="info-pop info-pop-right" tabindex="0" role="button" aria-label="How is difficulty defined?">
+              <span class="info-bang">!</span>
+              <span class="info-bubble">
+                <strong>Two tiers</strong> — more scaffolding = lower difficulty.
+                <ul class="bubble-list">
+                  <li><strong>Lite</strong> · exact classifier given</li>
+                  <li><strong>Standard</strong> · pick from classifier families</li>
+                </ul>
+              </span>
+            </span>
+          </label>
+          <select class="variant-select" id="clsTierSelect">
+            <option value="lite" selected>Lite</option>
+            <option value="standard">Standard</option>
+          </select>
+        </div>
+      </div>
+
+      <div id="clsPertaskBody"></div>
+    </div>
+  </div>
+
+  <!-- ================= CLASSIFICATION · WORKFLOW ================= -->
+  <div id="classification-panel-workflow" class="panel">
+    <div class="workflow-wrap">
+      <h3>Agent Workflow — S1 → S5</h3>
+      <p>
+        Same coding-agent loop as every other track. S4 classifies every
+        patient and writes a <code>predictions.csv</code> (<code>patient_id,label</code>);
+        S5 verifies the predictions and calls <code>submit_results</code>.
+        Scoring is <code>accuracy</code> against the held-out private labels.
+      </p>
+      <div class="workflow-flow" id="workflowFlow-classification"></div>
+      <p class="flow-hint">
+        Benchmark unit is <strong>one patient MRI</strong>. See
+        <button type="button" class="inline-link" data-goto-classification="rubrics">Scoring Rubrics</button>
+        for how each stage is scored.
+      </p>
+    </div>
+  </div>
+
+  <!-- ================= CLASSIFICATION · TASK SETTING ================= -->
+  <div id="classification-panel-tiers" class="panel">
+
+    <div class="content-block">
+      <h3>Difficulty Tiers</h3>
+      <div class="tier-grid" id="tierGrid-classification"></div>
+    </div>
+
+    <div class="content-block">
+      <h3>Dataset</h3>
+      <table class="simple dataset-table">
+        <thead><tr><th>Task</th><th>Modality</th><th>Task Time Range</th><th>Source</th><th>Description</th></tr></thead>
+        <tbody>
+          <tr>
+            <td>Brain Tumor MRI Classification</td>
+            <td>Brain MRI</td>
+            <td><code class="time-chip" data-task="classification-braintumor-mri">—</code></td>
+            <td><a href="https://www.kaggle.com/datasets/masoudnickparvar/brain-tumor-mri-dataset" target="_blank" rel="noopener">Brain Tumor MRI</a></td>
+            <td style="color:var(--ink-soft); font-size:13px">4-class single-label (glioma · meningioma · notumor · pituitary), 100 patients balanced. Task score = accuracy.</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="content-block">
+      <h3>Sandbox Rules</h3>
+      <dl class="constraints">
+        <div class="row">
+          <dt>Policy</dt>
+          <dd><strong>Inference-only.</strong> No training on benchmark data.</dd>
+        </div>
+        <div class="row">
+          <dt>Allowed</dt>
+          <dd>
+            <code>data/BrainTumorMRI/public/</code> <span class="note">read-only</span>
+            <span class="sep">·</span>
+            <code>/workspace/</code>
+          </dd>
+        </div>
+        <div class="row forbidden">
+          <dt>Forbidden</dt>
+          <dd>
+            <code>data/BrainTumorMRI/private/</code>
+            <span class="sep">·</span> ground-truth labels
+          </dd>
+        </div>
+        <div class="row">
+          <dt>Limits</dt>
+          <dd>
+            Time <code>3 600 s</code> / run <span class="sep">·</span>
+            Metric <code>accuracy</code>
+          </dd>
+        </div>
+        <div class="row">
+          <dt>On violation</dt>
+          <dd>
+            <span class="sev warn" data-n="1">Warning</span>
+            <span class="sev-body">execution blocked; agent continues</span>
+            <span class="sep">·</span>
+            <span class="sev fail" data-n="2">Disqualified</span>
+            <span class="sev-body">run zeroed; no credit</span>
+          </dd>
+        </div>
+      </dl>
+    </div>
+
+  </div>
+
+  <!-- ================= CLASSIFICATION · SCORING RUBRICS ================= -->
+  <div id="classification-panel-rubrics" class="panel">
+
+    <div class="content-block">
+      <h3>Overall Score</h3>
+      <p>Every run gets a single Overall Score (0–100). It is the average of an <strong>Agentic</strong> score (how well the agent ran the research pipeline) and a <strong>Task</strong> score (how accurate the final per-patient labels were).</p>
+
+      <div class="score-pies">
+        <figure class="score-pie">
+          <div class="pie-caption">
+            <span class="lbl">Overall = ½ · Agentic + ½ · Task</span>
+            <span class="rng">× 100 → [0, 100]</span>
+          </div>
+          <ul class="pie-legend">
+            <li>
+              <span class="sw" style="background:var(--primary)"></span>
+              <span class="sid"><span class="info-pop" tabindex="0" role="button" aria-label="How Agentic is computed"><strong>Agentic</strong><span class="info-bang">!</span><span class="info-bubble"><strong>Agentic</strong> — weighted sum of S1–S5 stage scores, each ∈ [0, 1]. Stays in [0, 1] internally, shown ×100.</span></span></span>
+              <span class="w">50%</span>
+            </li>
+            <li>
+              <span class="sw" style="background:var(--walnut)"></span>
+              <span class="sid"><span class="info-pop" tabindex="0" role="button" aria-label="How Task is computed"><strong>Task</strong><span class="info-bang">!</span><span class="info-bubble"><strong>Task (Classification)</strong> = <code>accuracy</code> = correct ÷ patients on the held-out private labels (a missing prediction counts as wrong). ∈ [0, 1].</span></span></span>
+              <span class="w">50%</span>
+            </li>
+          </ul>
+        </figure>
+
+        <figure class="score-pie">
+          <div class="pie-caption">
+            <span class="lbl">Agentic = weighted S1 → S5</span>
+            <span class="rng">∈ [0, 1]</span>
+          </div>
+          <ul class="pie-legend">
+            <li><span class="sw" style="background:var(--primary)"></span><span class="sid">S1</span><span class="snm">PLAN</span><span class="w">25%</span></li>
+            <li><span class="sw" style="background:var(--primary)"></span><span class="sid">S2</span><span class="snm">SETUP</span><span class="w">15%</span></li>
+            <li><span class="sw" style="background:var(--primary)"></span><span class="sid">S3</span><span class="snm">VALIDATE</span><span class="w">35%</span></li>
+            <li><span class="sw" style="background:var(--primary)"></span><span class="sid">S4</span><span class="snm">INFERENCE</span><span class="w">15%</span></li>
+            <li><span class="sw" style="background:var(--primary)"></span><span class="sid">S5</span><span class="snm">SUBMIT</span><span class="w">10%</span></li>
+          </ul>
+        </figure>
+      </div>
+
+      <p style="margin-top:14px; color:var(--ink-soft); font-size:13px">
+        All sub-scores live in <code>[0, 1]</code>; the leaderboard just shows them ×100.
+      </p>
+    </div>
+
+    <div class="content-block">
+      <h3>Stage-by-stage breakdown <small>S1 → S5 · weights & sub-criteria</small></h3>
+      <p>The Agentic score is a weighted sum across the five stages. Click any stage for its sub-criteria and scoring formula.</p>
+
+      <div class="workflow-flow" id="rubricsFlow-classification"></div>
+
+      <div class="workflow-legend">
+        <span><span class="dot"></span>LLM-judge scored: S1–S3</span>
+        <span><span class="dot"></span>Continuous: S4</span>
+        <span><span class="dot"></span>Discrete: S5</span>
+      </div>
+
+      <div class="stage-detail" id="stageDetail-classification"></div>
+    </div>
+
+  </div>
+
+</div>  <!-- end classification-view -->
 
 
 <!-- ===================================================================== -->
@@ -4603,9 +4889,9 @@ document.addEventListener('click', (e) => {
  * scroll to the Overall Score chart, even if the user previously
  * switched to another primary tab. */
 function gotoLeaderboard() {
-  // All five tracks are now live; jump to the current track's Performance
+  // All six tracks are now live; jump to the current track's Performance
   // panel rather than always redirecting to Segmentation.
-  const LIVE_TRACKS = ['segmentation', 'enhancement', 'vqa', 'reporting', 'detection'];
+  const LIVE_TRACKS = ['segmentation', 'enhancement', 'vqa', 'reporting', 'detection', 'classification'];
   const cat = (typeof activeCategory !== 'undefined' && LIVE_TRACKS.includes(activeCategory))
     ? activeCategory : 'segmentation';
   if (cat !== activeCategory) {
@@ -4980,10 +5266,10 @@ function renderPerformanceTable() {
 
 /* ======================================================================= */
 /*  CATEGORY TAB SWITCHING                                                  */
-/*  Live: Segmentation · VQA · Report Generation · Image Enhancement        */
-/*  Coming soon: Lesion Detection (disabled tab, no view wired up yet)      */
+/*  Live: Segmentation · Image Enhancement · VQA · Report Generation ·      */
+/*        Lesion Detection · Classification                                 */
 /* ======================================================================= */
-const CATEGORY_VIEWS = ['segmentation', 'enhancement', 'vqa', 'reporting', 'detection'];
+const CATEGORY_VIEWS = ['segmentation', 'enhancement', 'vqa', 'reporting', 'detection', 'classification'];
 let activeCategory = 'segmentation';
 document.getElementById('catTabs').addEventListener('click', (e) => {
   const btn = e.target.closest('.cat-tab');
@@ -5035,7 +5321,7 @@ function wireIncomingView(slug) {
     if (tab && !tab.classList.contains('active')) tab.click();
   });
 }
-['vqa', 'reporting', 'enhancement', 'detection'].forEach(wireIncomingView);
+['vqa', 'reporting', 'enhancement', 'detection', 'classification'].forEach(wireIncomingView);
 
 /* ======================================================================= */
 /*  PER-TRACK TIER DATA — keeps incoming views structurally aligned with   */
@@ -5098,6 +5384,20 @@ const TRACK_TIERS = {
         ['Environment', 'Agent sets up deps'],
         ['Guidance',    'S1 skill only']
       ] }
+  ],
+  'classification': [
+    { id: 'lite', name: 'Lite', tag: 'Agent follows a recipe', burden: 0.3,
+      specs: [
+        ['Model',       'Exact classifier given'],
+        ['Environment', 'requirements.txt provided'],
+        ['Guidance',    'S1–S3 skills provided']
+      ] },
+    { id: 'standard', name: 'Standard', tag: 'Agent chooses within bounds', burden: 0.6,
+      specs: [
+        ['Model',       'Pick from classifier families'],
+        ['Environment', 'Agent sets up deps'],
+        ['Guidance',    'S1 skill only']
+      ] }
   ]
 };
 
@@ -5141,6 +5441,8 @@ function renderTrackTiers(slug) {
     renderTierGridInto('tierGrid-enhancement', TRACK_TIERS['enhancement']);
   } else if (slug === 'detection') {
     renderTierGridInto('tierGrid-detection',  TRACK_TIERS['detection']);
+  } else if (slug === 'classification') {
+    renderTierGridInto('tierGrid-classification',  TRACK_TIERS['classification']);
   }
   _tiersRenderedFor.add(slug);
 }
@@ -5401,6 +5703,69 @@ const TRACK_STAGES = {
       ],
       formula: 'S5 = 0.50·has_valid_results + 0.50·output_format_valid  ∈ {0.0, 0.5, 1.0}'
     }
+  ],
+
+  /* Classification — S1-S5 rubric from eval_cls/llm_judge.py.
+     1:1 port of segmentation's structure; Task score = accuracy. */
+  'classification': [
+    {
+      id: 'S1', name: 'PLAN', weight: 25, judge: 'llm',
+      desc: 'Research classifiers, write plan.md',
+      scale: 'Each sub-criterion ∈ {0, 1}',
+      criteria: [
+        ['s1a', 'Created plan.md?', '{0, 1}'],
+        ['s1b', 'Plan has a clear inference pipeline (preprocess → model → argmax → label)?', '{0, 1}'],
+        ['s1c', 'Chose a classifier whose class head matches / remaps to the target classes?', '{0, 1}'],
+        ['s1d', 'Researched ≥ 3 models/checkpoints? (Lite: auto-pass)', '{0, 1}'],
+        ['s1e', 'Created plan visualization (png)? (Lite: auto-pass)', '{0, 1}'],
+        ['s1f', 'Plot has clear pipeline diagram? (Lite: auto-pass)', '{0, 1}']
+      ],
+      formula: 'S1 = (s1a + s1b + s1c + s1d + s1e + s1f) / 6  ∈ [0, 1]'
+    },
+    {
+      id: 'S2', name: 'SETUP', weight: 15, judge: 'llm',
+      desc: 'Download weights, install deps, load GPU',
+      scale: 'Each sub-criterion ∈ {0, 1}',
+      criteria: [
+        ['s2a', 'Model weights downloaded?', '{0, 1}'],
+        ['s2b', 'Checked image input format (resolution, channels/mode, normalization)?', '{0, 1}'],
+        ['s2c', 'Environment setup succeeded?', '{0, 1}'],
+        ['s2d', 'Env failures ≤ 5 attempts?', '{0, 1}'],
+        ['s2e', 'Model loaded on GPU?', '{0, 1}']
+      ],
+      formula: 'S2 = (s2a + s2b + s2c + s2d + s2e) / 5  ∈ [0, 1]'
+    },
+    {
+      id: 'S3', name: 'VALIDATE', weight: 35, judge: 'llm',
+      desc: 'Classify 1 image, check label + probability vector',
+      scale: 'LLM-judge ∈ [0, 1]',
+      criteria: [
+        ['judge_score',  'LLM-judge verdict on validation quality', '[0, 1]'],
+        ['pilot_before', 'Ran one image end-to-end before full inference', '{0, 1}'],
+        ['label_sanity', 'Predicted label in class set AND probability vector not degenerate', '{0, 1}']
+      ],
+      formula: 'S3 = LLM-judge verdict ∈ [0, 1]'
+    },
+    {
+      id: 'S4', name: 'INFERENCE', weight: 15, judge: 'continuous',
+      desc: 'Classify all patients, write predictions.csv',
+      scale: 'Two equal-weight sub-criteria',
+      criteria: [
+        ['completion_rate',    'n_predicted / n_patients', '[0, 1]'],
+        ['output_format_valid', '1 if every present label is in the class set', '{0, 1}']
+      ],
+      formula: 'S4 = 0.50·completion_rate + 0.50·output_format_valid  ∈ [0, 1]'
+    },
+    {
+      id: 'S5', name: 'SUBMIT', weight: 10, judge: 'discrete',
+      desc: 'Verify predictions, call submit_results',
+      scale: 'Each sub-criterion ∈ {0, 1}',
+      criteria: [
+        ['has_valid_results',   'n_predicted > 0 AND accuracy > 0', '{0, 1}'],
+        ['output_format_valid', 'predictions.csv / prediction.json pass format check', '{0, 1}']
+      ],
+      formula: 'S5 = 0.50·has_valid_results + 0.50·output_format_valid  ∈ {0.0, 0.5, 1.0}'
+    }
   ]
 };
 
@@ -5547,11 +5912,13 @@ function setTheme(theme) {
   _vqaSecondaryRendered = false;
   _rptSecondaryRendered = false;
   _detSecondaryRendered = false;
+  _clsSecondaryRendered = false;
   renderFirstViewCharts();
   renderEnhFirstViewCharts();
   renderVqaFirstViewCharts();
   renderReportingFirstViewCharts();
   renderDetectionFirstViewCharts();
+  renderClassificationFirstViewCharts();
   if (disclosureBox.classList.contains('open')) renderSecondaryCharts();
   const enhBox = document.getElementById('moreMetrics-enh');
   if (enhBox && enhBox.classList.contains('open')) renderEnhSecondaryCharts();
@@ -5561,6 +5928,8 @@ function setTheme(theme) {
   if (rptBox && rptBox.classList.contains('open')) renderReportingSecondaryCharts();
   const detBox = document.getElementById('moreMetrics-detection');
   if (detBox && detBox.classList.contains('open')) renderDetectionSecondaryCharts();
+  const clsBox = document.getElementById('moreMetrics-classification');
+  if (clsBox && clsBox.classList.contains('open')) renderClassificationSecondaryCharts();
 }
 document.getElementById('themeToggle').addEventListener('click', () => {
   const cur = document.documentElement.dataset.theme === 'dark' ? 'dark' : 'light';
@@ -6842,6 +7211,147 @@ document.getElementById('detTierSelect')?.addEventListener('change', (e) => { de
 renderDetectionFirstViewCharts();
 renderDetectionPerTaskTable();
 
+/* ======================================================================= */
+/*  CLASSIFICATION — performance charts + per-task leaderboard             */
+/* ======================================================================= */
+const CLASSIFICATION_DATA = {
+  'classification-braintumor-mri': {
+    lite: [
+      {agent:"claude-opus-4.6", n:10, overall:0.9958, agentic:1.0000, task:0.9917, turns:15.5, time_s:283.0,  cost:2.9527, tokens:167366, fail:0.0},
+      {agent:"glm-5",           n:10, overall:0.9583, agentic:1.0000, task:0.9167, turns:24.9, time_s:490.6,  cost:0.5081, tokens:234452, fail:0.0},
+      {agent:"qwen3.5",         n:10, overall:0.9485, agentic:1.0000, task:0.8970, turns:18.2, time_s:257.4,  cost:0.4052, tokens:182571, fail:10.0},
+      {agent:"chatgpt-5.4",     n:10, overall:0.9350, agentic:0.9500, task:0.9200, turns:9.7,  time_s:93.4,   cost:1.3674, tokens:78284,  fail:10.0},
+      {agent:"minimax-m2.5",    n:10, overall:0.8780, agentic:1.0000, task:0.7560, turns:21.4, time_s:207.9,  cost:0.4428, tokens:199553, fail:10.0},
+      {agent:"gemini-3.1-pro",  n:10, overall:0.7905, agentic:0.9000, task:0.6810, turns:13.1, time_s:1164.7, cost:0.7822, tokens:102003, fail:30.0}
+    ],
+    standard: [
+      {agent:"glm-5",           n:10, overall:0.9944, agentic:1.0000, task:0.9889, turns:25.6, time_s:701.4,  cost:0.6299, tokens:285732, fail:0.0},
+      {agent:"qwen3.5",         n:10, overall:0.9920, agentic:1.0000, task:0.9840, turns:19.5, time_s:411.7,  cost:0.5575, tokens:246784, fail:0.0},
+      {agent:"claude-opus-4.6", n:10, overall:0.9885, agentic:1.0000, task:0.9770, turns:18.6, time_s:368.5,  cost:3.5733, tokens:199236, fail:0.0},
+      {agent:"minimax-m2.5",    n:10, overall:0.8521, agentic:0.9793, task:0.7250, turns:24.6, time_s:321.3,  cost:0.6271, tokens:279154, fail:30.0},
+      {agent:"gemini-3.1-pro",  n:10, overall:0.7630, agentic:0.7530, task:0.7730, turns:15.8, time_s:1592.3, cost:1.1654, tokens:152709, fail:20.0},
+      {agent:"chatgpt-5.4",     n:10, overall:0.5323, agentic:0.6865, task:0.3780, turns:12.9, time_s:257.1,  cost:2.1504, tokens:123340, fail:80.0}
+    ]
+  }
+};
+const CLASSIFICATION_TASKS = Object.keys(CLASSIFICATION_DATA);
+let clsTask = 'classification-braintumor-mri';
+let clsTier = 'lite';
+let clsSortKey = 'overall';
+let clsSortDir = 'desc';
+
+function clsGetRows(task, tier) {
+  return ((CLASSIFICATION_DATA[task] || {})[tier]) || null;
+}
+function buildClassificationAgentStats() {
+  const acc = {};
+  for (const t of CLASSIFICATION_TASKS) {
+    for (const v of ['lite', 'standard']) {
+      const rows = clsGetRows(t, v);
+      if (!rows) continue;
+      for (const r of rows) {
+        if (!acc[r.agent]) {
+          acc[r.agent] = { overall:[], agentic:[], task:[], turns:[], time:[], tokens:[], cost:[], fail:[] };
+        }
+        const a = acc[r.agent];
+        a.overall.push(r.overall); a.agentic.push(r.agentic); a.task.push(r.task);
+        a.turns.push(r.turns); a.time.push(r.time_s); a.tokens.push(r.tokens);
+        a.cost.push(r.cost); a.fail.push(r.fail);
+      }
+    }
+  }
+  const agents = Object.keys(acc).sort((a, b) => mean(acc[b].overall) - mean(acc[a].overall));
+  return agents.map(a => ({
+    agent: a, color: AGENT_COLORS[a] || '#8A6B4A',
+    avgOverall: mean(acc[a].overall), avgAgentic: mean(acc[a].agentic),
+    avgTask: mean(acc[a].task), avgTurns: mean(acc[a].turns),
+    avgTime: mean(acc[a].time), avgTokens: mean(acc[a].tokens),
+    avgCost: mean(acc[a].cost), avgFail: mean(acc[a].fail),
+  }));
+}
+function renderClassificationFirstViewCharts() {
+  const stats = buildClassificationAgentStats();
+  if (!stats.length) return;
+  const overall = overallGroupedChart('chartOverall-classification', stats);
+  renderOverallLegend('chartOverallLegend-classification', overall, '#ECEFE5');
+  Object.values(AGENT_BRAND).forEach(b => {
+    if (!b.slug) return;
+    loadBrandLogo(b.slug).then(img => { if (img) overall.update('none'); });
+  });
+  simpleBarChart('chartTurns-classification',  stats, { value: d => d.avgTurns, label: 'Turns', smallTicks: true, yFmt: v => v, tooltip: v => v.toFixed(1) + ' turns' });
+  simpleBarChart('chartTime-classification',   stats, { value: d => d.avgTime / 60, label: 'Time', smallTicks: true, yFmt: v => v + 'm', tooltip: v => v.toFixed(1) + ' min' });
+  simpleBarChart('chartTokens-classification', stats, { value: d => d.avgTokens / 1e6, label: 'Tokens', smallTicks: true, yFmt: v => v.toFixed(1) + 'M', tooltip: v => v.toFixed(2) + 'M tokens' });
+  simpleBarChart('chartCost-classification',   stats, { value: d => d.avgCost, label: 'Cost', smallTicks: true, yFmt: v => '$' + v, tooltip: v => fmtCost(v) });
+}
+let _clsSecondaryRendered = false;
+function renderClassificationSecondaryCharts() {
+  if (_clsSecondaryRendered) return;
+  const stats = buildClassificationAgentStats();
+  if (!stats.length) return;
+  _clsSecondaryRendered = true;
+  simpleBarChart('chartFail-classification', stats, { value: d => d.avgFail, label: 'Fail %', yMax: 100, yFmt: v => v + '%', smallTicks: true, tooltip: v => v.toFixed(1) + '%' });
+}
+function renderClassificationPerTaskTable() {
+  const rows = clsGetRows(clsTask, clsTier);
+  const host = document.getElementById('clsPertaskBody');
+  if (!host) return;
+  if (!rows || rows.length === 0) {
+    host.innerHTML = pendingCard(`Runs for <code style="font-family:JetBrains Mono,monospace;background:var(--primary-soft);color:var(--primary);padding:1px 6px;border-radius:4px">${clsTask} · ${clsTier}</code> are still being collected.`);
+    return;
+  }
+  const sorted = [...rows].sort((a, b) => compareRows(a, b, clsSortKey, clsSortDir));
+  const medal = i => i < 3 ? `medal-${i+1}` : '';
+  const failClass = v => v >= 70 ? 'fail-hi' : v >= 30 ? 'fail-mid' : '';
+  const thFor = (c) => {
+    const activeCls = (clsSortKey === c.key) ? `active ${clsSortDir}` : '';
+    const numCls    = c.num ? 'num' : '';
+    return `<th class="sortable ${numCls} ${activeCls}" data-sort="${c.key}" title="Sort by ${c.label.replace('&nbsp;', ' ')}"><span class="th-inner">${c.label}${SORT_CARET_SVG}</span></th>`;
+  };
+  host.innerHTML = `
+    <div class="table-card">
+      <table class="leaderboard">
+        <thead><tr><th>#</th><th>Agent</th>${SORT_COLUMNS.map(thFor).join('')}</tr></thead>
+        <tbody>
+          ${sorted.map((r, i) => `
+            <tr>
+              <td class="rank ${medal(i)}">${i + 1}</td>
+              <td><div class="agent-cell"><span class="agent-dot" style="background:${AGENT_COLORS[r.agent] || '#8A6B4A'}"></span><span class="agent-name">${r.agent}</span></div></td>
+              <td class="num overall-score">${(r.overall * 100).toFixed(1)}</td>
+              <td class="num">${(r.agentic * 100).toFixed(1)}</td>
+              <td class="num">${(r.task * 100).toFixed(1)}</td>
+              <td class="num muted">${r.turns.toFixed(1)}</td>
+              <td class="num muted">${fmtTime(r.time_s)}</td>
+              <td class="num">${fmtCost(r.cost)}</td>
+              <td class="num muted">${fmtTokens(r.tokens)}</td>
+              <td class="num ${failClass(r.fail)}">${r.fail.toFixed(1)}%</td>
+            </tr>`).join('')}
+        </tbody>
+      </table>
+    </div>`;
+  host.querySelectorAll('th.sortable').forEach(th => {
+    th.addEventListener('click', () => {
+      const key = th.dataset.sort;
+      if (clsSortKey === key) clsSortDir = (clsSortDir === 'asc') ? 'desc' : 'asc';
+      else { clsSortKey = key; clsSortDir = SORT_DEFAULTS[key] || 'desc'; }
+      renderClassificationPerTaskTable();
+    });
+  });
+}
+document.getElementById('clsTaskSelect')?.addEventListener('change', (e) => { clsTask = e.target.value; renderClassificationPerTaskTable(); });
+document.getElementById('clsTierSelect')?.addEventListener('change', (e) => { clsTier = e.target.value; renderClassificationPerTaskTable(); });
+(function wireClsDisclosure() {
+  const btn  = document.getElementById('moreMetricsBtn-classification');
+  const body = document.getElementById('moreMetrics-classification');
+  if (!btn || !body) return;
+  btn.addEventListener('click', () => {
+    const open = body.classList.toggle('open');
+    btn.classList.toggle('open', open);
+    if (open) renderClassificationSecondaryCharts();
+  });
+})();
+renderClassificationFirstViewCharts();
+renderClassificationPerTaskTable();
+
 /* Time-range chips for VQA + Detection task-setting tables */
 function _timeRangeFromRows(rows) {
   const vals = [];
@@ -6874,11 +7384,23 @@ function _timeRangeFromRows(rows) {
     if (rows.length) chip.textContent = _timeRangeFromRows(rows);
   });
 })();
+(function renderClassificationTimeChips() {
+  const chips = document.querySelectorAll('#classification-panel-tiers .time-chip[data-task]');
+  chips.forEach(chip => {
+    const t = chip.dataset.task;
+    const rows = [];
+    for (const v of ['lite', 'standard']) {
+      const r = clsGetRows(t, v);
+      if (r) rows.push(...r);
+    }
+    if (rows.length) chip.textContent = _timeRangeFromRows(rows);
+  });
+})();
 
 // Eagerly render workflow + tier grids + per-step rubrics for all incoming
 // tracks so the content is in the DOM regardless of which tab the user opens
 // first.
-['vqa', 'reporting', 'enhancement', 'detection'].forEach(slug => {
+['vqa', 'reporting', 'enhancement', 'detection', 'classification'].forEach(slug => {
   renderIncomingWorkflow(slug);
   renderTrackTiers(slug);
   renderTrackRubrics(slug);
