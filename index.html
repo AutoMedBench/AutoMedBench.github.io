@@ -2107,8 +2107,8 @@ footer a:hover { color: var(--primary); text-decoration: none; }
   </div>
   <aside class="hero-stats" aria-label="benchmark at a glance">
     <div class="stat-item"><span class="stat-num">7</span><span class="stat-label">agentic models<span class="info-pop info-pop-right" tabindex="0" role="button" aria-label="What is an agentic model?"><span class="info-bang">!</span><span class="info-bubble">We evaluate the <strong>base LLM as the agent</strong> driving the pipeline directly &mdash; not a vendor&rsquo;s own agent harness or tool-use wrapper.</span></span></span></div>
-    <div class="stat-item"><span class="stat-num">80</span><span class="stat-label">task combos<span class="info-pop info-pop-right" tabindex="0" role="button" aria-label="How task combos break down across tracks"><span class="info-bang">!</span><span class="info-bubble"><strong>Distribution across 6 tracks</strong><ul class="bubble-list"><li>Segmentation &middot; 28</li><li>Image Enhancement &middot; 14</li><li>VQA &middot; 18</li><li>Report Generation &middot; 10</li><li>Lesion Detection &middot; 8</li><li>Classification &middot; 2</li></ul></span></span></span></div>
-    <div class="stat-item"><span class="stat-num">5,500+</span><span class="stat-label">total runs</span></div>
+    <div class="stat-item"><span class="stat-num">88</span><span class="stat-label">task combos<span class="info-pop info-pop-right" tabindex="0" role="button" aria-label="How task combos break down across tracks"><span class="info-bang">!</span><span class="info-bubble"><strong>Distribution across 6 tracks</strong><ul class="bubble-list"><li>Segmentation &middot; 28</li><li>Image Enhancement &middot; 14</li><li>VQA &middot; 18</li><li>Report Generation &middot; 10</li><li>Lesion Detection &middot; 8</li><li>Classification &middot; 10</li></ul></span></span></span></div>
+    <div class="stat-item"><span class="stat-num">5,900+</span><span class="stat-label">total runs</span></div>
   </aside>
 </section>
 
@@ -3354,6 +3354,10 @@ footer a:hover { color: var(--primary); text-decoration: none; }
           <label for="clsTaskSelect">Task</label>
           <select class="variant-select" id="clsTaskSelect">
             <option value="classification-braintumor-mri" selected>classification-braintumor-mri</option>
+            <option value="classification-crc-histology">classification-crc-histology</option>
+            <option value="classification-pcam-metastasis">classification-pcam-metastasis</option>
+            <option value="classification-chest-pneumonia">classification-chest-pneumonia</option>
+            <option value="classification-isic-skin-lesion">classification-isic-skin-lesion</option>
           </select>
         </div>
         <div class="variant-picker" style="margin-left: auto">
@@ -3393,7 +3397,7 @@ footer a:hover { color: var(--primary); text-decoration: none; }
       </p>
       <div class="workflow-flow" id="workflowFlow-classification"></div>
       <p class="flow-hint">
-        Benchmark unit is <strong>one patient MRI</strong>. See
+        Benchmark unit is <strong>one image</strong>. See
         <button type="button" class="inline-link" data-goto-classification="rubrics">Scoring Rubrics</button>
         for how each stage is scored.
       </p>
@@ -3420,6 +3424,34 @@ footer a:hover { color: var(--primary); text-decoration: none; }
             <td><a href="https://www.kaggle.com/datasets/masoudnickparvar/brain-tumor-mri-dataset" target="_blank" rel="noopener">Brain Tumor MRI</a></td>
             <td style="color:var(--ink-soft); font-size:13px">4-class single-label (glioma · meningioma · notumor · pituitary), 100 patients balanced. Task score = accuracy.</td>
           </tr>
+          <tr>
+            <td>Colorectal Tissue Histology</td>
+            <td>Histopathology (H&amp;E)</td>
+            <td><code class="time-chip" data-task="classification-crc-histology">—</code></td>
+            <td><a href="https://zenodo.org/records/1214456" target="_blank" rel="noopener">NCT-CRC-HE-100K</a></td>
+            <td style="color:var(--ink-soft); font-size:13px">9-class colorectal tissue (tumor · stroma · lymphocytes · …), 100 cases. Task score = accuracy.</td>
+          </tr>
+          <tr>
+            <td>Lymph-Node Metastasis</td>
+            <td>Histopathology (H&amp;E)</td>
+            <td><code class="time-chip" data-task="classification-pcam-metastasis">—</code></td>
+            <td><a href="https://github.com/basveeling/pcam" target="_blank" rel="noopener">PatchCamelyon</a></td>
+            <td style="color:var(--ink-soft); font-size:13px">Binary tumor / normal in 96×96 lymph-node patches, 100 cases. Task score = accuracy.</td>
+          </tr>
+          <tr>
+            <td>Chest X-ray Pneumonia</td>
+            <td>Chest X-ray</td>
+            <td><code class="time-chip" data-task="classification-chest-pneumonia">—</code></td>
+            <td><a href="https://data.mendeley.com/datasets/rscbjbr9sj/2" target="_blank" rel="noopener">Kermany et al.</a></td>
+            <td style="color:var(--ink-soft); font-size:13px">Binary pneumonia / normal, 100 cases. Task score = accuracy.</td>
+          </tr>
+          <tr>
+            <td>Skin Lesion</td>
+            <td>Dermoscopy</td>
+            <td><code class="time-chip" data-task="classification-isic-skin-lesion">—</code></td>
+            <td><a href="https://www.isic-archive.com/" target="_blank" rel="noopener">ISIC Archive</a></td>
+            <td style="color:var(--ink-soft); font-size:13px">Multi-class dermoscopic skin-lesion classification, 100 cases. Task score = accuracy.</td>
+          </tr>
         </tbody>
       </table>
     </div>
@@ -3434,7 +3466,7 @@ footer a:hover { color: var(--primary); text-decoration: none; }
         <div class="row">
           <dt>Allowed</dt>
           <dd>
-            <code>data/BrainTumorMRI/public/</code> <span class="note">read-only</span>
+            <code>data/&lt;dataset&gt;/public/</code> <span class="note">read-only</span>
             <span class="sep">·</span>
             <code>/workspace/</code>
           </dd>
@@ -3442,7 +3474,7 @@ footer a:hover { color: var(--primary); text-decoration: none; }
         <div class="row forbidden">
           <dt>Forbidden</dt>
           <dd>
-            <code>data/BrainTumorMRI/private/</code>
+            <code>data/&lt;dataset&gt;/private/</code>
             <span class="sep">·</span> ground-truth labels
           </dd>
         </div>
@@ -7236,6 +7268,78 @@ const CLASSIFICATION_DATA = {
       {agent:"minimax-m2.5",    n:10, overall:0.8521, agentic:0.9793, task:0.7250, turns:24.6, time_s:321.3,  cost:0.6271, tokens:279154, fail:30.0},
       {agent:"gemini-3.1-pro",  n:10, overall:0.7630, agentic:0.7530, task:0.7730, turns:15.8, time_s:1592.3, cost:1.1654, tokens:152709, fail:20.0},
       {agent:"chatgpt-5.4",     n:10, overall:0.5323, agentic:0.6865, task:0.3780, turns:12.9, time_s:257.1,  cost:2.1504, tokens:123340, fail:80.0}
+    ]
+  },
+  'classification-crc-histology': {
+    lite: [
+      {agent:"claude-opus-4.6", n:10, overall:0.8599, agentic:1.0000, task:0.7197, turns:11.7, time_s:120.8,  cost:1.8379, tokens:101124, fail:0.0},
+      {agent:"glm-5",           n:10, overall:0.8599, agentic:1.0000, task:0.7197, turns:18.3, time_s:147.8,  cost:0.3456, tokens:154630, fail:0.0},
+      {agent:"qwen3.5",         n:10, overall:0.8599, agentic:1.0000, task:0.7197, turns:18.1, time_s:126.3,  cost:0.4131, tokens:186754, fail:0.0},
+      {agent:"minimax-m2.5",    n:10, overall:0.8599, agentic:1.0000, task:0.7197, turns:19.4, time_s:177.1,  cost:0.3881, tokens:172972, fail:0.0},
+      {agent:"chatgpt-5.4",     n:10, overall:0.7800, agentic:0.8725, task:0.6875, turns:5.8,  time_s:426.8,  cost:0.8089, tokens:43507,  fail:10.0},
+      {agent:"gemini-3.1-pro",  n:10, overall:0.7277, agentic:0.9156, task:0.5398, turns:8.2,  time_s:1411.0, cost:0.5275, tokens:66567,  fail:25.0}
+    ],
+    standard: [
+      {agent:"claude-opus-4.6", n:10, overall:0.8854, agentic:1.0000, task:0.7708, turns:12.8, time_s:176.1,  cost:2.6943, tokens:145328, fail:0.0},
+      {agent:"glm-5",           n:10, overall:0.8683, agentic:1.0000, task:0.7366, turns:18.3, time_s:207.3,  cost:0.3918, tokens:171955, fail:0.0},
+      {agent:"qwen3.5",         n:10, overall:0.8552, agentic:1.0000, task:0.7104, turns:17.4, time_s:521.2,  cost:0.4836, tokens:212472, fail:10.0},
+      {agent:"minimax-m2.5",    n:10, overall:0.8239, agentic:0.9825, task:0.6654, turns:25.0, time_s:335.7,  cost:0.7801, tokens:347741, fail:20.0},
+      {agent:"chatgpt-5.4",     n:10, overall:0.7654, agentic:0.8980, task:0.6327, turns:8.5,  time_s:172.7,  cost:1.3357, tokens:73662,  fail:20.0},
+      {agent:"gemini-3.1-pro",  n:10, overall:0.6847, agentic:0.8222, task:0.5474, turns:12.4, time_s:3220.4, cost:0.8097, tokens:101703, fail:25.0}
+    ]
+  },
+  'classification-pcam-metastasis': {
+    lite: [
+      {agent:"claude-opus-4.6", n:10, overall:0.9250, agentic:1.0000, task:0.8500, turns:14.3, time_s:153.4,  cost:2.3953, tokens:137102, fail:0.0},
+      {agent:"glm-5",           n:10, overall:0.9250, agentic:1.0000, task:0.8500, turns:19.8, time_s:502.1,  cost:0.3597, tokens:164442, fail:0.0},
+      {agent:"qwen3.5",         n:10, overall:0.9250, agentic:1.0000, task:0.8500, turns:18.9, time_s:154.8,  cost:0.4089, tokens:185944, fail:0.0},
+      {agent:"minimax-m2.5",    n:10, overall:0.9250, agentic:1.0000, task:0.8500, turns:19.0, time_s:163.2,  cost:0.3527, tokens:158110, fail:0.0},
+      {agent:"chatgpt-5.4",     n:10, overall:0.8375, agentic:0.8250, task:0.8500, turns:6.2,  time_s:65.9,   cost:0.8036, tokens:44743,  fail:0.0},
+      {agent:"gemini-3.1-pro",  n:10, overall:0.7719, agentic:0.9062, task:0.6375, turns:9.8,  time_s:1845.0, cost:0.5904, tokens:75638,  fail:25.0}
+    ],
+    standard: [
+      {agent:"claude-opus-4.6", n:10, overall:0.9555, agentic:1.0000, task:0.9110, turns:15.1, time_s:208.1,  cost:3.3797, tokens:185072, fail:0.0},
+      {agent:"glm-5",           n:10, overall:0.9450, agentic:1.0000, task:0.8900, turns:20.2, time_s:196.6,  cost:0.4243, tokens:189468, fail:0.0},
+      {agent:"minimax-m2.5",    n:10, overall:0.9350, agentic:1.0000, task:0.8700, turns:22.1, time_s:317.0,  cost:0.5676, tokens:248337, fail:0.0},
+      {agent:"qwen3.5",         n:10, overall:0.9330, agentic:1.0000, task:0.8660, turns:19.8, time_s:228.7,  cost:0.5458, tokens:242248, fail:0.0},
+      {agent:"chatgpt-5.4",     n:10, overall:0.8194, agentic:0.8887, task:0.7500, turns:9.0,  time_s:195.8,  cost:1.4966, tokens:82854,  fail:40.0},
+      {agent:"gemini-3.1-pro",  n:10, overall:0.7039, agentic:0.7736, task:0.6343, turns:11.9, time_s:3107.9, cost:0.7518, tokens:94289,  fail:28.6}
+    ]
+  },
+  'classification-chest-pneumonia': {
+    lite: [
+      {agent:"claude-opus-4.6", n:10, overall:0.9900, agentic:1.0000, task:0.9800, turns:9.5,  time_s:101.7,  cost:1.3809, tokens:75006,  fail:0.0},
+      {agent:"glm-5",           n:10, overall:0.9900, agentic:1.0000, task:0.9800, turns:14.2, time_s:127.4,  cost:0.2261, tokens:99014,  fail:0.0},
+      {agent:"qwen3.5",         n:10, overall:0.9900, agentic:1.0000, task:0.9800, turns:16.5, time_s:129.3,  cost:0.3569, tokens:158111, fail:0.0},
+      {agent:"minimax-m2.5",    n:10, overall:0.9900, agentic:1.0000, task:0.9800, turns:16.3, time_s:158.7,  cost:0.2882, tokens:125869, fail:0.0},
+      {agent:"gemini-3.1-pro",  n:10, overall:0.9822, agentic:0.9844, task:0.9800, turns:7.4,  time_s:518.9,  cost:0.3993, tokens:50411,  fail:0.0},
+      {agent:"chatgpt-5.4",     n:10, overall:0.8073, agentic:0.7325, task:0.8820, turns:5.0,  time_s:62.7,   cost:0.6513, tokens:34972,  fail:0.0}
+    ],
+    standard: [
+      {agent:"minimax-m2.5",    n:10, overall:0.9900, agentic:1.0000, task:0.9800, turns:13.8, time_s:223.3,  cost:0.3300, tokens:137332, fail:0.0},
+      {agent:"glm-5",           n:10, overall:0.9865, agentic:1.0000, task:0.9730, turns:16.5, time_s:184.8,  cost:0.3378, tokens:146209, fail:0.0},
+      {agent:"claude-opus-4.6", n:10, overall:0.9760, agentic:1.0000, task:0.9520, turns:12.8, time_s:182.8,  cost:2.5733, tokens:136367, fail:0.0},
+      {agent:"qwen3.5",         n:10, overall:0.9655, agentic:1.0000, task:0.9310, turns:20.0, time_s:299.8,  cost:0.6229, tokens:277231, fail:0.0},
+      {agent:"gemini-3.1-pro",  n:10, overall:0.9248, agentic:0.8697, task:0.9800, turns:8.9,  time_s:97.2,   cost:0.5361, tokens:67474,  fail:0.0},
+      {agent:"chatgpt-5.4",     n:10, overall:0.8759, agentic:0.8488, task:0.9030, turns:8.2,  time_s:197.1,  cost:1.3746, tokens:75800,  fail:10.0}
+    ]
+  },
+  'classification-isic-skin-lesion': {
+    lite: [
+      {agent:"claude-opus-4.6", n:10, overall:0.8334, agentic:1.0000, task:0.6667, turns:12.8, time_s:137.1,  cost:2.2651, tokens:124694, fail:0.0},
+      {agent:"glm-5",           n:10, overall:0.8334, agentic:1.0000, task:0.6667, turns:18.6, time_s:166.8,  cost:0.3534, tokens:157853, fail:0.0},
+      {agent:"qwen3.5",         n:10, overall:0.8334, agentic:1.0000, task:0.6667, turns:18.7, time_s:140.1,  cost:0.4446, tokens:202310, fail:0.0},
+      {agent:"minimax-m2.5",    n:10, overall:0.8334, agentic:1.0000, task:0.6667, turns:16.2, time_s:155.4,  cost:0.3151, tokens:138618, fail:0.0},
+      {agent:"chatgpt-5.4",     n:10, overall:0.7609, agentic:0.8550, task:0.6667, turns:6.9,  time_s:84.5,   cost:1.0120, tokens:55697,  fail:0.0},
+      {agent:"gemini-3.1-pro",  n:10, overall:0.6349, agentic:0.8531, task:0.4167, turns:9.9,  time_s:1414.2, cost:0.5994, tokens:76474,  fail:37.5}
+    ],
+    standard: [
+      {agent:"claude-opus-4.6", n:10, overall:0.9285, agentic:1.0000, task:0.8571, turns:16.6, time_s:240.3,  cost:3.9552, tokens:217626, fail:0.0},
+      {agent:"glm-5",           n:10, overall:0.9142, agentic:1.0000, task:0.8285, turns:18.2, time_s:258.4,  cost:0.4933, tokens:213362, fail:0.0},
+      {agent:"minimax-m2.5",    n:10, overall:0.8485, agentic:1.0000, task:0.6968, turns:22.5, time_s:341.9,  cost:0.7292, tokens:320675, fail:0.0},
+      {agent:"gemini-3.1-pro",  n:10, overall:0.8243, agentic:0.8481, task:0.8004, turns:18.1, time_s:229.9,  cost:1.4279, tokens:186139, fail:0.0},
+      {agent:"chatgpt-5.4",     n:10, overall:0.8206, agentic:0.8608, task:0.7804, turns:11.1, time_s:215.8,  cost:2.2470, tokens:128068, fail:0.0},
+      {agent:"qwen3.5",         n:10, overall:0.7798, agentic:0.8875, task:0.6721, turns:16.8, time_s:220.4,  cost:0.4977, tokens:218567, fail:0.0}
     ]
   }
 };
