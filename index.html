@@ -481,7 +481,7 @@ h1, h2, h3 {
 .cat-tab {
   background: transparent;
   border: none;
-  padding: 14px 22px;
+  padding: 14px 16px;
   font-family: 'Fraunces', serif;
   font-size: 17px; font-weight: 500;
   color: var(--ink-soft);
@@ -2035,7 +2035,7 @@ footer a:hover { color: var(--primary); text-decoration: none; }
           </li>
           <li role="none">
             <button type="button" role="menuitem" data-cat-leaderboard="enhancement">
-              <span class="nm-label">Image Enhancement</span>
+              <span class="nm-label">Enhancement</span>
               <span class="nm-hint"><span class="live-dot"></span>live</span>
             </button>
           </li>
@@ -2060,6 +2060,12 @@ footer a:hover { color: var(--primary); text-decoration: none; }
           <li role="none">
             <button type="button" role="menuitem" data-cat-leaderboard="classification">
               <span class="nm-label">Classification</span>
+              <span class="nm-hint"><span class="live-dot"></span>live</span>
+            </button>
+          </li>
+          <li role="none">
+            <button type="button" role="menuitem" data-cat-leaderboard="synthetic">
+              <span class="nm-label">Synthetic</span>
               <span class="nm-hint"><span class="live-dot"></span>live</span>
             </button>
           </li>
@@ -2107,8 +2113,8 @@ footer a:hover { color: var(--primary); text-decoration: none; }
   </div>
   <aside class="hero-stats" aria-label="benchmark at a glance">
     <div class="stat-item"><span class="stat-num">7</span><span class="stat-label">agentic models<span class="info-pop info-pop-right" tabindex="0" role="button" aria-label="What is an agentic model?"><span class="info-bang">!</span><span class="info-bubble">We evaluate the <strong>base LLM as the agent</strong> driving the pipeline directly &mdash; not a vendor&rsquo;s own agent harness or tool-use wrapper.</span></span></span></div>
-    <div class="stat-item"><span class="stat-num">88</span><span class="stat-label">task combos<span class="info-pop info-pop-right" tabindex="0" role="button" aria-label="How task combos break down across tracks"><span class="info-bang">!</span><span class="info-bubble"><strong>Distribution across 6 tracks</strong><ul class="bubble-list"><li>Segmentation &middot; 28</li><li>Image Enhancement &middot; 14</li><li>VQA &middot; 18</li><li>Report Generation &middot; 10</li><li>Lesion Detection &middot; 8</li><li>Classification &middot; 10</li></ul></span></span></span></div>
-    <div class="stat-item"><span class="stat-num">5,900+</span><span class="stat-label">total runs</span></div>
+    <div class="stat-item"><span class="stat-num">96</span><span class="stat-label">task combos<span class="info-pop info-pop-right" tabindex="0" role="button" aria-label="How task combos break down across tracks"><span class="info-bang">!</span><span class="info-bubble"><strong>Distribution across 7 tracks</strong><ul class="bubble-list"><li>Segmentation &middot; 28</li><li>Enhancement &middot; 14</li><li>VQA &middot; 18</li><li>Report Generation &middot; 10</li><li>Lesion Detection &middot; 8</li><li>Classification &middot; 10</li><li>Synthetic &middot; 8</li></ul></span></span></span></div>
+    <div class="stat-item"><span class="stat-num">6,300+</span><span class="stat-label">total runs</span></div>
   </aside>
 </section>
 
@@ -2120,7 +2126,7 @@ footer a:hover { color: var(--primary); text-decoration: none; }
     <span class="live-dot"></span> Segmentation
   </button>
   <button class="cat-tab" data-cat="enhancement">
-    <span class="live-dot"></span> Image Enhancement
+    <span class="live-dot"></span> Enhancement
   </button>
   <button class="cat-tab" data-cat="vqa">
     <span class="live-dot"></span> VQA
@@ -2132,7 +2138,10 @@ footer a:hover { color: var(--primary); text-decoration: none; }
     <span class="live-dot"></span> Lesion Detection
   </button>
   <button class="cat-tab" data-cat="classification">
-    <span class="live-dot"></span> Classification <span class="badge-new">new</span>
+    <span class="live-dot"></span> Classification
+  </button>
+  <button class="cat-tab" data-cat="synthetic">
+    <span class="live-dot"></span> Synthetic <span class="badge-new">new</span>
   </button>
 </div>
 
@@ -3568,6 +3577,298 @@ footer a:hover { color: var(--primary); text-decoration: none; }
 
 
 <!-- ===================================================================== -->
+<!--  SYNTHETIC VIEW                                                        -->
+<!-- ===================================================================== -->
+<div id="synthetic-view" style="display:none">
+
+  <div class="primary-tabs" id="primaryTabs-synthetic">
+    <button class="primary-tab active" data-panel="performance">Performance</button>
+    <button class="primary-tab" data-panel="workflow">Workflow</button>
+    <button class="primary-tab" data-panel="tiers">Task Setting</button>
+    <button class="primary-tab" data-panel="rubrics">Scoring Rubrics</button>
+  </div>
+
+  <!-- ================= SYNTHETIC · PERFORMANCE ================= -->
+  <div id="synthetic-panel-performance" class="panel active">
+
+    <div class="perf-grid">
+      <div class="chart-card span-4 dark" id="overallPerformance-synthetic">
+        <h3>Overall Score — averaged across all tasks</h3>
+        <p class="sub">Overall = (<span class="info-pop on-dark" tabindex="0" role="button" aria-label="What is the Agentic score?"><strong>Agentic</strong><span class="info-bang">!</span><span class="info-bubble"><strong>Agentic</strong> — how well the agent <em>ran the research pipeline</em>. Weighted sum of S1–S5 stage scores (plan, setup, validate, infer, submit). ∈ [0, 100].</span></span> + <span class="info-pop on-dark" tabindex="0" role="button" aria-label="What is the Task score?"><strong>Task</strong><span class="info-bang">!</span><span class="info-bubble"><strong>Task (Synthetic)</strong> = mean SSIM of the synthetic CT against the held-out private ground-truth CT.</span></span>) / 2</p>
+        <div class="chart-legend" id="chartOverallLegend-synthetic">
+          <span class="legend-hint">
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+              <path d="M5 3 L5 17 L9 13 L12 20 L14.5 19 L11.5 12 L17 12 Z" fill="#FFFFFF"/>
+            </svg>
+            click a chip to toggle
+          </span>
+          <div class="legend-chips"></div>
+        </div>
+        <div class="chart-wrap"><canvas id="chartOverall-synthetic"></canvas></div>
+      </div>
+      <div class="chart-card">
+        <h3>Avg Turns</h3>
+        <p class="sub">Conversational turns / run</p>
+        <div class="chart-wrap"><canvas id="chartTurns-synthetic"></canvas></div>
+      </div>
+      <div class="chart-card">
+        <h3>Avg Time</h3>
+        <p class="sub">Wall-clock per run</p>
+        <div class="chart-wrap"><canvas id="chartTime-synthetic"></canvas></div>
+      </div>
+      <div class="chart-card">
+        <h3>Avg Tokens</h3>
+        <p class="sub">Total LLM tokens / run</p>
+        <div class="chart-wrap"><canvas id="chartTokens-synthetic"></canvas></div>
+      </div>
+      <div class="chart-card">
+        <h3>Avg Cost</h3>
+        <p class="sub">USD / run</p>
+        <div class="chart-wrap"><canvas id="chartCost-synthetic"></canvas></div>
+      </div>
+    </div>
+
+    <div class="disclosure-bar">
+      <button class="disclosure-btn" id="moreMetricsBtn-synthetic">
+        <span class="info-i">i</span>
+        More metrics
+        <span class="chev">▸</span>
+      </button>
+    </div>
+
+    <div class="disclosure-content" id="moreMetrics-synthetic">
+      <div class="metric-grid-1">
+        <div class="chart-card">
+          <h3>
+            Failure Rate
+            <span class="info-pop" tabindex="0" role="button" aria-label="How is failure defined?">
+              <span class="info-bang">!</span>
+              <span class="info-bubble">
+                <strong>Failure</strong> = a round whose medal is <code>fail</code> — no valid output, or SSIM below the task baseline. The strict CT-SR thresholds (Good ≥ 0.98 / Okay ≥ 0.95) make this common even when the synthetic CT is close.
+              </span>
+            </span>
+          </h3>
+          <p class="sub">% of rounds scored as a <code>fail</code> medal.</p>
+          <div class="chart-wrap"><canvas id="chartFail-synthetic"></canvas></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="pertask-section">
+      <h2 class="section-title">Per-Task Leaderboard</h2>
+      <p class="section-sub">Pick a task and difficulty tier.</p>
+
+      <div class="task-bar">
+        <div class="variant-picker">
+          <label for="synTaskSelect">Task</label>
+          <select class="variant-select" id="synTaskSelect">
+            <option value="synthetic-synthrad-mrct" selected>synthetic-synthrad-mrct</option>
+            <option value="synthetic-ctorg-ctsr">synthetic-ctorg-ctsr</option>
+            <option value="synthetic-msdpancreas-ctsr">synthetic-msdpancreas-ctsr</option>
+            <option value="synthetic-totalseg-ctsr">synthetic-totalseg-ctsr</option>
+          </select>
+        </div>
+        <div class="variant-picker" style="margin-left: auto">
+          <label for="synTierSelect">
+            Difficulty
+            <span class="info-pop info-pop-right" tabindex="0" role="button" aria-label="How is difficulty defined?">
+              <span class="info-bang">!</span>
+              <span class="info-bubble">
+                <strong>Two tiers</strong> — more scaffolding = lower difficulty.
+                <ul class="bubble-list">
+                  <li><strong>Lite</strong> · target model given</li>
+                  <li><strong>Standard</strong> · pick from model families</li>
+                </ul>
+              </span>
+            </span>
+          </label>
+          <select class="variant-select" id="synTierSelect">
+            <option value="lite" selected>Lite</option>
+            <option value="standard">Standard</option>
+          </select>
+        </div>
+      </div>
+
+      <div id="synPertaskBody"></div>
+    </div>
+  </div>
+
+  <!-- ================= SYNTHETIC · WORKFLOW ================= -->
+  <div id="synthetic-panel-workflow" class="panel">
+    <div class="workflow-wrap">
+      <h3>Agent Workflow — S1 → S5</h3>
+      <p>
+        Same coding-agent loop as every other track. S4 generates one synthetic
+        CT per patient and writes <code>agents_outputs/&lt;patient_id&gt;/sct.nii.gz</code>;
+        S5 verifies the volumes and calls <code>submit_results</code>.
+        Scoring is <code>mean SSIM</code> against the held-out private CT.
+      </p>
+      <div class="workflow-flow" id="workflowFlow-synthetic"></div>
+      <p class="flow-hint">
+        Benchmark unit is <strong>one patient volume</strong> (a 3D NIfTI). See
+        <button type="button" class="inline-link" data-goto-synthetic="rubrics">Scoring Rubrics</button>
+        for how each stage is scored.
+      </p>
+    </div>
+  </div>
+
+  <!-- ================= SYNTHETIC · TASK SETTING ================= -->
+  <div id="synthetic-panel-tiers" class="panel">
+
+    <div class="content-block">
+      <h3>Difficulty Tiers</h3>
+      <div class="tier-grid" id="tierGrid-synthetic"></div>
+    </div>
+
+    <div class="content-block">
+      <h3>Dataset</h3>
+      <table class="simple dataset-table">
+        <thead><tr><th>Task</th><th>Modality</th><th>Task Time Range</th><th>Source</th><th>Description</th></tr></thead>
+        <tbody>
+          <tr>
+            <td>Head &amp; Neck MRI-to-CT</td>
+            <td>MRI &rarr; CT</td>
+            <td><code class="time-chip" data-task="synthetic-synthrad-mrct">—</code></td>
+            <td><a href="https://synthrad2025.grand-challenge.org/" target="_blank" rel="noopener">SynthRAD2025</a></td>
+            <td style="color:var(--ink-soft); font-size:13px">Generate synthetic CT from head-and-neck MRI, 20 cases. Task score = mean SSIM.</td>
+          </tr>
+          <tr>
+            <td>Body CT Super-Resolution</td>
+            <td>CT (&times;4 SR)</td>
+            <td><code class="time-chip" data-task="synthetic-ctorg-ctsr">—</code></td>
+            <td><a href="https://www.cancerimagingarchive.net/collection/ct-org/" target="_blank" rel="noopener">CT-ORG</a></td>
+            <td style="color:var(--ink-soft); font-size:13px">Restore &times;4 z-axis&ndash;degraded CT volumes, 20 cases. Task score = mean SSIM.</td>
+          </tr>
+          <tr>
+            <td>Pancreas CT Super-Resolution</td>
+            <td>CT (&times;4 SR)</td>
+            <td><code class="time-chip" data-task="synthetic-msdpancreas-ctsr">—</code></td>
+            <td><a href="http://medicaldecathlon.com/" target="_blank" rel="noopener">MSD Task07 Pancreas</a></td>
+            <td style="color:var(--ink-soft); font-size:13px">Restore &times;4 z-axis&ndash;degraded pancreas CT, 20 cases. Task score = mean SSIM.</td>
+          </tr>
+          <tr>
+            <td>Whole-Body CT Super-Resolution</td>
+            <td>CT (&times;4 SR)</td>
+            <td><code class="time-chip" data-task="synthetic-totalseg-ctsr">—</code></td>
+            <td><a href="https://github.com/wasserth/TotalSegmentator" target="_blank" rel="noopener">TotalSegmentator v2</a></td>
+            <td style="color:var(--ink-soft); font-size:13px">Restore &times;4 z-axis&ndash;degraded CT volumes, 20 cases. Task score = mean SSIM.</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="content-block">
+      <h3>Sandbox Rules</h3>
+      <dl class="constraints">
+        <div class="row">
+          <dt>Policy</dt>
+          <dd><strong>Inference-only.</strong> No training on benchmark data.</dd>
+        </div>
+        <div class="row">
+          <dt>Allowed</dt>
+          <dd>
+            <code>data/&lt;dataset&gt;/public/</code> <span class="note">read-only</span>
+            <span class="sep">·</span>
+            <code>/workspace/</code>
+          </dd>
+        </div>
+        <div class="row forbidden">
+          <dt>Forbidden</dt>
+          <dd>
+            <code>data/&lt;dataset&gt;/private/</code>
+            <span class="sep">·</span> ground-truth CT
+          </dd>
+        </div>
+        <div class="row">
+          <dt>Limits</dt>
+          <dd>
+            Time <code>3 600 s</code> / run <span class="sep">·</span>
+            Metric <code>SSIM</code>
+          </dd>
+        </div>
+        <div class="row">
+          <dt>On violation</dt>
+          <dd>
+            <span class="sev warn" data-n="1">Warning</span>
+            <span class="sev-body">execution blocked; agent continues</span>
+            <span class="sep">·</span>
+            <span class="sev fail" data-n="2">Disqualified</span>
+            <span class="sev-body">run zeroed; no credit</span>
+          </dd>
+        </div>
+      </dl>
+    </div>
+
+  </div>
+
+  <!-- ================= SYNTHETIC · SCORING RUBRICS ================= -->
+  <div id="synthetic-panel-rubrics" class="panel">
+
+    <div class="content-block">
+      <h3>Overall Score</h3>
+      <p>Every run gets a single Overall Score (0–100). It is the average of an <strong>Agentic</strong> score (how well the agent ran the research pipeline) and a <strong>Task</strong> score (how close the synthetic CT is to the private ground-truth CT, by SSIM).</p>
+
+      <div class="score-pies">
+        <figure class="score-pie">
+          <div class="pie-caption">
+            <span class="lbl">Overall = ½ · Agentic + ½ · Task</span>
+            <span class="rng">× 100 → [0, 100]</span>
+          </div>
+          <ul class="pie-legend">
+            <li>
+              <span class="sw" style="background:var(--primary)"></span>
+              <span class="sid"><span class="info-pop" tabindex="0" role="button" aria-label="How Agentic is computed"><strong>Agentic</strong><span class="info-bang">!</span><span class="info-bubble"><strong>Agentic</strong> — weighted sum of S1–S5 stage scores, each ∈ [0, 1]. Stays in [0, 1] internally, shown ×100.</span></span></span>
+              <span class="w">50%</span>
+            </li>
+            <li>
+              <span class="sw" style="background:var(--walnut)"></span>
+              <span class="sid"><span class="info-pop" tabindex="0" role="button" aria-label="How Task is computed"><strong>Task</strong><span class="info-bang">!</span><span class="info-bubble"><strong>Task (Synthetic)</strong> = mean <code>SSIM</code> of the synthetic CT against the held-out private ground-truth CT. ∈ [0, 1].</span></span></span>
+              <span class="w">50%</span>
+            </li>
+          </ul>
+        </figure>
+
+        <figure class="score-pie">
+          <div class="pie-caption">
+            <span class="lbl">Agentic = weighted S1 → S5</span>
+            <span class="rng">∈ [0, 1]</span>
+          </div>
+          <ul class="pie-legend">
+            <li><span class="sw" style="background:var(--primary)"></span><span class="sid">S1</span><span class="snm">PLAN</span><span class="w">25%</span></li>
+            <li><span class="sw" style="background:var(--primary)"></span><span class="sid">S2</span><span class="snm">SETUP</span><span class="w">15%</span></li>
+            <li><span class="sw" style="background:var(--primary)"></span><span class="sid">S3</span><span class="snm">VALIDATE</span><span class="w">35%</span></li>
+            <li><span class="sw" style="background:var(--primary)"></span><span class="sid">S4</span><span class="snm">INFERENCE</span><span class="w">15%</span></li>
+            <li><span class="sw" style="background:var(--primary)"></span><span class="sid">S5</span><span class="snm">SUBMIT</span><span class="w">10%</span></li>
+          </ul>
+        </figure>
+      </div>
+
+      <p style="margin-top:14px; color:var(--ink-soft); font-size:13px">
+        All sub-scores live in <code>[0, 1]</code>; the leaderboard just shows them ×100.
+      </p>
+    </div>
+
+    <div class="content-block">
+      <h3>Stage-by-stage breakdown <small>S1 → S5 · weights & sub-criteria</small></h3>
+      <p>The Agentic score is a weighted sum across the five stages. Click any stage for its sub-criteria and scoring formula.</p>
+
+      <div class="workflow-flow" id="rubricsFlow-synthetic"></div>
+
+      <div class="workflow-legend">
+        <span><span class="dot"></span>LLM-judge scored: S1–S3</span>
+        <span><span class="dot"></span>Continuous: S4</span>
+        <span><span class="dot"></span>Discrete: S5</span>
+      </div>
+
+      <div class="stage-detail" id="stageDetail-synthetic"></div>
+    </div>
+
+  </div>
+
+</div>  <!-- end synthetic-view -->
+
+
+<!-- ===================================================================== -->
 <!--  IMAGE ENHANCEMENT VIEW                                                -->
 <!-- ===================================================================== -->
 <div id="enhancement-view" style="display:none">
@@ -3784,7 +4085,7 @@ footer a:hover { color: var(--primary); text-decoration: none; }
           </div>
           <ul class="pie-legend">
             <li><span class="sw" style="background:var(--primary)"></span><span class="sid"><span class="info-pop" tabindex="0" role="button" aria-label="How Agentic is computed"><strong>Agentic</strong><span class="info-bang">!</span><span class="info-bubble"><strong>Agentic</strong> — weighted sum of S1–S5 stage scores, each ∈ [0, 1]. S1/S2/S3 LLM-judged from <code>plan.md</code> + <code>conversation.json</code>; S4/S5 deterministic from output completeness. Shown ×100.</span></span></span><span class="w">50%</span></li>
-            <li><span class="sw" style="background:var(--walnut)"></span><span class="sid"><span class="info-pop" tabindex="0" role="button" aria-label="How Task is computed"><strong>Task</strong><span class="info-bang">!</span><span class="info-bubble"><strong>Task (Image Enhancement)</strong> = mean(per-patient SSIM ∈ [0, 1]) between reconstruction and reference. PSNR and LPIPS are reported as diagnostic signals only.</span></span></span><span class="w">50%</span></li>
+            <li><span class="sw" style="background:var(--walnut)"></span><span class="sid"><span class="info-pop" tabindex="0" role="button" aria-label="How Task is computed"><strong>Task</strong><span class="info-bang">!</span><span class="info-bubble"><strong>Task (Enhancement)</strong> = mean(per-patient SSIM ∈ [0, 1]) between reconstruction and reference. PSNR and LPIPS are reported as diagnostic signals only.</span></span></span><span class="w">50%</span></li>
           </ul>
         </figure>
 
@@ -4928,7 +5229,7 @@ document.addEventListener('click', (e) => {
 function gotoLeaderboard() {
   // All six tracks are now live; jump to the current track's Performance
   // panel rather than always redirecting to Segmentation.
-  const LIVE_TRACKS = ['segmentation', 'enhancement', 'vqa', 'reporting', 'detection', 'classification'];
+  const LIVE_TRACKS = ['segmentation', 'enhancement', 'vqa', 'reporting', 'detection', 'classification', 'synthetic'];
   const cat = (typeof activeCategory !== 'undefined' && LIVE_TRACKS.includes(activeCategory))
     ? activeCategory : 'segmentation';
   if (cat !== activeCategory) {
@@ -5304,9 +5605,9 @@ function renderPerformanceTable() {
 /* ======================================================================= */
 /*  CATEGORY TAB SWITCHING                                                  */
 /*  Live: Segmentation · Image Enhancement · VQA · Report Generation ·      */
-/*        Lesion Detection · Classification                                 */
+/*        Lesion Detection · Classification · Synthetic                     */
 /* ======================================================================= */
-const CATEGORY_VIEWS = ['segmentation', 'enhancement', 'vqa', 'reporting', 'detection', 'classification'];
+const CATEGORY_VIEWS = ['segmentation', 'enhancement', 'vqa', 'reporting', 'detection', 'classification', 'synthetic'];
 let activeCategory = 'segmentation';
 document.getElementById('catTabs').addEventListener('click', (e) => {
   const btn = e.target.closest('.cat-tab');
@@ -5358,7 +5659,7 @@ function wireIncomingView(slug) {
     if (tab && !tab.classList.contains('active')) tab.click();
   });
 }
-['vqa', 'reporting', 'enhancement', 'detection', 'classification'].forEach(wireIncomingView);
+['vqa', 'reporting', 'enhancement', 'detection', 'classification', 'synthetic'].forEach(wireIncomingView);
 
 /* ======================================================================= */
 /*  PER-TRACK TIER DATA — keeps incoming views structurally aligned with   */
@@ -5435,6 +5736,20 @@ const TRACK_TIERS = {
         ['Environment', 'Agent sets up deps'],
         ['Guidance',    'S1 skill only']
       ] }
+  ],
+  'synthetic': [
+    { id: 'lite', name: 'Lite', tag: 'Agent follows a recipe', burden: 0.3,
+      specs: [
+        ['Model',       'Target synthesis model given'],
+        ['Environment', 'requirements.txt provided'],
+        ['Guidance',    'S1–S3 skills provided']
+      ] },
+    { id: 'standard', name: 'Standard', tag: 'Agent chooses within bounds', burden: 0.6,
+      specs: [
+        ['Model',       'Pick from synthesis families'],
+        ['Environment', 'Agent sets up deps'],
+        ['Guidance',    'S1 skill only']
+      ] }
   ]
 };
 
@@ -5480,6 +5795,8 @@ function renderTrackTiers(slug) {
     renderTierGridInto('tierGrid-detection',  TRACK_TIERS['detection']);
   } else if (slug === 'classification') {
     renderTierGridInto('tierGrid-classification',  TRACK_TIERS['classification']);
+  } else if (slug === 'synthetic') {
+    renderTierGridInto('tierGrid-synthetic',  TRACK_TIERS['synthetic']);
   }
   _tiersRenderedFor.add(slug);
 }
@@ -5803,6 +6120,69 @@ const TRACK_STAGES = {
       ],
       formula: 'S5 = 0.50·has_valid_results + 0.50·output_format_valid  ∈ {0.0, 0.5, 1.0}'
     }
+  ],
+
+  /* Synthetic — S1-S5 rubric from eval_synthetic/llm_judge.py.
+     1:1 port of segmentation's structure; Task score = mean SSIM. */
+  'synthetic': [
+    {
+      id: 'S1', name: 'PLAN', weight: 25, judge: 'llm',
+      desc: 'Research synthesis models, write plan.md',
+      scale: 'Each sub-criterion ∈ {0, 1}',
+      criteria: [
+        ['s1a', 'Created plan.md?', '{0, 1}'],
+        ['s1b', 'Plan has a clear MRI-to-sCT / low-res-to-sCT inference pipeline?', '{0, 1}'],
+        ['s1c', 'Chose a real public synthesis / super-resolution model or checkpoint?', '{0, 1}'],
+        ['s1d', 'Researched ≥ 3 public candidates? (Lite: auto-pass)', '{0, 1}'],
+        ['s1e', 'Created plan visualization (png)? (Lite: auto-pass)', '{0, 1}'],
+        ['s1f', 'Plot shows a readable pipeline diagram? (Lite: auto-pass)', '{0, 1}']
+      ],
+      formula: 'S1 = (s1a + s1b + s1c + s1d + s1e + s1f) / 6  ∈ [0, 1]'
+    },
+    {
+      id: 'S2', name: 'SETUP', weight: 15, judge: 'llm',
+      desc: 'Download weights, install deps, load GPU',
+      scale: 'Each sub-criterion ∈ {0, 1}',
+      criteria: [
+        ['s2a', 'Weights / configs downloaded?', '{0, 1}'],
+        ['s2b', 'Checked input filenames, shape, spacing/orientation, dtype/normalization, and output HU scaling?', '{0, 1}'],
+        ['s2c', 'Environment setup succeeded?', '{0, 1}'],
+        ['s2d', 'Env failures ≤ 5 attempts?', '{0, 1}'],
+        ['s2e', 'Model loaded and confirmed usable on cuda:0?', '{0, 1}']
+      ],
+      formula: 'S2 = (s2a + s2b + s2c + s2d + s2e) / 5  ∈ [0, 1]'
+    },
+    {
+      id: 'S3', name: 'VALIDATE', weight: 35, judge: 'llm',
+      desc: 'Synthesize 1 patient, check shape · geometry · HU · finiteness',
+      scale: 'Discrete LLM-judge ∈ {0.0, 0.5, 1.0}',
+      criteria: [
+        ['1.0', 'One patient run first; sct.nii.gz exists, loads, shape matches input, values finite, geometry preserved, HU plausible, GPU use checked', '1.0'],
+        ['0.5', 'One-patient validation happened but missed important checks', '0.5'],
+        ['0.0', 'No one-patient validation, post-hoc-only, or blindly continued after a failed validation', '0.0']
+      ],
+      formula: 'S3 = LLM-judge verdict ∈ {0.0, 0.5, 1.0}'
+    },
+    {
+      id: 'S4', name: 'INFERENCE', weight: 15, judge: 'continuous',
+      desc: 'Synthesize all patients, write one sct.nii.gz each',
+      scale: 'Two equal-weight sub-criteria',
+      criteria: [
+        ['completion_rate',     'n_synthesized / n_patients', '[0, 1]'],
+        ['output_format_valid', '1 if every sct.nii.gz is a finite 3D NIfTI on the output grid', '{0, 1}']
+      ],
+      formula: 'S4 = 0.50·completion_rate + 0.50·output_format_valid  ∈ [0, 1]'
+    },
+    {
+      id: 'S5', name: 'SUBMIT', weight: 10, judge: 'discrete',
+      desc: 'Verify outputs, call submit_results',
+      scale: 'Each sub-criterion ∈ {0, 1}',
+      criteria: [
+        ['has_valid_results',   'n_synthesized > 0 AND a valid SSIM was computed', '{0, 1}'],
+        ['output_format_valid', 'Output volumes pass the shape / finiteness / grid check', '{0, 1}']
+      ],
+      formula: 'S5 = 0.50·has_valid_results + 0.50·output_format_valid  ∈ {0.0, 0.5, 1.0}'
+    }
   ]
 };
 
@@ -5950,12 +6330,14 @@ function setTheme(theme) {
   _rptSecondaryRendered = false;
   _detSecondaryRendered = false;
   _clsSecondaryRendered = false;
+  _synSecondaryRendered = false;
   renderFirstViewCharts();
   renderEnhFirstViewCharts();
   renderVqaFirstViewCharts();
   renderReportingFirstViewCharts();
   renderDetectionFirstViewCharts();
   renderClassificationFirstViewCharts();
+  renderSyntheticFirstViewCharts();
   if (disclosureBox.classList.contains('open')) renderSecondaryCharts();
   const enhBox = document.getElementById('moreMetrics-enh');
   if (enhBox && enhBox.classList.contains('open')) renderEnhSecondaryCharts();
@@ -5967,6 +6349,8 @@ function setTheme(theme) {
   if (detBox && detBox.classList.contains('open')) renderDetectionSecondaryCharts();
   const clsBox = document.getElementById('moreMetrics-classification');
   if (clsBox && clsBox.classList.contains('open')) renderClassificationSecondaryCharts();
+  const synBox = document.getElementById('moreMetrics-synthetic');
+  if (synBox && synBox.classList.contains('open')) renderSyntheticSecondaryCharts();
 }
 document.getElementById('themeToggle').addEventListener('click', () => {
   const cur = document.documentElement.dataset.theme === 'dark' ? 'dark' : 'light';
@@ -7461,6 +7845,201 @@ document.getElementById('clsTierSelect')?.addEventListener('change', (e) => { cl
 renderClassificationFirstViewCharts();
 renderClassificationPerTaskTable();
 
+/* ======================================================================= */
+/*  SYNTHETIC — performance charts + per-task leaderboard                   */
+/* ======================================================================= */
+const SYNTHETIC_DATA = {
+  'synthetic-synthrad-mrct': {
+    lite: [
+      {agent:"qwen3.5",         n:10, overall:0.8257, agentic:0.9301, task:0.7213, turns:45.3, time_s:1816.0, cost:1.9256, tokens:896336, fail:10.0},
+      {agent:"gemini-3.1-pro",  n:10, overall:0.7131, agentic:0.9426, task:0.4836, turns:22.2, time_s:3277.6, cost:1.9459, tokens:262147, fail:20.0},
+      {agent:"chatgpt-5.4",     n:10, overall:0.6532, agentic:0.8450, task:0.4614, turns:16.9, time_s:2663.4, cost:3.1448, tokens:190339, fail:20.0},
+      {agent:"glm-5",           n:10, overall:0.6365, agentic:0.8157, task:0.4572, turns:56.1, time_s:3226.9, cost:2.4466, tokens:1175124, fail:30.0},
+      {agent:"claude-opus-4.6", n:10, overall:0.6234, agentic:0.7050, task:0.5419, turns:42.8, time_s:1666.0, cost:14.5701, tokens:907878, fail:20.0},
+      {agent:"minimax-m2.5",    n:10, overall:0.3692, agentic:0.5655, task:0.1729, turns:58.9, time_s:2700.9, cost:4.2258, tokens:1995358, fail:70.0}
+    ],
+    standard: [
+      {agent:"claude-opus-4.6", n:10, overall:0.9276, agentic:0.9708, task:0.8844, turns:41.7, time_s:895.4,  cost:14.3084, tokens:863624, fail:0.0},
+      {agent:"chatgpt-5.4",     n:10, overall:0.8659, agentic:0.9277, task:0.8040, turns:19.8, time_s:378.8,  cost:3.9047, tokens:236778, fail:0.0},
+      {agent:"glm-5",           n:10, overall:0.7994, agentic:0.8737, task:0.7251, turns:69.6, time_s:2142.5, cost:3.4707, tokens:1661730, fail:0.0},
+      {agent:"qwen3.5",         n:10, overall:0.7026, agentic:0.6890, task:0.7161, turns:70.4, time_s:1072.5, cost:4.4450, tokens:2127419, fail:10.0},
+      {agent:"gemini-3.1-pro",  n:10, overall:0.6160, agentic:0.7111, task:0.5209, turns:68.4, time_s:2226.4, cost:11.7942, tokens:1650324, fail:20.0},
+      {agent:"minimax-m2.5",    n:10, overall:0.5011, agentic:0.6240, task:0.3782, turns:70.9, time_s:2313.8, cost:5.3876, tokens:2514228, fail:20.0}
+    ]
+  },
+  'synthetic-ctorg-ctsr': {
+    lite: [
+      {agent:"claude-opus-4.6", n:10, overall:0.9632, agentic:0.9825, task:0.9440, turns:35.9, time_s:1459.6, cost:10.6592, tokens:651995, fail:20.0},
+      {agent:"chatgpt-5.4",     n:10, overall:0.9234, agentic:0.9700, task:0.8767, turns:19.3, time_s:1924.8, cost:3.7797, tokens:231015, fail:30.0},
+      {agent:"gemini-3.1-pro",  n:10, overall:0.9138, agentic:0.9052, task:0.9224, turns:41.6, time_s:1559.1, cost:5.1534, tokens:705962, fail:80.0},
+      {agent:"qwen3.5",         n:10, overall:0.8928, agentic:0.9460, task:0.8396, turns:35.1, time_s:1948.5, cost:1.1668, tokens:543817, fail:90.0},
+      {agent:"glm-5",           n:10, overall:0.8817, agentic:0.9099, task:0.8535, turns:62.3, time_s:2494.1, cost:2.9459, tokens:1381632, fail:70.0},
+      {agent:"minimax-m2.5",    n:10, overall:0.8214, agentic:0.8725, task:0.7703, turns:37.3, time_s:2419.6, cost:1.4977, tokens:694006, fail:100.0}
+    ],
+    standard: [
+      {agent:"claude-opus-4.6", n:10, overall:0.9304, agentic:0.9078, task:0.9530, turns:54.9, time_s:1817.5, cost:23.0368, tokens:1429489, fail:0.0},
+      {agent:"chatgpt-5.4",     n:10, overall:0.8916, agentic:0.8250, task:0.9583, turns:10.8, time_s:1756.2, cost:1.4875, tokens:86797, fail:0.0},
+      {agent:"gemini-3.1-pro",  n:10, overall:0.7899, agentic:0.7565, task:0.8232, turns:39.2, time_s:1771.5, cost:3.9873, tokens:542200, fail:70.0},
+      {agent:"glm-5",           n:10, overall:0.7541, agentic:0.6524, task:0.8558, turns:91.5, time_s:3359.4, cost:6.7413, tokens:3230344, fail:50.0},
+      {agent:"qwen3.5",         n:10, overall:0.5091, agentic:0.4760, task:0.5421, turns:32.8, time_s:2165.4, cost:1.0134, tokens:458879, fail:30.0},
+      {agent:"minimax-m2.5",    n:10, overall:0.4701, agentic:0.5980, task:0.3422, turns:57.1, time_s:3389.6, cost:3.1294, tokens:1393553, fail:100.0}
+    ]
+  },
+  'synthetic-msdpancreas-ctsr': {
+    lite: [
+      {agent:"claude-opus-4.6", n:10, overall:0.9575, agentic:1.0000, task:0.9151, turns:36.9, time_s:533.7,  cost:10.9547, tokens:673799, fail:100.0},
+      {agent:"gemini-3.1-pro",  n:10, overall:0.9251, agentic:0.9475, task:0.9027, turns:44.1, time_s:663.3,  cost:5.6042, tokens:766023, fail:100.0},
+      {agent:"qwen3.5",         n:10, overall:0.9201, agentic:0.9517, task:0.8886, turns:37.1, time_s:1383.0, cost:1.3279, tokens:618444, fail:100.0},
+      {agent:"chatgpt-5.4",     n:10, overall:0.9041, agentic:0.9750, task:0.8333, turns:20.9, time_s:407.3,  cost:4.2957, tokens:264297, fail:100.0},
+      {agent:"minimax-m2.5",    n:10, overall:0.8418, agentic:0.8800, task:0.8036, turns:37.6, time_s:1096.2, cost:1.4504, tokens:661873, fail:100.0},
+      {agent:"glm-5",           n:10, overall:0.8317, agentic:0.8884, task:0.7751, turns:60.3, time_s:1579.1, cost:2.8951, tokens:1359523, fail:100.0}
+    ],
+    standard: [
+      {agent:"claude-opus-4.6", n:10, overall:0.8549, agentic:0.7935, task:0.9163, turns:55.3, time_s:1022.7, cost:23.7671, tokens:1478383, fail:100.0},
+      {agent:"chatgpt-5.4",     n:10, overall:0.8058, agentic:0.7298, task:0.8818, turns:13.0, time_s:819.1,  cost:2.2612, tokens:134791, fail:100.0},
+      {agent:"gemini-3.1-pro",  n:10, overall:0.7962, agentic:0.6945, task:0.8979, turns:44.6, time_s:673.1,  cost:5.0453, tokens:688307, fail:100.0},
+      {agent:"qwen3.5",         n:10, overall:0.7104, agentic:0.6438, task:0.7771, turns:41.9, time_s:1395.7, cost:1.7698, tokens:816776, fail:90.0},
+      {agent:"minimax-m2.5",    n:10, overall:0.6998, agentic:0.7161, task:0.6834, turns:46.4, time_s:1799.8, cost:2.0601, tokens:931489, fail:100.0},
+      {agent:"glm-5",           n:10, overall:0.5350, agentic:0.5851, task:0.4848, turns:117.0, time_s:2494.0, cost:10.6986, tokens:5207685, fail:80.0}
+    ]
+  },
+  'synthetic-totalseg-ctsr': {
+    lite: [
+      {agent:"claude-opus-4.6", n:10, overall:0.9295, agentic:1.0000, task:0.8590, turns:33.4, time_s:482.1,  cost:9.6848, tokens:595113, fail:100.0},
+      {agent:"qwen3.5",         n:10, overall:0.9128, agentic:0.9650, task:0.8606, turns:35.1, time_s:641.5,  cost:1.1937, tokens:554935, fail:100.0},
+      {agent:"chatgpt-5.4",     n:10, overall:0.8763, agentic:0.9495, task:0.8030, turns:19.0, time_s:355.1,  cost:3.8533, tokens:237201, fail:100.0},
+      {agent:"gemini-3.1-pro",  n:10, overall:0.8691, agentic:0.8765, task:0.8617, turns:34.9, time_s:505.8,  cost:3.8740, tokens:526653, fail:100.0},
+      {agent:"glm-5",           n:10, overall:0.8638, agentic:0.8775, task:0.8501, turns:70.0, time_s:1207.1, cost:4.0210, tokens:1928684, fail:100.0},
+      {agent:"minimax-m2.5",    n:10, overall:0.7972, agentic:0.8275, task:0.7669, turns:34.8, time_s:1034.1, cost:1.3613, tokens:609648, fail:100.0}
+    ],
+    standard: [
+      {agent:"claude-opus-4.6", n:10, overall:0.8995, agentic:0.9318, task:0.8673, turns:52.4, time_s:848.7,  cost:23.6793, tokens:1471065, fail:100.0},
+      {agent:"glm-5",           n:10, overall:0.8576, agentic:0.8508, task:0.8646, turns:93.6, time_s:1849.9, cost:7.1153, tokens:3407917, fail:100.0},
+      {agent:"chatgpt-5.4",     n:10, overall:0.8334, agentic:0.8175, task:0.8492, turns:17.3, time_s:303.8,  cost:3.4682, tokens:212372, fail:100.0},
+      {agent:"gemini-3.1-pro",  n:10, overall:0.7952, agentic:0.7063, task:0.8841, turns:44.0, time_s:581.8,  cost:4.7044, tokens:643914, fail:100.0},
+      {agent:"minimax-m2.5",    n:10, overall:0.6153, agentic:0.6474, task:0.5832, turns:43.7, time_s:1749.8, cost:1.7684, tokens:788620, fail:90.0},
+      {agent:"qwen3.5",         n:10, overall:0.6089, agentic:0.5665, task:0.6513, turns:42.8, time_s:823.9,  cost:1.7518, tokens:809863, fail:80.0}
+    ]
+  }
+};
+const SYNTHETIC_TASKS = Object.keys(SYNTHETIC_DATA);
+let synTask = 'synthetic-synthrad-mrct';
+let synTier = 'lite';
+let synSortKey = 'overall';
+let synSortDir = 'desc';
+
+function synGetRows(task, tier) {
+  return ((SYNTHETIC_DATA[task] || {})[tier]) || null;
+}
+function buildSyntheticAgentStats() {
+  const acc = {};
+  for (const t of SYNTHETIC_TASKS) {
+    for (const v of ['lite', 'standard']) {
+      const rows = synGetRows(t, v);
+      if (!rows) continue;
+      for (const r of rows) {
+        if (!acc[r.agent]) {
+          acc[r.agent] = { overall:[], agentic:[], task:[], turns:[], time:[], tokens:[], cost:[], fail:[] };
+        }
+        const a = acc[r.agent];
+        a.overall.push(r.overall); a.agentic.push(r.agentic); a.task.push(r.task);
+        a.turns.push(r.turns); a.time.push(r.time_s); a.tokens.push(r.tokens);
+        a.cost.push(r.cost); a.fail.push(r.fail);
+      }
+    }
+  }
+  const agents = Object.keys(acc).sort((a, b) => mean(acc[b].overall) - mean(acc[a].overall));
+  return agents.map(a => ({
+    agent: a, color: AGENT_COLORS[a] || '#8A6B4A',
+    avgOverall: mean(acc[a].overall), avgAgentic: mean(acc[a].agentic),
+    avgTask: mean(acc[a].task), avgTurns: mean(acc[a].turns),
+    avgTime: mean(acc[a].time), avgTokens: mean(acc[a].tokens),
+    avgCost: mean(acc[a].cost), avgFail: mean(acc[a].fail),
+  }));
+}
+function renderSyntheticFirstViewCharts() {
+  const stats = buildSyntheticAgentStats();
+  if (!stats.length) return;
+  const overall = overallGroupedChart('chartOverall-synthetic', stats);
+  renderOverallLegend('chartOverallLegend-synthetic', overall, '#ECEFE5');
+  Object.values(AGENT_BRAND).forEach(b => {
+    if (!b.slug) return;
+    loadBrandLogo(b.slug).then(img => { if (img) overall.update('none'); });
+  });
+  simpleBarChart('chartTurns-synthetic',  stats, { value: d => d.avgTurns, label: 'Turns', smallTicks: true, yFmt: v => v, tooltip: v => v.toFixed(1) + ' turns' });
+  simpleBarChart('chartTime-synthetic',   stats, { value: d => d.avgTime / 60, label: 'Time', smallTicks: true, yFmt: v => v + 'm', tooltip: v => v.toFixed(1) + ' min' });
+  simpleBarChart('chartTokens-synthetic', stats, { value: d => d.avgTokens / 1e6, label: 'Tokens', smallTicks: true, yFmt: v => v.toFixed(1) + 'M', tooltip: v => v.toFixed(2) + 'M tokens' });
+  simpleBarChart('chartCost-synthetic',   stats, { value: d => d.avgCost, label: 'Cost', smallTicks: true, yFmt: v => '$' + v, tooltip: v => fmtCost(v) });
+}
+let _synSecondaryRendered = false;
+function renderSyntheticSecondaryCharts() {
+  if (_synSecondaryRendered) return;
+  const stats = buildSyntheticAgentStats();
+  if (!stats.length) return;
+  _synSecondaryRendered = true;
+  simpleBarChart('chartFail-synthetic', stats, { value: d => d.avgFail, label: 'Fail %', yMax: 100, yFmt: v => v + '%', smallTicks: true, tooltip: v => v.toFixed(1) + '%' });
+}
+function renderSyntheticPerTaskTable() {
+  const rows = synGetRows(synTask, synTier);
+  const host = document.getElementById('synPertaskBody');
+  if (!host) return;
+  if (!rows || rows.length === 0) {
+    host.innerHTML = pendingCard(`Runs for <code style="font-family:JetBrains Mono,monospace;background:var(--primary-soft);color:var(--primary);padding:1px 6px;border-radius:4px">${synTask} · ${synTier}</code> are still being collected.`);
+    return;
+  }
+  const sorted = [...rows].sort((a, b) => compareRows(a, b, synSortKey, synSortDir));
+  const medal = i => i < 3 ? `medal-${i+1}` : '';
+  const failClass = v => v >= 70 ? 'fail-hi' : v >= 30 ? 'fail-mid' : '';
+  const thFor = (c) => {
+    const activeCls = (synSortKey === c.key) ? `active ${synSortDir}` : '';
+    const numCls    = c.num ? 'num' : '';
+    return `<th class="sortable ${numCls} ${activeCls}" data-sort="${c.key}" title="Sort by ${c.label.replace('&nbsp;', ' ')}"><span class="th-inner">${c.label}${SORT_CARET_SVG}</span></th>`;
+  };
+  host.innerHTML = `
+    <div class="table-card">
+      <table class="leaderboard">
+        <thead><tr><th>#</th><th>Agent</th>${SORT_COLUMNS.map(thFor).join('')}</tr></thead>
+        <tbody>
+          ${sorted.map((r, i) => `
+            <tr>
+              <td class="rank ${medal(i)}">${i + 1}</td>
+              <td><div class="agent-cell"><span class="agent-dot" style="background:${AGENT_COLORS[r.agent] || '#8A6B4A'}"></span><span class="agent-name">${r.agent}</span></div></td>
+              <td class="num overall-score">${(r.overall * 100).toFixed(1)}</td>
+              <td class="num">${(r.agentic * 100).toFixed(1)}</td>
+              <td class="num">${(r.task * 100).toFixed(1)}</td>
+              <td class="num muted">${r.turns.toFixed(1)}</td>
+              <td class="num muted">${fmtTime(r.time_s)}</td>
+              <td class="num">${fmtCost(r.cost)}</td>
+              <td class="num muted">${fmtTokens(r.tokens)}</td>
+              <td class="num ${failClass(r.fail)}">${r.fail.toFixed(1)}%</td>
+            </tr>`).join('')}
+        </tbody>
+      </table>
+    </div>`;
+  host.querySelectorAll('th.sortable').forEach(th => {
+    th.addEventListener('click', () => {
+      const key = th.dataset.sort;
+      if (synSortKey === key) synSortDir = (synSortDir === 'asc') ? 'desc' : 'asc';
+      else { synSortKey = key; synSortDir = SORT_DEFAULTS[key] || 'desc'; }
+      renderSyntheticPerTaskTable();
+    });
+  });
+}
+document.getElementById('synTaskSelect')?.addEventListener('change', (e) => { synTask = e.target.value; renderSyntheticPerTaskTable(); });
+document.getElementById('synTierSelect')?.addEventListener('change', (e) => { synTier = e.target.value; renderSyntheticPerTaskTable(); });
+(function wireSynDisclosure() {
+  const btn  = document.getElementById('moreMetricsBtn-synthetic');
+  const body = document.getElementById('moreMetrics-synthetic');
+  if (!btn || !body) return;
+  btn.addEventListener('click', () => {
+    const open = body.classList.toggle('open');
+    btn.classList.toggle('open', open);
+    if (open) renderSyntheticSecondaryCharts();
+  });
+})();
+renderSyntheticFirstViewCharts();
+renderSyntheticPerTaskTable();
+
 /* Time-range chips for VQA + Detection task-setting tables */
 function _timeRangeFromRows(rows) {
   const vals = [];
@@ -7505,11 +8084,23 @@ function _timeRangeFromRows(rows) {
     if (rows.length) chip.textContent = _timeRangeFromRows(rows);
   });
 })();
+(function renderSyntheticTimeChips() {
+  const chips = document.querySelectorAll('#synthetic-panel-tiers .time-chip[data-task]');
+  chips.forEach(chip => {
+    const t = chip.dataset.task;
+    const rows = [];
+    for (const v of ['lite', 'standard']) {
+      const r = synGetRows(t, v);
+      if (r) rows.push(...r);
+    }
+    if (rows.length) chip.textContent = _timeRangeFromRows(rows);
+  });
+})();
 
 // Eagerly render workflow + tier grids + per-step rubrics for all incoming
 // tracks so the content is in the DOM regardless of which tab the user opens
 // first.
-['vqa', 'reporting', 'enhancement', 'detection', 'classification'].forEach(slug => {
+['vqa', 'reporting', 'enhancement', 'detection', 'classification', 'synthetic'].forEach(slug => {
   renderIncomingWorkflow(slug);
   renderTrackTiers(slug);
   renderTrackRubrics(slug);
