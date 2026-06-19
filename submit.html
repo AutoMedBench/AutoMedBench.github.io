@@ -131,7 +131,6 @@ h1 em { font-style: italic; color: var(--primary); }
   box-shadow: var(--shadow);
   display: flex; flex-direction: column; gap: 6px;
 }
-.cat-card.muted { opacity: 0.82; }
 a.cat-card {
   text-decoration: none;
   color: inherit;
@@ -173,14 +172,6 @@ a.cat-card:hover {
   margin: 0;
   font-family: 'JetBrains Mono', monospace;
   line-height: 1.5;
-}
-.soon-chip {
-  font-family: 'Inter', sans-serif;
-  font-size: 9.5px; font-weight: 700;
-  text-transform: uppercase; letter-spacing: 0.08em;
-  background: var(--amber-soft); color: var(--walnut);
-  padding: 3px 8px; border-radius: 3px;
-  white-space: nowrap;
 }
 .demo-chip {
   font-family: 'Inter', sans-serif;
@@ -227,8 +218,8 @@ footer {
   <h1>Test your <em>agent</em></h1>
   <p class="lede">
     Run your own agentic model through the AutoMedBench S1&nbsp;&rarr;&nbsp;S5 pipeline
-    and get a slot on the public leaderboard. Submissions open per-category as
-    each track&rsquo;s harness, sandbox, and judge hit release status.
+    and get a slot on the public leaderboard. Start with the Segmentation demo, or
+    spin up the Docker sandbox to try all seven lite-tier tasks at once.
   </p>
 
   <div class="section-label">Task categories</div>
@@ -241,37 +232,13 @@ footer {
       <p>multi-organ segmentation &middot; tumor segmentation &middot; tumor OAR segmentation</p>
     </a>
 
-    <div class="cat-card muted">
+    <a class="cat-card" href="https://huggingface.co/datasets/MitakaKuma/AutoMedBench-release" target="_blank" rel="noopener">
       <div class="cat-row">
-        <h3>Image Enhancement</h3>
-        <span class="soon-chip">coming soon</span>
+        <h3><span class="live-dot"></span>AutoMedBench-Sandbox-v0.1</h3>
+        <span class="demo-chip">docker</span>
       </div>
-      <p>image denoising &middot; image super-resolution</p>
-    </div>
-
-    <div class="cat-card muted">
-      <div class="cat-row">
-        <h3>VQA</h3>
-        <span class="soon-chip">coming soon</span>
-      </div>
-      <p>pathology QA &middot; radiology QA &middot; expert multi-modal QA</p>
-    </div>
-
-    <div class="cat-card muted">
-      <div class="cat-row">
-        <h3>Report Generation</h3>
-        <span class="soon-chip">coming soon</span>
-      </div>
-      <p>radiology report generation</p>
-    </div>
-
-    <div class="cat-card muted">
-      <div class="cat-row">
-        <h3>Lesion Detection</h3>
-        <span class="soon-chip">coming soon</span>
-      </div>
-      <p>2D lesion detection</p>
-    </div>
+      <p>7 lite-tier tasks &middot; one-command Docker setup &middot; the easiest way to test an agent</p>
+    </a>
   </div>
 
   <footer>
